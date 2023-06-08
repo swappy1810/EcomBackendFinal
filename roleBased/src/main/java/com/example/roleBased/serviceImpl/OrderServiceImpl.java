@@ -32,7 +32,7 @@ public class OrderServiceImpl {
     ModelMapper modelMapper = new ModelMapper();
 
 //add order to orders
-    public OrderDto createOrder(OrderDto cartDto, Integer productId, String userId) {
+    public OrderDto createOrder(OrderDto cartDto, Integer productId, Integer userId) {
         User user =  this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id" +userId));
 
         Product product =  this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id" +productId));
@@ -84,7 +84,7 @@ public class OrderServiceImpl {
 
 //get order by user by user id
 
-    public List<OrderDto> getOrderByUser(String userId) {
+    public List<OrderDto> getOrderByUser(Integer userId) {
         User user = this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("post category not found with this id "+userId));
         List<Order> carts = this.orderDao.findByUser(user);
         List<OrderDto> cartDtos = carts.stream().map((x) -> this.modelMapper.map(x, OrderDto.class)).collect(Collectors.toList());

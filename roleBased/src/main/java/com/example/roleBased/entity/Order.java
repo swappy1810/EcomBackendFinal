@@ -21,6 +21,15 @@ public class Order {
     private Date addedDate;
     private int quantity;
     private String orderStatus;
+    private double totalPrice;
+    private String  username;
+    private String addressLine1;
+    private String addressLine2;
+    private String country;
+    private String state;
+    private String city;
+    private String mobileNo;
+
 
     //mapped order by product
     @ManyToOne

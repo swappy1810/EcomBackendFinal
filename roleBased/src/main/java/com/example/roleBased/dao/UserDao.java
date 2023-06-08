@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserDao extends CrudRepository<User,String> {
+public interface UserDao extends CrudRepository<User,Integer> {
 
      Optional<User> getUserByUsername(String username);
      Optional<User> getUserByEmail(String email);

@@ -18,14 +18,14 @@ public class OrderController {
 
     //add the order using user id and product id
     @PostMapping("/users/{userId}/product/{productId}/orders")
-    public ResponseEntity<OrderDto> createCart(@RequestBody OrderDto cartDto, @PathVariable Integer productId, @PathVariable String userId){
+    public ResponseEntity<OrderDto> createCart(@RequestBody OrderDto cartDto, @PathVariable Integer productId, @PathVariable Integer userId){
         OrderDto createCart = this.orderService.createOrder(cartDto,productId,userId);
         return new ResponseEntity<OrderDto>(createCart, HttpStatus.CREATED);
     }
 
     //get orders by user id
     @GetMapping("users/{userId}/order")
-    public ResponseEntity<List<OrderDto>> getByUser(@PathVariable String userId){
+    public ResponseEntity<List<OrderDto>> getByUser(@PathVariable Integer userId){
         List<OrderDto> cartDtos = this.orderService.getOrderByUser(userId);
         return new ResponseEntity<List<OrderDto>>(cartDtos,HttpStatus.OK);
     }

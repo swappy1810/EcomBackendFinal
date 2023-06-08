@@ -6,10 +6,12 @@ import com.example.roleBased.dto.LoginDto;
 import com.example.roleBased.entity.LoginMessage;
 import com.example.roleBased.entity.Role;
 import com.example.roleBased.entity.User;
+import com.example.roleBased.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,8 +33,11 @@ public class UserServiceImpl {
     @Autowired
     private RoleDao roleDao;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+   @Autowired
+   private PasswordEncoder passwordEncoder;
+
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
     //method to login user
     public LoginMessage authenticateUser(@RequestBody LoginDto loginDto){
@@ -52,14 +57,13 @@ public class UserServiceImpl {
               }
           }
           else{
-              return new LoginMessage("Password not match!",false);
+              return new LoginMessage("Invalid password!",false);
           }
       }
       else {
-          return new LoginMessage("Email not exists!",false);
+          return new LoginMessage("Invalid Email Address!",false);
       }
     }
-
 
     //method to register as new user
     public User registerNewUser(User user) {
@@ -99,6 +103,7 @@ public class UserServiceImpl {
         roleDao.save(userRole);
 
         User adminUser = new User();
+        adminUser.setUserId(1);
         adminUser.setUsername("Admin");
         adminUser.setEmail("admin123@gmail.com");
         adminUser.setPassword(passwordEncoder.encode("Admin@pass"));
@@ -115,4 +120,6 @@ public class UserServiceImpl {
         return userDao.getUserByUsername(username);
     }
 
+
 }
+

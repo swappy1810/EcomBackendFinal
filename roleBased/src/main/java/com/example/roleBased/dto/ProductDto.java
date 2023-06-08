@@ -13,18 +13,21 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class ProductDto {
 
-
     private int product_id;
     @NotNull
     private String product_image;
     @NotBlank
     private String product_name;
     @NotBlank
-    private String product_desc;
+    private String product_short_desc;
+    @NotBlank
+    private String product_long_desc;
     @NotNull
     private int product_price;
 
     private int quantity;
+
+    private int rating;
 
     private CategoryDto category;
 

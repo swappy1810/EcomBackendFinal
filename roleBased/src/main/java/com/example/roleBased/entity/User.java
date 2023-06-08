@@ -17,12 +17,14 @@ import java.util.Set;
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int UserId;
     private String username;
     private String email;
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinTable(name = "USER_ROLE",
+    @JoinTable(name = "USER_ROLES",
     joinColumns = {
             @JoinColumn(name = "username")
     },
@@ -32,9 +34,6 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @OneToOne
-    @JoinColumn(name = "cd")
-    private Cart cart;
 
     public boolean isPresent() {
         return true;
