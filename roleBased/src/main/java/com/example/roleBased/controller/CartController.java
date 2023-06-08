@@ -19,13 +19,13 @@ public class CartController {
     private UserServiceImpl userService;
 
     //get added cart item
-    @PostMapping("/addtocart/{productId}")
-    public String addToCart(@PathVariable(name = "productId") Integer productId){
-        return cartService.addToCart(productId);
-    }
-
-    @GetMapping("/getCartDetails")
-    public List<Cart> getDetails(){
-        return cartService.getCartDetails();
-    }
+//    @PostMapping("/addtocart/{productId}")
+//    public String addToCart(@PathVariable(name = "productId") Integer productId){
+//        return cartService.addToCart(productId);
+//    }
+//
+//    @GetMapping("/getCartDetails")
+//    public List<Cart> getDetails(){
+//        return cartService.getCartDetails();
+//    }
 }

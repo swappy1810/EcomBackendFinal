@@ -17,18 +17,9 @@ public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int cartId;
-    private int quantity;
+    private int uCartId;
     private double totalPrice;
-    @OneToOne
-    private Product product;
-    @OneToOne
-    private User user;
 
 
-    public Cart(Product product, User user) {
-        this.product=product;
-        this.user=user;
 
-    }
 }

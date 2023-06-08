@@ -29,26 +29,26 @@ public class CartServiceImpl{
     @Autowired
     private UserDao userDao;
 
-    public String addToCart(Integer productId) {
-        Product product = productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("Product not found with this id"+productId));
-        String username = JwtRequestFilter.CURRENT_USER;
-        User user = null;
-        if (user != null) {
-            user = userDao.getUserByUsername(username).orElseThrow(() -> new ResourceNotFoundException("Username not found" + username));
-        }
-        if (product != null && user != null) {
-            Cart cart = new Cart(product, user);
-             cartDao.save(cart);
-        }
+//    public String addToCart(Integer productId) {
+//        Product product = productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("Product not found with this id"+productId));
+//        String username = JwtRequestFilter.CURRENT_USER;
+//        User user = null;
+//        if (user != null) {
+//            user = userDao.getUserByUsername(username).orElseThrow(() -> new ResourceNotFoundException("Username not found" + username));
+//        }
+//        if (product != null && user != null) {
+//            Cart cart = new Cart(product, user);
+//             cartDao.save(cart);
+//        }
+//
+//        return "Added product to cart";
+//    }
 
-        return "Added product to cart";
-    }
-
-    public List<Cart> getCartDetails(){
-        String username = JwtRequestFilter.CURRENT_USER;
-        User user = userDao.findById(username).get();
-        return cartDao.findByUser(user);
-    }
+//    public List<Cart> getCartDetails(){
+//        String username = JwtRequestFilter.CURRENT_USER;
+//        User user = userDao.findById(username).get();
+//        return cartDao.findByUser(user);
+//    }
 
 }
 

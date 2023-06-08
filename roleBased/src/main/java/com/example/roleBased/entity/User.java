@@ -32,11 +32,4 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @OneToOne
-    @JoinColumn(name = "cd")
-    private Cart cart;
-
-    public boolean isPresent() {
-        return true;
-    }
 }

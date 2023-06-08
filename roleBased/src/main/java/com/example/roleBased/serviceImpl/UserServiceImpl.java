@@ -42,13 +42,12 @@ public class UserServiceImpl {
           String password = loginDto.getPassword();
           String ecodedPassword = user.getPassword();
           Boolean isPwdRight = passwordEncoder.matches(password,ecodedPassword);
-          if(isPwdRight){
+          if(isPwdRight) {
               Optional<User> user1 = userDao.findOneByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword());
-              if (user.isPresent()){
-                  return new LoginMessage("Login Success",true);
-              }
-              else{
-                  return  new LoginMessage("Login Failed",false);
+              if (user1.isPresent()) {
+                  return new LoginMessage("Login Success", true);
+              } else {
+                  return new LoginMessage("Login Failed", false);
               }
           }
           else{
@@ -59,7 +58,6 @@ public class UserServiceImpl {
           return new LoginMessage("Email not exists!",false);
       }
     }
-
 
     //method to register as new user
     public User registerNewUser(User user) {
