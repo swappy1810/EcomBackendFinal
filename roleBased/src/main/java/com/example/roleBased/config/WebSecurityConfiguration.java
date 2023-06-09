@@ -37,14 +37,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     @Override
-   public AuthenticationManager authenticationManagerBean() throws  Exception{
+    public AuthenticationManager authenticationManagerBean() throws  Exception{
         return super.authenticationManagerBean();
     }
-//permit all methods list
+    //permit all methods list
     private static final String[] AUTH_WHITELIST = {
             // -- Swagger UI v3 (OpenAPI)
+
             "/v3/api-docs/**",
             "/swagger-ui.html",
+
             // other public endpoints of your API may be appended to this array
             "/login",
             "/authenticate",
@@ -58,7 +60,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/users/{userId}/order",
             "/search/**",
             "/carts/addtocart/{productId}",
-            "/carts/getCartDetails"
+            "/carts/getCartDetails",
+            "/carts/cartDetails/{productId}",
+            "/carts/deleteCart/{productId}"
     };
 
     //configure security via http methods
