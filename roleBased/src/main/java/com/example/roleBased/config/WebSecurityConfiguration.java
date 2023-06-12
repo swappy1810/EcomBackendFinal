@@ -65,7 +65,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/addtocart/{productId}",
             "/deleteCart/{productId}",
             "/carts/getCartDetails",
-            "/{userCartId}"
+            "/{userCartId}",
+        "/save/{userId}/product/{productId}",
+        "/getList/{userId}"
 
     };
 

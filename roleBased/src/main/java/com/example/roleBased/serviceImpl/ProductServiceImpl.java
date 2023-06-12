@@ -96,7 +96,7 @@ public class ProductServiceImpl{
     }
 
     //product to dto fetch
-    private ProductDto productToDto(Product product) {
+    public ProductDto productToDto(Product product) {
         ProductDto productDto = modelMapper.map(product,ProductDto.class);
         return  productDto;
     }
