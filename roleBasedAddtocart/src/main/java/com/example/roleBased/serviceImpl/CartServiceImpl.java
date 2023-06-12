@@ -1,25 +1,16 @@
 package com.example.roleBased.serviceImpl;
 
-import com.example.roleBased.dao.CartDao;
 import com.example.roleBased.dao.CartNewDao;
 import com.example.roleBased.dao.ProductDao;
-import com.example.roleBased.dao.UserDao;
-import com.example.roleBased.dto.CartDto;
 import com.example.roleBased.dto.CartNewDto;
-import com.example.roleBased.dto.CategoryDto;
 import com.example.roleBased.entity.*;
-import com.example.roleBased.exception.ApiResponse;
 import com.example.roleBased.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
 
 @Service
 public class CartServiceImpl {

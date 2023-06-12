@@ -14,8 +14,6 @@ public class ApiResponse {
     private String message;
     private boolean success;
 
-    public ApiResponse(String cart_is_successfully_deleted_with, boolean b) {
-    }
 
     //getter and setter
     public String getMessage() {

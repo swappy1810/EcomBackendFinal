@@ -30,7 +30,7 @@ public class ProductController {
     public ResponseEntity<ProductDto> updateProduct(@Valid @RequestBody ProductDto productDto, @PathVariable Integer id){
         ProductDto updatedProduct = this.productService.updateProduct(productDto,id);
         updatedProduct.setProduct_name(productDto.getProduct_name());
-        updatedProduct.setProduct_desc(productDto.getProduct_desc());
+        updatedProduct.setProduct_short_desc(productDto.getProduct_long_desc());
         updatedProduct.setProduct_price(productDto.getProduct_price());
         updatedProduct.setProduct_image(productDto.getProduct_image());
         updatedProduct.setQuantity(productDto.getQuantity());

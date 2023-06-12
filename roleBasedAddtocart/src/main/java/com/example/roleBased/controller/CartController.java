@@ -1,9 +1,6 @@
 package com.example.roleBased.controller;
 
-import com.example.roleBased.dto.CartDto;
 import com.example.roleBased.dto.CartNewDto;
-import com.example.roleBased.entity.Cart;
-import com.example.roleBased.entity.User;
 import com.example.roleBased.exception.ApiResponse;
 import com.example.roleBased.serviceImpl.CartServiceImpl;
 import com.example.roleBased.serviceImpl.UserServiceImpl;
@@ -11,9 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("carts")

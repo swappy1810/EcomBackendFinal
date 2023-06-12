@@ -46,7 +46,8 @@ public class ProductServiceImpl{
     public ProductDto updateProduct(@RequestBody ProductDto productDto, @PathVariable Integer id) {
         Product product = this.productDao.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found with this id " + id));
         product.setProduct_name(productDto.getProduct_name());
-        product.setProduct_desc(productDto.getProduct_desc());
+        product.setProduct_short_desc(productDto.getProduct_short_desc());
+        product.setProduct_long_desc(productDto.getProduct_long_desc());
         product.setProduct_price(productDto.getProduct_price());
         product.setProduct_image(productDto.getProduct_image());
         product.setQuantity(productDto.getQuantity());
@@ -95,7 +96,7 @@ public class ProductServiceImpl{
     }
 
     //product to dto fetch
-    private ProductDto productToDto(Product product) {
+    public ProductDto productToDto(Product product) {
         ProductDto productDto = modelMapper.map(product,ProductDto.class);
         return  productDto;
     }
