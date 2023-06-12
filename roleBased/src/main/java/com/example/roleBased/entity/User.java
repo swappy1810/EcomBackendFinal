@@ -1,7 +1,6 @@
 package com.example.roleBased.entity;
 
 import lombok.*;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -23,6 +22,10 @@ public class User {
     private String email;
     private String password;
 
+    public String getUsername() {
+        return username;
+    }
+
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(name = "USER_ROLES",
     joinColumns = {
@@ -34,6 +37,9 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cartId")
+    private Cart cart;
 
     public boolean isPresent() {
         return true;

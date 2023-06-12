@@ -18,5 +18,6 @@ public class UserDto {
     @Size(min = 8,max = 16,message = "Invalid password!!(8-16 characters)")
     private String password;
     private Role role;
+    private CartDetailDto cart;
 
 }

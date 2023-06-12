@@ -21,6 +21,7 @@ public class SubCategory {
     private String subCatName;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "catId")
     private Category category;
 
 }

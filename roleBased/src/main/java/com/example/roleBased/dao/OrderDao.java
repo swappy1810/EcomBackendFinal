@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface OrderDao extends JpaRepository<Order,Integer> {
 //methods
-    List<Order> findByUser(User user);
+    List<Order> findByUserCartId(Integer userCartId);
 
     List<Order> findByProduct(Product product);
 

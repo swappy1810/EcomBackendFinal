@@ -1,16 +1,22 @@
 package com.example.roleBased.serviceImpl;
 
+import com.example.roleBased.config.JwtUtil;
 import com.example.roleBased.dao.RoleDao;
 import com.example.roleBased.dao.UserDao;
+import com.example.roleBased.dto.Login;
 import com.example.roleBased.dto.LoginDto;
-import com.example.roleBased.entity.LoginMessage;
-import com.example.roleBased.entity.Role;
-import com.example.roleBased.entity.User;
+import com.example.roleBased.dto.Response;
+import com.example.roleBased.entity.*;
 import com.example.roleBased.exception.ResourceNotFoundException;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,34 +42,31 @@ public class UserServiceImpl {
    @Autowired
    private PasswordEncoder passwordEncoder;
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+   @Autowired
+   private JwtUtil jwtUtil;
 
     //method to login user
-    public LoginMessage authenticateUser(@RequestBody LoginDto loginDto){
-        String msg ="";
-      User user = userDao.findByEmail(loginDto.getEmail());
-      if(user != null){
-          String password = loginDto.getPassword();
-          String ecodedPassword = user.getPassword();
-          Boolean isPwdRight = passwordEncoder.matches(password,ecodedPassword);
-          if(isPwdRight){
-              Optional<User> user1 = userDao.findOneByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword());
-              if (user.isPresent()){
-                  return new LoginMessage("Login Success",true);
-              }
-              else{
-                  return  new LoginMessage("Login Failed",false);
-              }
-          }
-          else{
-              return new LoginMessage("Invalid password!",false);
-          }
-      }
-      else {
-          return new LoginMessage("Invalid Email Address!",false);
-      }
+    public ResponseEntity<Response> login(Login login) {
+        User user = userDao.findByEmail(login.getEmail());
+        if(user!=null){
+            String plaintextPassword = login.getPassword();
+            String encryptedPassword = user.getPassword();
+
+            Boolean passwordMatched = passwordEncoder.matches(plaintextPassword,encryptedPassword);
+            if(passwordMatched){
+                Optional<User> validUser = userDao.findOneByEmailAndPassword(login.getEmail(),encryptedPassword);
+                if(validUser.isPresent()){
+                    return ResponseEntity.ok().body(Response.builder().status(true).message("Login Successful !!").build());
+                }else{
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Response.builder().status(true).message("Invalid Credentials !!").build());
+                }
+            }else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Response.builder().status(false).message("Credentials not Matching!!").build());
+            }
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Response.builder().status(false).message("Email Not Exist !!").build());
     }
+
 
     //method to register as new user
     public User registerNewUser(User user) {
@@ -86,6 +89,7 @@ public class UserServiceImpl {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         user.setRoles(roles);
+        user.setCart(new Cart());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userDao.save(user);
     }

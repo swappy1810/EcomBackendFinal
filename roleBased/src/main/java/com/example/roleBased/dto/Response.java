@@ -1,9 +1,6 @@
 package com.example.roleBased.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.AssertFalse;
 
@@ -11,6 +8,7 @@ import javax.validation.constraints.AssertFalse;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Response {
 
     private String message;

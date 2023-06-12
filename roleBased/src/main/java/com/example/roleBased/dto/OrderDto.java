@@ -12,15 +12,18 @@ import java.util.Date;
 public class OrderDto {
 
     private int orderId;
-
     private Date addedDate;
-
     private String status;
-
     private int quantity;
-
     private ProductDto product;
-
-    private UserDto user;
+    private int userCartId;
+    private double totalPrice;
+    private String addressLine1;
+    private String addressLine2;
+    private String country;
+    private String state;
+    private String city;
+    private String zipCode;
+    private String mobileNo;
 
 }

@@ -32,26 +32,23 @@ public class OrderServiceImpl {
     ModelMapper modelMapper = new ModelMapper();
 
 //add order to orders
-    public OrderDto createOrder(OrderDto cartDto, Integer productId, Integer userId) {
-        User user =  this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id" +userId));
+    public OrderDto createOrder(OrderDto orderDto, Integer productId) {
+         Product product =  this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id" +productId));
 
-        Product product =  this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id" +productId));
-
-        Order cart = this.modelMapper.map(cartDto, Order.class);
-        cart.setAddedDate(new Date());
-        cart.setOrderStatus(cartDto.getStatus());
-        cart.setQuantity(cartDto.getQuantity());
-        cart.setAddedDate(cartDto.getAddedDate());
-        cart.setProduct(product);
-        cart.setUser(user);
-
-        Order newCart = this.orderDao.save(cart);
+        Order order = this.modelMapper.map(orderDto, Order.class);
+        order.setAddedDate(new Date());
+        order.setStatus(orderDto.getStatus());
+        order.setQuantity(orderDto.getQuantity());
+        order.setAddedDate(orderDto.getAddedDate());
+        order.setProduct(product);
+        order.setUserCartId(orderDto.getUserCartId());
+        Order newCart = this.orderDao.save(order);
         return this.modelMapper.map(newCart, OrderDto.class);
     }
 
     //update the order by order id
 
-    public Order updateOrder(OrderDto cartDto, Integer orderId) {
+    public Order updateOrder(OrderDto orderDto, Integer orderId) {
         return null;
     }
 
@@ -69,7 +66,7 @@ public class OrderServiceImpl {
 
     //get order by order id
 
-    public OrderDto getOrderById(Integer cartId) {
+    public OrderDto getOrderById(Integer orderId) {
         return null;
     }
 
@@ -77,16 +74,16 @@ public class OrderServiceImpl {
 
     public List<OrderDto> getOrderByProduct(Integer productId) {
         Product product= this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("Product with cart not found with this id "+productId));
-        List<Order> carts = this.orderDao.findByProduct(product);
-        List<OrderDto> cartDtos = carts.stream().map((x) -> this.modelMapper.map(x, OrderDto.class)).collect(Collectors.toList());
-        return cartDtos;
+        List<Order> orders = this.orderDao.findByProduct(product);
+        List<OrderDto> orderDtos = orders.stream().map((x) -> this.modelMapper.map(x, OrderDto.class)).collect(Collectors.toList());
+        return orderDtos;
     }
 
 //get order by user by user id
 
-    public List<OrderDto> getOrderByUser(Integer userId) {
-        User user = this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("post category not found with this id "+userId));
-        List<Order> carts = this.orderDao.findByUser(user);
+    public List<OrderDto> getOrderByUser(Integer userCartId) {
+        User user = this.userDao.findById(userCartId).orElseThrow(()->new ResourceNotFoundException(" userCart Id not found with this id "+userCartId));
+        List<Order> carts = this.orderDao.findByUserCartId(userCartId);
         List<OrderDto> cartDtos = carts.stream().map((x) -> this.modelMapper.map(x, OrderDto.class)).collect(Collectors.toList());
         return cartDtos;
     }

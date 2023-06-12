@@ -49,17 +49,24 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             // other public endpoints of your API may be appended to this array
             "/login",
             "/authenticate",
+            "/authenticateAdmin",
             "/registerNewUser",
             "/products/save/{catId}",
             "/products/**",
             "/category/**",
             "/category/{id}",
-            "/users/{userId}/product/{productId}/orders",
+            "/subCat/save/{catId}",
+            "/subCat/{id}",
+            "/subCat/",
+            "/product/{productId}/orders",
             "/product/{productId}/order",
             "/users/{userId}/order",
             "/search/**",
-            "/carts/addtocart/{productId}",
-            "/carts/getCartDetails"
+            "/addtocart/{productId}",
+            "/deleteCart/{productId}",
+            "/carts/getCartDetails",
+            "/{userCartId}"
+
     };
 
     //configure security via http methods

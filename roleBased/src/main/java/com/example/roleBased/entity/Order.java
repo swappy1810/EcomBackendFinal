@@ -20,15 +20,16 @@ public class Order {
     @Column(name = "date")
     private Date addedDate;
     private int quantity;
-    private String orderStatus;
+    private String status;
     private double totalPrice;
-    private String  username;
     private String addressLine1;
     private String addressLine2;
     private String country;
     private String state;
     private String city;
+    private String zipCode;
     private String mobileNo;
+    private int userCartId;
 
 
     //mapped order by product
@@ -36,8 +37,6 @@ public class Order {
     @JoinColumn(name = "productId")
     private Product product;
 
-    //mapped order by user
-    @ManyToOne
-    private User user;
+
 
 }

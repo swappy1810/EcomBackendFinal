@@ -14,4 +14,6 @@ public class LoginMessage {
     private String message;
 
     private boolean status;
+
+
 }
