@@ -69,4 +69,5 @@ public class CartServiceImpl {
         User user = userDao.findById(userCartId).get();
         return user.getCart().getCartDetails().stream().map(cartDetails -> this.cartNewDto(cartDetails)).collect(Collectors.toList());
     }
+
     }

@@ -3,24 +3,12 @@ package com.example.roleBased.serviceImpl;
 import com.example.roleBased.config.JwtUtil;
 import com.example.roleBased.dao.RoleDao;
 import com.example.roleBased.dao.UserDao;
-import com.example.roleBased.dto.Login;
-import com.example.roleBased.dto.LoginDto;
-import com.example.roleBased.dto.Response;
 import com.example.roleBased.entity.*;
-import com.example.roleBased.exception.ResourceNotFoundException;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
@@ -44,29 +32,6 @@ public class UserServiceImpl {
 
    @Autowired
    private JwtUtil jwtUtil;
-
-    //method to login user
-    public ResponseEntity<Response> login(Login login) {
-        User user = userDao.findByEmail(login.getEmail());
-        if(user!=null){
-            String plaintextPassword = login.getPassword();
-            String encryptedPassword = user.getPassword();
-
-            Boolean passwordMatched = passwordEncoder.matches(plaintextPassword,encryptedPassword);
-            if(passwordMatched){
-                Optional<User> validUser = userDao.findOneByEmailAndPassword(login.getEmail(),encryptedPassword);
-                if(validUser.isPresent()){
-                    return ResponseEntity.ok().body(Response.builder().status(true).message("Login Successful !!").build());
-                }else{
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Response.builder().status(true).message("Invalid Credentials !!").build());
-                }
-            }else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Response.builder().status(false).message("Credentials not Matching!!").build());
-            }
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Response.builder().status(false).message("Email Not Exist !!").build());
-    }
-
 
     //method to register as new user
     public User registerNewUser(User user) {
@@ -110,7 +75,7 @@ public class UserServiceImpl {
         adminUser.setUserId(1);
         adminUser.setUsername("Admin");
         adminUser.setEmail("admin123@gmail.com");
-        adminUser.setPassword(passwordEncoder.encode("Admin@pass"));
+        adminUser.setPassword(passwordEncoder.encode("Admin@123"));
 
         Set<Role> adminRoles = new HashSet<>();
         adminUser.setRoles(adminRoles);

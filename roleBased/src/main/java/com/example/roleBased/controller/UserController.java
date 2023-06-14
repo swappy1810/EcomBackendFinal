@@ -6,6 +6,9 @@ import com.example.roleBased.dto.AuthRequest;
 import com.example.roleBased.dto.LoginResponse;
 import com.example.roleBased.dto.Response;
 import com.example.roleBased.dto.UserDto;
+import com.example.roleBased.entity.JwtRequest;
+import com.example.roleBased.entity.JwtResponse;
+import com.example.roleBased.entity.Role;
 import com.example.roleBased.entity.User;
 import com.example.roleBased.serviceImpl.JwtService;
 import com.example.roleBased.serviceImpl.UserServiceImpl;
@@ -19,8 +22,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
+@CrossOrigin
 public class UserController {
 
     @Autowired
@@ -36,30 +41,30 @@ public class UserController {
     PasswordEncoder passwordEncoder;
 
     //add user by email and login user
-
     @PostMapping("/authenticate")
-    public ResponseEntity<LoginResponse> generateToken(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<JwtResponse> createJwtToken(@RequestBody JwtRequest jwtRequest) {
+        User user = userDao.findByEmail(jwtRequest.getEmail());
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword())
+                    new UsernamePasswordAuthenticationToken(jwtRequest.getEmail(), jwtRequest.getPassword())
             );
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(LoginResponse.builder().message("not valid!").status(false).build());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(JwtResponse.builder().message("not valid!").status(false).build());
         }
-        return ResponseEntity.status(HttpStatus.OK).body(LoginResponse.builder().status(true).message("It is a Valid User!!").email(authRequest.getUserName()).jwtToken(JwtUtil.generateToken(authRequest.getUserName())).build());
+        System.out.println(user.getRoles());
+        return ResponseEntity.status(HttpStatus.OK).body(JwtResponse.builder().status(true).message("It is a Valid User!!").roles(user.getRoles()).email(jwtRequest.getEmail()).jwtToken(JwtUtil.generateToken(jwtRequest.getEmail())).build());
     }
-
 //    @PostMapping("/authenticate")
-//    public ResponseEntity<LoginResponse> generateToken(@RequestBody AuthRequest authRequest) {
+//    public ResponseEntity<LoginResponse> generateToken1(@RequestBody AuthRequest authRequest) {
 //        User user =null;
-//        System.out.println(authRequest.getUserName());
+//        System.out.println(authRequest.getEmail());
 //        System.out.println(authRequest.getPassword());
 //            authenticationManager.authenticate(
 //                    new UsernamePasswordAuthenticationToken(authRequest.getPassword(), authRequest.getPassword())
 //            );
 //            return ResponseEntity.status(LoginResponse.builder().status(true).message("Valide User!").)
-//            user = userDao.findByEmail(authRequest.getUserName());
-//            System.out.println(authRequest.getUserName());
+//            user = userDao.findByEmail(authRequest.getEmail());
+//            System.out.println(authRequest.getEmail());
 //            if(user!=null){
 //                String plaintextPassword = authRequest.getPassword();
 //                String encryptedPassword = user.getPassword();
@@ -67,9 +72,9 @@ public class UserController {
 //                Boolean passwordMatched = passwordEncoder.matches(plaintextPassword,encryptedPassword);
 //                System.out.println(passwordMatched);
 //                if(passwordMatched) {
-//                    Optional<User> validUser = userDao.findOneByEmailAndPassword(authRequest.getUserName(), encryptedPassword);
+//                    Optional<User> validUser = userDao.findOneByEmailAndPassword(authRequest.getEmail(), encryptedPassword);
 //                    if (user.isPresent()) {
-//                        return ResponseEntity.status(HttpStatus.OK).body(LoginResponse.builder().message("It is a Valid User!!").status(true).email(authRequest.getUserName()).username(user.getUsername()).jwtToken(JwtUtil.generateToken(authRequest.getUserName())).build());
+//                        return ResponseEntity.status(HttpStatus.OK).body(LoginResponse.builder().message("It is a Valid User!!").status(true).email(authRequest.getEmail()).jwtToken(JwtUtil.generateToken(authRequest.getEmail())).build());
 //                    }
 //                    else{
 //                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(LoginResponse.builder().status(true).message("Invalid Credentials !!").build());

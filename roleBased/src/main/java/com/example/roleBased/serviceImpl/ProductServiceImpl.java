@@ -37,7 +37,13 @@ public class ProductServiceImpl{
         Category category = this.categoryDao.findById(catId).orElseThrow(()->new ResourceNotFoundException("Category not found with this id"+catId));
         Product product = this.dtoToProduct(productDto);
         product.setCategory(category);
+        product.setProduct_price(productDto.getProduct_price());
+        product.setProduct_image(productDto.getProduct_image());
+        product.setProduct_name(productDto.getProduct_name());
+        product.setProduct_short_desc(productDto.getProduct_short_desc());
+        product.setProduct_long_desc(productDto.getProduct_long_desc());
         product.setQuantity(productDto.getQuantity());
+        product.setRating(productDto.getRating());
         Product savedProduct = this.productDao.save(product);
         return this.productToDto(savedProduct);
     }

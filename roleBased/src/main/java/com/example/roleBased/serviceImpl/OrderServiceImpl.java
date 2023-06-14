@@ -1,12 +1,9 @@
 package com.example.roleBased.serviceImpl;
 
-import com.example.roleBased.dao.OrderDao;
-import com.example.roleBased.dao.ProductDao;
-import com.example.roleBased.dao.UserDao;
+import com.example.roleBased.config.JwtRequestFilter;
+import com.example.roleBased.dao.*;
 import com.example.roleBased.dto.OrderDto;
-import com.example.roleBased.entity.Order;
-import com.example.roleBased.entity.Product;
-import com.example.roleBased.entity.User;
+import com.example.roleBased.entity.*;
 import com.example.roleBased.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +23,13 @@ public class OrderServiceImpl {
     private UserDao userDao;
 
     @Autowired
+    private CartDetailDao cartDetailDao;
+
+    @Autowired
     private ProductDao productDao;
 
+    @Autowired
+    private CartDao cartDao;
 
     ModelMapper modelMapper = new ModelMapper();
 
@@ -40,10 +42,30 @@ public class OrderServiceImpl {
         order.setStatus(orderDto.getStatus());
         order.setQuantity(orderDto.getQuantity());
         order.setAddedDate(orderDto.getAddedDate());
+        order.setAddressLine1(orderDto.getAddressLine1());
+        order.setAddressLine2(orderDto.getAddressLine2());
+        order.setCity(orderDto.getCity());
+        order.setCountry(order.getCountry());
+        order.setState(order.getState());
+        order.setMobileNo(order.getMobileNo());
+        order.setQuantity(orderDto.getQuantity());
+        order.setZipCode(orderDto.getZipCode());
+        order.setTotalPrice(orderDto.getTotalPrice());
         order.setProduct(product);
         order.setUserCartId(orderDto.getUserCartId());
         Order newCart = this.orderDao.save(order);
+
+        System.out.println("entered clear cart");
+        Cart cart = cartDao.findById(order.getUserCartId()).get();
+        System.out.println(cart.getUserCartId());
+        System.out.println(cart);
+        cart.getCartDetails().clear();
+        System.out.println(cart);
+        cart.setTotalPrice(0);
+        cartDao.save(cart);
+
         return this.modelMapper.map(newCart, OrderDto.class);
+
     }
 
     //update the order by order id

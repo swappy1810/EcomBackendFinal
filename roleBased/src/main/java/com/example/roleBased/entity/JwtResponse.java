@@ -1,17 +1,22 @@
 package com.example.roleBased.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.Set;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class JwtResponse {
 
-    private User user;
+    private Set<Role> roles;
+    private String message;
+    private Boolean status;
     private String jwtToken;
+    private String email;
 
+    public JwtResponse(User user, String newGeneratedToken) {
+    }
 }
