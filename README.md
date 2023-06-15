@@ -55,14 +55,6 @@ In pom.xml you should need to add dependency
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
      ```
-   In Application.properties
-   -  ```
-        MySQL Database
-        spring.datasource.url=jdbc:mysql://database-2.cctzpp5rvrir.ap-south-1.rds.amazonaws.com:3306/project_new
-        spring.datasource.username=admin
-        spring.datasource.password=admin1234
-        spring-datasource-driver-class-name=com.mysql.cj.jdbc.Driver
-      ```
 
 ##  🤝 Collabrators in code
 
