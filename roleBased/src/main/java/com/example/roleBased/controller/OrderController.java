@@ -17,9 +17,9 @@ public class OrderController {
     private OrderServiceImpl orderService;
 
     //add the order using user id and product id
-    @PostMapping("product/{productId}/orders")
-    public ResponseEntity<OrderDto> createCart(@RequestBody OrderDto cartDto, @PathVariable Integer productId){
-        OrderDto createCart = this.orderService.createOrder(cartDto,productId);
+    @PostMapping("product/{productId}/orders/{isSingleCheckout}")
+    public ResponseEntity<OrderDto> createCart(@RequestBody OrderDto cartDto, @PathVariable Integer productId,Boolean isSingleCheckout){
+        OrderDto createCart = this.orderService.createOrder(cartDto,productId,isSingleCheckout);
         return new ResponseEntity<OrderDto>(createCart, HttpStatus.CREATED);
     }
 

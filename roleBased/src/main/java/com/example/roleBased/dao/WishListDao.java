@@ -14,4 +14,6 @@ public interface WishListDao  extends JpaRepository<Wishlist,Integer>
     //List<WishList> findAllByUserIdOrderByCreatedDateDesc(Integer userId);
     List<Wishlist> findByUser(User user);
 
+    void deleteByUsername(String username);
+
 }

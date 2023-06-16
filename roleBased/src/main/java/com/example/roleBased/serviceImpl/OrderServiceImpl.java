@@ -34,38 +34,56 @@ public class OrderServiceImpl {
     ModelMapper modelMapper = new ModelMapper();
 
 //add order to orders
-    public OrderDto createOrder(OrderDto orderDto, Integer productId) {
+    public OrderDto createOrder(OrderDto orderDto, Integer productId,Boolean isSingleCheckout) {
          Product product =  this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id" +productId));
+        if(Boolean.TRUE.equals(isSingleCheckout)){
+            Order order = new Order();
+            order.setAddedDate(new Date());
+            order.setStatus(orderDto.getStatus());
+            order.setQuantity(orderDto.getQuantity());
+            order.setAddedDate(orderDto.getAddedDate());
+            order.setAddressLine1(orderDto.getAddressLine1());
+            order.setAddressLine2(orderDto.getAddressLine2());
+            order.setCity(orderDto.getCity());
+            order.setCountry(order.getCountry());
+            order.setState(order.getState());
+            order.setMobileNo(order.getMobileNo());
+            order.setQuantity(orderDto.getQuantity());
+            order.setZipCode(orderDto.getZipCode());
+            order.setTotalPrice(orderDto.getTotalPrice());
+            order.setProduct(product);
+            Order order1 = this.orderDao.save(order);
+            return this.modelMapper.map(order1,OrderDto.class);
+        }
+        else {
+            Order order = this.modelMapper.map(orderDto, Order.class);
+            order.setAddedDate(new Date());
+            order.setStatus(orderDto.getStatus());
+            order.setQuantity(orderDto.getQuantity());
+            order.setAddressLine1(orderDto.getAddressLine1());
+            order.setAddressLine2(orderDto.getAddressLine2());
+            order.setCity(orderDto.getCity());
+            order.setCountry(order.getCountry());
+            order.setState(order.getState());
+            order.setMobileNo(order.getMobileNo());
+            order.setQuantity(orderDto.getQuantity());
+            order.setZipCode(orderDto.getZipCode());
+            order.setTotalPrice(orderDto.getTotalPrice());
+            order.setProduct(product);
+            order.setUserCartId(orderDto.getUserCartId());
+            Order newCart = this.orderDao.save(order);
 
-        Order order = this.modelMapper.map(orderDto, Order.class);
-        order.setAddedDate(new Date());
-        order.setStatus(orderDto.getStatus());
-        order.setQuantity(orderDto.getQuantity());
-        order.setAddedDate(orderDto.getAddedDate());
-        order.setAddressLine1(orderDto.getAddressLine1());
-        order.setAddressLine2(orderDto.getAddressLine2());
-        order.setCity(orderDto.getCity());
-        order.setCountry(order.getCountry());
-        order.setState(order.getState());
-        order.setMobileNo(order.getMobileNo());
-        order.setQuantity(orderDto.getQuantity());
-        order.setZipCode(orderDto.getZipCode());
-        order.setTotalPrice(orderDto.getTotalPrice());
-        order.setProduct(product);
-        order.setUserCartId(orderDto.getUserCartId());
-        Order newCart = this.orderDao.save(order);
+            System.out.println("entered clear cart");
+            Cart cart = cartDao.findById(order.getUserCartId()).get();
+            System.out.println(cart.getUserCartId());
+            System.out.println(cart);
+            cart.getCartDetails().clear();
+            System.out.println(cart);
+            cart.setTotalPrice(0);
+            cartDao.save(cart);
 
-        System.out.println("entered clear cart");
-        Cart cart = cartDao.findById(order.getUserCartId()).get();
-        System.out.println(cart.getUserCartId());
-        System.out.println(cart);
-        cart.getCartDetails().clear();
-        System.out.println(cart);
-        cart.setTotalPrice(0);
-        cartDao.save(cart);
-
-        return this.modelMapper.map(newCart, OrderDto.class);
-
+            return this.modelMapper.map(newCart, OrderDto.class);
+        }
     }
 
     //update the order by order id

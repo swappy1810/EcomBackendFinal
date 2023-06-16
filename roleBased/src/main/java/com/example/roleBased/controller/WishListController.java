@@ -3,6 +3,7 @@ package com.example.roleBased.controller;
 import com.example.roleBased.dto.ProductDto;
 import com.example.roleBased.dto.WishlistDto;
 import com.example.roleBased.entity.Wishlist;
+import com.example.roleBased.exception.ApiResponse;
 import com.example.roleBased.serviceImpl.ProductServiceImpl;
 import com.example.roleBased.serviceImpl.WishListServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,12 @@ public class WishListController {
         }
 
         return new ResponseEntity<List<ProductDto>>(products, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{username}")
+    public ApiResponse deleteByUserId(@PathVariable String username) {
+        wishListService.deleteWishList(username);
+        return new ApiResponse("Product removed from wishlist",true);
     }
 
 }

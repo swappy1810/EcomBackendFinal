@@ -14,7 +14,7 @@ public class OrderDto {
     private int orderId;
     private Date addedDate;
     private String status;
-    private int quantity;
+    private int quantity=1;
     private ProductDto product;
     private int userCartId;
     private double totalPrice;

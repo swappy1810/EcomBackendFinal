@@ -12,6 +12,8 @@ import com.example.roleBased.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
@@ -58,5 +60,10 @@ public class WishListServiceImpl {
     public List<Wishlist> readWishList(Integer userId) {
         User user=this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("User not found with this userId"+userId));
         return wishListDao.findByUser(user);
+    }
+    //delete wishlist of user by user Id
+    @Transactional
+    public void deleteWishList(String username){
+        wishListDao.deleteByUsername(username);
     }
 }
