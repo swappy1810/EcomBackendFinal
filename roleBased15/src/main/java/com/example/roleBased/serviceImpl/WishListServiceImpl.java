@@ -8,11 +8,15 @@ import com.example.roleBased.dto.WishlistDto;
 import com.example.roleBased.entity.Product;
 import com.example.roleBased.entity.User;
 import com.example.roleBased.entity.Wishlist;
+import com.example.roleBased.exception.ApiResponse;
 import com.example.roleBased.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -62,10 +66,45 @@ public class WishListServiceImpl {
         return wishListDao.findByUser(user);
     }
     @Transactional
-    public void removeWishList(String username) {
-        wishListDao.deleteByUsername(username);
-
+    public ApiResponse removeWishList(Integer productId) {
+      //  User user=this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("User not found with this userId"+userId));
+        Product product= this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("Product not fount with this id"+productId));
+        // wishListDao.deleteByUsername(username);
+      //  wishListDao.deleteByUser(user);
+        wishListDao.deleteByProduct(product);
+        return new ApiResponse("WishList Deleted Successfully", true);
     }
 
+    @Transactional
+    public void removeWishList(Integer userId, Integer productId) {
+        User user=this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("User not found with this userId"+userId));
+        Product product= this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("Product not fount with this id"+productId));
+        Wishlist wishlist1= (Wishlist) wishListDao.findByUser(user);
+        Wishlist wishlist2= (Wishlist) wishListDao.findByProduct(product);
+        if(wishlist1==wishlist2){
+            wishListDao.deleteByProduct(product);
+        }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 }

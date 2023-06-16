@@ -25,8 +25,8 @@ public class WishListController {
     private ProductServiceImpl productService;
 
     @PostMapping("save/{userId}/product/{productId}")
-    public ResponseEntity<WishlistDto> createWishList(@RequestBody WishlistDto wishListDto, @PathVariable Integer userId, @PathVariable Integer productId){
-        WishlistDto createWishListDto = this.wishListService.createWishList(wishListDto,userId,productId);
+    public ResponseEntity<WishlistDto> createWishList(@RequestBody WishlistDto wishListDto, @PathVariable Integer userId, @PathVariable Integer productId) {
+        WishlistDto createWishListDto = this.wishListService.createWishList(wishListDto, userId, productId);
         return new ResponseEntity<WishlistDto>(createWishListDto, HttpStatus.CREATED);
     }
 
@@ -46,11 +46,19 @@ public class WishListController {
         return new ResponseEntity<List<ProductDto>>(products, HttpStatus.OK);
     }
 
-    @DeleteMapping("remove/{username}")
-    public ResponseEntity<ApiResponse> deleteWishList(@PathVariable String username){
-        wishListService.removeWishList(username);
-        return new ResponseEntity<ApiResponse>(new ApiResponse("WishList Deleted Successfully",true), HttpStatus.OK);
-
+    @DeleteMapping("remove/{productId}")
+    public ApiResponse deleteWishList(@PathVariable Integer productId) {
+       return wishListService.removeWishList(productId);
     }
 
+    @DeleteMapping("remove/user/{userId}/product/{productId}")
+    public ResponseEntity<ApiResponse> RemoveWishList(@PathVariable Integer userId, Integer ProductId) {
+        try {
+            wishListService.removeWishList(userId, ProductId);
+            return new ResponseEntity<ApiResponse>(new ApiResponse("WishList Deleted Successfully", true), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<ApiResponse>(new ApiResponse("WishList did not deleted)", true), HttpStatus.NO_CONTENT);
+        }
+
+    }
 }
