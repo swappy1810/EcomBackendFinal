@@ -11,8 +11,11 @@ import java.util.List;
 @Repository
 public interface OrderDao extends JpaRepository<Order,Integer> {
 //methods
-    List<Order> findByUserCartId(Integer userCartId);
 
     List<Order> findByProduct(Product product);
+
+    List<Order> findByUser(User user);
+
+    public void deleteByUser(User user);
 
 }

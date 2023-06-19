@@ -1,14 +1,18 @@
 package com.example.roleBased.controller;
 
 import com.example.roleBased.dto.CartDetailDto;
+import com.example.roleBased.dto.ProductDto;
 import com.example.roleBased.entity.CartDetails;
+import com.example.roleBased.entity.Wishlist;
 import com.example.roleBased.exception.ApiResponse;
 import com.example.roleBased.serviceImpl.CartServiceImpl;
+import com.example.roleBased.serviceImpl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,9 +22,12 @@ public class CartController {
    @Autowired
    private CartServiceImpl cartServiceImpl;
 
-    @PostMapping("/addtocart/{productId}")
-    public String addToCart(@RequestBody CartDetails cartDetails, @PathVariable(name = "productId") Integer productId){
-        return cartServiceImpl.addToCart(cartDetails,productId);
+   @Autowired
+   private ProductServiceImpl productService;
+
+    @PostMapping("/addtocart/{productId}/{userId}")
+    public String addToCart(@RequestBody CartDetails cartDetails, @PathVariable(name = "productId") Integer productId, @PathVariable(name = "userId") Integer userId){
+        return cartServiceImpl.addToCart(cartDetails,productId,userId);
     }
 
     @DeleteMapping("/deleteCart/{productId}")
@@ -29,9 +36,17 @@ public class CartController {
         return new ResponseEntity<ApiResponse>(new ApiResponse("product is successfully deleted from cart",true), HttpStatus.OK);
     }
 
-    @GetMapping("/{userCartId}")
-    public List<CartDetailDto> getAllCart(@PathVariable Integer userCartId){
-        return cartServiceImpl.getCartDetails(userCartId);
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<ProductDto>> getAllCart(@PathVariable Integer userId){
+         //get wishlist
+        List<CartDetails> body = cartServiceImpl.getCartDetails(userId);
+
+        //create productDTO from productId in wishlist
+        List<ProductDto> products = new ArrayList<ProductDto>();
+        for (CartDetails cartDetails : body) {
+            products.add(productService.productToDto(cartDetails.getProduct()));
+        }
+        return new ResponseEntity<List<ProductDto>>(products, HttpStatus.OK);
     }
 
 }

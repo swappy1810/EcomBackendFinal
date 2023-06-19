@@ -20,6 +20,9 @@ public class CartDetails {
     private int quantity=1;
     private double price;
     private int userCartId;
-    private Integer productId;
+    @OneToOne
+    private User user;
+    @OneToOne
+    private Product product;
 
 }

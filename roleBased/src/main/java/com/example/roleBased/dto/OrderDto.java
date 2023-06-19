@@ -16,7 +16,6 @@ public class OrderDto {
     private String status;
     private int quantity=1;
     private ProductDto product;
-    private int userCartId;
     private double totalPrice;
     private String addressLine1;
     private String addressLine2;
@@ -25,5 +24,6 @@ public class OrderDto {
     private String city;
     private String zipCode;
     private String mobileNo;
+    private UserDto user;
 
 }

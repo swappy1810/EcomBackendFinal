@@ -38,17 +38,25 @@ public class CartServiceImpl {
 
     ModelMapper modelMapper = new ModelMapper();
 
-
-    public String addToCart(CartDetails cartDetails, Integer productId) {
-      Product product = productDao.findById(productId).get();
-        Cart cart = cartDao.findById(cartDetails.getUserCartId()).get();
-        List<CartDetails> cartDetails1 = new ArrayList<>();
-        cartDetails.setProductId(productId);
-        cartDetails1.add(cartDetails);
-        cart.setCartDetails(cartDetails1);
-        cartDao.save(cart);
-        return "Product added to cart";
-
+    public String addToCart(CartDetails cartDetails, Integer productId,Integer userId) {
+        User user = this.userDao.findById(userId).get();
+        if(user != null) {
+            Product product = productDao.findById(productId).get();
+            Cart cart = cartDao.findById(cartDetails.getUserCartId()).get();
+            List<CartDetails> cartDetails1 = new ArrayList<>();
+            cartDetails.setProduct(product);
+            cartDetails.setUser(user);
+            cartDetails.setUserCartId(cartDetails.getUserCartId());
+            cartDetails.setPrice(cartDetails.getPrice());
+            cartDetails.setQuantity(cartDetails.getQuantity());
+            cartDetails1.add(cartDetails);
+            cart.setCartDetails(cartDetails1);
+            cartDao.save(cart);
+            return "Product added to cart";
+        }
+        else{
+            return "User not logged In please sign In!";
+        }
     }
 
     private CartDetailDto cartNewDto(CartDetails newCart) {
@@ -65,9 +73,9 @@ public class CartServiceImpl {
     }
 
     //get all cart items lists
-    public List<CartDetailDto> getCartDetails(Integer userCartId) {
-        User user = userDao.findById(userCartId).get();
-        return user.getCart().getCartDetails().stream().map(cartDetails -> this.cartNewDto(cartDetails)).collect(Collectors.toList());
-    }
+    public List<CartDetails> getCartDetails(Integer userId) {
+        User user = userDao.findById(userId).get();
+        return cartDetailDao.findByUser(user);
+        }
 
     }

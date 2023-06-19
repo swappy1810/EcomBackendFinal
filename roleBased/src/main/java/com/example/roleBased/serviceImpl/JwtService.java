@@ -55,7 +55,6 @@ public class JwtService implements UserDetailsService {
         } else {
 throw new UsernameNotFoundException("email is not valid");
         }
-
     }
 
     private Set getAuthorities(User user){

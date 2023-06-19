@@ -58,17 +58,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/subCat/save/{catId}",
             "/subCat/{id}",
             "/subCat/",
-            "/product/{productId}/orders/{isSingleCheckout}",
+            "/product/{productId}/orders/{isSingleCheckout}/{userId}",
             "/product/{productId}/order",
             "/users/{userId}/order",
             "/search/**",
-            "/addtocart/{productId}",
+            "/addtocart/{productId}/{userId}",
             "/deleteCart/{productId}",
             "/carts/getCartDetails",
-            "/{userCartId}",
+            "/{userId}",
         "/save/{userId}/product/{productId}",
         "/getList/{userId}",
-        "/{username}"
+        "/{userId}"
 
     };
 

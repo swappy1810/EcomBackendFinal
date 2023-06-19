@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,14 +35,15 @@ public class OrderServiceImpl {
     ModelMapper modelMapper = new ModelMapper();
 
 //add order to orders
-    public OrderDto createOrder(OrderDto orderDto, Integer productId,Boolean isSingleCheckout) {
-         Product product =  this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id" +productId));
+    public OrderDto createOrder(OrderDto orderDto, Integer productId,Boolean isSingleCheckout,Integer userId) {
+        User user = this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("User not found with user Id"+userId));
+        Product product =  this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id" +productId));
         if(Boolean.TRUE.equals(isSingleCheckout)){
             Order order = new Order();
             order.setAddedDate(new Date());
             order.setStatus(orderDto.getStatus());
+            order.setUser(user);
             order.setQuantity(orderDto.getQuantity());
-            order.setAddedDate(orderDto.getAddedDate());
             order.setAddressLine1(orderDto.getAddressLine1());
             order.setAddressLine2(orderDto.getAddressLine2());
             order.setCity(orderDto.getCity());
@@ -65,25 +67,24 @@ public class OrderServiceImpl {
             order.setCity(orderDto.getCity());
             order.setCountry(order.getCountry());
             order.setState(order.getState());
+            order.setUser(user);
             order.setMobileNo(order.getMobileNo());
             order.setQuantity(orderDto.getQuantity());
             order.setZipCode(orderDto.getZipCode());
             order.setTotalPrice(orderDto.getTotalPrice());
             order.setProduct(product);
-            order.setUserCartId(orderDto.getUserCartId());
             Order newCart = this.orderDao.save(order);
 
-            System.out.println("entered clear cart");
-            Cart cart = cartDao.findById(order.getUserCartId()).get();
-            System.out.println(cart.getUserCartId());
-            System.out.println(cart);
-            cart.getCartDetails().clear();
-            System.out.println(cart);
-            cart.setTotalPrice(0);
-            cartDao.save(cart);
-
+            List<CartDetails> cart = cartDetailDao.findByUser(user);
+            cart.clear();
             return this.modelMapper.map(newCart, OrderDto.class);
         }
+    }
+
+    @Transactional
+    public void deleteCart(Integer userId){
+        User user = userDao.findById(userId).get();
+        orderDao.deleteByUser(user);
     }
 
     //update the order by order id
@@ -121,10 +122,8 @@ public class OrderServiceImpl {
 
 //get order by user by user id
 
-    public List<OrderDto> getOrderByUser(Integer userCartId) {
-        User user = this.userDao.findById(userCartId).orElseThrow(()->new ResourceNotFoundException(" userCart Id not found with this id "+userCartId));
-        List<Order> carts = this.orderDao.findByUserCartId(userCartId);
-        List<OrderDto> cartDtos = carts.stream().map((x) -> this.modelMapper.map(x, OrderDto.class)).collect(Collectors.toList());
-        return cartDtos;
+    public List<Order> getOrderByUser(Integer userId) {
+        User user = this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException(" userCart Id not found with this id "+userId));
+       return orderDao.findByUser(user);
     }
 }

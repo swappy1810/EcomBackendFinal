@@ -14,6 +14,7 @@ public class JwtResponse {
     private Set<Role> roles;
     private String message;
     private Boolean status;
+    private int userId;
     private String jwtToken;
     private String email;
 

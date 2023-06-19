@@ -62,8 +62,8 @@ public class WishListServiceImpl {
         return wishListDao.findByUser(user);
     }
     //delete wishlist of user by user Id
-    @Transactional
-    public void deleteWishList(String username){
-        wishListDao.deleteByUsername(username);
-    }
+//    @Transactional
+//    public void deleteWishList(Integer userId){
+//        wishListDao.getProductByProductId()
+//    }
 }

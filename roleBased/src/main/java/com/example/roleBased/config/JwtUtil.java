@@ -29,26 +29,31 @@ public class JwtUtil {
     public String getUserNameFromToken(String token){
         return getClaimFromToken(token,Claims::getSubject);
     }
-//get Claim From Token
+
+    //get Claim From Token
     private <T> T getClaimFromToken(String token, Function<Claims,T> claimResolver){
         final Claims claims =  getAllClaimsFromToken(token);
         return claimResolver.apply(claims);
     }
-//get all claims from token
+
+    //get all claims from token
     private Claims getAllClaimsFromToken(String token){
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJwt(token).getBody();
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
-//validate token from username
+
+    //validate token from username
     public Boolean validateToken(String token, UserDetails userDetails){
         String username = getUserNameFromToken(token);
         return (username.equals(userDetails.getUsername()) && isTokenExpired(token));
     }
-//checking expiry of token
+
+    //checking expiry of token
     private Boolean isTokenExpired(String token){
         final Date expiredDate = getExpirationDateFromToken(token);
         return expiredDate.before(new Date());
     }
-//get expiration date from token
+
+    //get expiration date from token
     private Date getExpirationDateFromToken(String token){
         return getClaimFromToken(token,Claims::getExpiration);
     }
@@ -60,7 +65,7 @@ public class JwtUtil {
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+ TOKEN_VALIDITY * 1000))
-                .signWith(SignatureAlgorithm.HS512,SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256,SECRET_KEY)
                 .compact()
                 ;
     }

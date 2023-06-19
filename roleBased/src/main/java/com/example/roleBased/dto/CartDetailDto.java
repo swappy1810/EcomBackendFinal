@@ -12,7 +12,8 @@ public class CartDetailDto {
     private int id;
     private int quantity=1;
     private double totalPrice;
+    private UserDto user;
     private int userCartId;
-    private Integer productId;
+    private ProductDto product;
 
 }

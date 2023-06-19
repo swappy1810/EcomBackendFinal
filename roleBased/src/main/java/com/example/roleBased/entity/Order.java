@@ -29,9 +29,9 @@ public class Order {
     private String city;
     private String zipCode;
     private String mobileNo;
-    private int userCartId;
 
-
+    @OneToOne
+    private User user;
     //mapped order by product
     @ManyToOne
     @JoinColumn(name = "productId")

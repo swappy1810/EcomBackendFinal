@@ -46,10 +46,10 @@ public class WishListController {
         return new ResponseEntity<List<ProductDto>>(products, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{username}")
-    public ApiResponse deleteByUserId(@PathVariable String username) {
-        wishListService.deleteWishList(username);
-        return new ApiResponse("Product removed from wishlist",true);
-    }
+//    @DeleteMapping("/{userId}")
+//    public ApiResponse deleteByUserId(@PathVariable Integer userId) {
+//        wishListService.deleteWishList(userId);
+//        return new ApiResponse("Product removed from wishlist",true);
+//    }
 
 }
