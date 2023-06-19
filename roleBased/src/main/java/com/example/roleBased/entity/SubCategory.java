@@ -24,4 +24,27 @@ public class SubCategory {
     @JoinColumn(name = "catId")
     private Category category;
 
+    public int getSubCatId() {
+        return subCatId;
+    }
+
+    public void setSubCatId(int subCatId) {
+        this.subCatId = subCatId;
+    }
+
+    public String getSubCatName() {
+        return subCatName;
+    }
+
+    public void setSubCatName(String subCatName) {
+        this.subCatName = subCatName;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }

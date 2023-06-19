@@ -13,4 +13,27 @@ public class CartDto {
     private double totalPrice;
     private CartDetailDto cartDetail;
 
+    public int getUserCartId() {
+        return userCartId;
+    }
+
+    public void setUserCartId(int userCartId) {
+        this.userCartId = userCartId;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public CartDetailDto getCartDetail() {
+        return cartDetail;
+    }
+
+    public void setCartDetail(CartDetailDto cartDetail) {
+        this.cartDetail = cartDetail;
+    }
 }

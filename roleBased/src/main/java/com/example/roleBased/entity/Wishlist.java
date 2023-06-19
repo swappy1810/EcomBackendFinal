@@ -36,5 +36,49 @@ public class Wishlist {
     public String getUsername() {
         return username;
     }
+
+    public int getListid() {
+        return Listid;
+    }
+
+    public void setListid(int listid) {
+        Listid = listid;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }
 
