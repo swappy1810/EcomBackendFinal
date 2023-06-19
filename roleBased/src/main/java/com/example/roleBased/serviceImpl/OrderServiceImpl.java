@@ -75,8 +75,11 @@ public class OrderServiceImpl {
             order.setProduct(product);
             Order newCart = this.orderDao.save(order);
 
-            List<CartDetails> cart = cartDetailDao.findByUser(user);
-            cart.clear();
+            Cart cart = cartDao.findById(user.getCart().getUserCartId()).get();
+        cart.getCartDetails().clear();
+        cart.setTotalPrice(0);
+        cartDao.save(cart);
+
             return this.modelMapper.map(newCart, OrderDto.class);
         }
     }

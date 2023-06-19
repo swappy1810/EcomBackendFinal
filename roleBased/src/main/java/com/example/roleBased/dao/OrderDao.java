@@ -1,8 +1,6 @@
 package com.example.roleBased.dao;
 
-import com.example.roleBased.entity.Order;
-import com.example.roleBased.entity.Product;
-import com.example.roleBased.entity.User;
+import com.example.roleBased.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,5 +15,6 @@ public interface OrderDao extends JpaRepository<Order,Integer> {
     List<Order> findByUser(User user);
 
     public void deleteByUser(User user);
+
 
 }

@@ -23,27 +23,6 @@ public class Category {
     @OneToMany(mappedBy = "category",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<Product> product;
 
-    public int getCatId() {
-        return catId;
-    }
 
-    public void setCatId(int catId) {
-        this.catId = catId;
-    }
 
-    public String getCatName() {
-        return catName;
-    }
-
-    public void setCatName(String catName) {
-        this.catName = catName;
-    }
-
-    public Set<Product> getProduct() {
-        return product;
-    }
-
-    public void setProduct(Set<Product> product) {
-        this.product = product;
-    }
 }

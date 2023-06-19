@@ -7,16 +7,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-
+@NoArgsConstructor
+@AllArgsConstructor
 public class ApiResponse {
 
     private String message;
     private boolean success;
-
-    public ApiResponse(String product_deleted_successfully_from_cart, boolean b) {
-    }
-
-    //getter and setter
+//getter and setter
     public String getMessage() {
         return message;
     }

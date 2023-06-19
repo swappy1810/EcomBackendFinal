@@ -26,27 +26,4 @@ public class Cart {
     @JoinColumn(name = "cart_cartDetail")
     private List<CartDetails> cartDetails = new ArrayList<>();
 
-    public int getUserCartId() {
-        return userCartId;
-    }
-
-    public void setUserCartId(int userCartId) {
-        this.userCartId = userCartId;
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public List<CartDetails> getCartDetails() {
-        return cartDetails;
-    }
-
-    public void setCartDetails(List<CartDetails> cartDetails) {
-        this.cartDetails = cartDetails;
-    }
 }
