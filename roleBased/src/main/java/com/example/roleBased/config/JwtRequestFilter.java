@@ -39,23 +39,25 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String jwtToken = null;
         String username = null;
-        System.out.println(header);
-        if (header != null && header.startsWith("Bearer")) {
+        if (header != null && header.startsWith("Bearer ")) {
             jwtToken = header.substring(7);
 //checking expiration of token
             try {
                 username = jwtUtil.getUserNameFromToken(jwtToken);
+                System.out.println(username);
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get Jwt Token");
             } catch (ExpiredJwtException e) {
                 System.out.println("Jwt Token get expired");
             }
-        } else {
+        }
+        else {
             System.out.println("Jwt Token does not start with Bearer");
         }
 //get username from authentication classes
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = jwtService.loadUserByUsername(username);
+            System.out.println(userDetails);
             if (jwtUtil.validateToken(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,
                         null, userDetails.getAuthorities());
@@ -67,13 +69,4 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-        private String parseJwt(HttpServletRequest request) {
-            String headerAuth = request.getHeader("Authorization");
-
-            if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-                return headerAuth.substring(7);
-            }
-
-            return null;
-        }
     }

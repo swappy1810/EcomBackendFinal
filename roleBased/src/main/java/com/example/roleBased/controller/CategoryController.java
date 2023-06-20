@@ -21,6 +21,7 @@ public class CategoryController {
     private CategoryServiceImpl categoryService;
 
     //add product to products
+    @PreAuthorize("hasRole('Admin')")
     @PostMapping("/save")
     public ResponseEntity<CategoryDto> createProduct(@Valid @RequestBody CategoryDto categoryDto){
         CategoryDto createCategoryDto = this.categoryService.createProduct(categoryDto);
@@ -28,6 +29,7 @@ public class CategoryController {
     }
 
     //update product by product id
+    @PreAuthorize("hasRole('Admin')")
     @PutMapping("/{id}")
     public ResponseEntity<CategoryDto> updateProduct(@Valid @RequestBody CategoryDto categoryDto, @PathVariable Integer id){
         CategoryDto updatedCategory = this.categoryService.updateProduct(categoryDto,id);
@@ -36,6 +38,7 @@ public class CategoryController {
     }
 
     //delete the product by product Id
+    @PreAuthorize("hasRole('Admin')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable("id") Integer id){
         this.categoryService.deleteProduct(id);
@@ -43,12 +46,14 @@ public class CategoryController {
     }
 
     //get all product
+    @PreAuthorize("hasRole('User')")
     @GetMapping("/")
     public ResponseEntity<List<CategoryDto>> getAllProducts(){
         return ResponseEntity.ok(this.categoryService.getAllProduct());
     }
 
     //get product by product id
+    @PreAuthorize("hasRole('User')")
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDto> getProductBYId(@PathVariable("id") Integer id){
         return ResponseEntity.ok(this.categoryService.getProductById(id));

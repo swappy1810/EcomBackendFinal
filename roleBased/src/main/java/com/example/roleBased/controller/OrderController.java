@@ -9,6 +9,7 @@ import com.example.roleBased.serviceImpl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class OrderController {
     private ProductServiceImpl productService;
 
     //add the order using user id and product id
+    @PreAuthorize("hasRole('User')")
     @PostMapping("product/{productId}/orders/{isSingleCheckout}/{userId}")
     public ResponseEntity<OrderDto> createCart(@RequestBody OrderDto cartDto, @PathVariable Integer productId,Boolean isSingleCheckout,@PathVariable Integer userId){
         OrderDto createCart = this.orderService.createOrder(cartDto,productId,isSingleCheckout,userId);
@@ -32,6 +34,7 @@ public class OrderController {
     }
 
     //get orders by user id
+    @PreAuthorize("hasRole('User')")
     @GetMapping("users/{userId}/order")
     public ResponseEntity<List<ProductDto>> getByUserId(@PathVariable Integer userId){
         //get wishlist
@@ -47,6 +50,7 @@ public class OrderController {
     }
 
     //get order by product id
+    @PreAuthorize("hasRole('User')")
     @GetMapping("product/{productId}/order")
     public ResponseEntity<List<OrderDto>> getByCategory(@PathVariable Integer productId){
         List<OrderDto> cartDtos = this.orderService.getOrderByProduct(productId);

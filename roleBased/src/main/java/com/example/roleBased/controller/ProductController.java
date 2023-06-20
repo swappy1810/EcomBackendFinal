@@ -6,6 +6,7 @@ import com.example.roleBased.serviceImpl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,12 +21,14 @@ public class ProductController {
     private ProductServiceImpl productService;
 
 //save or add the product
+@PreAuthorize("hasRole('Admin')")
     @PostMapping("/save/{catId}")
     public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productDto, @PathVariable Integer catId){
         ProductDto createProductDto = this.productService.createProduct(productDto,catId);
         return new ResponseEntity<>(createProductDto, HttpStatus.CREATED);
     }
 //update products from products list
+@PreAuthorize("hasRole('Admin')")
     @PutMapping("/{id}")
     public ResponseEntity<ProductDto> updateProduct(@Valid @RequestBody ProductDto productDto, @PathVariable Integer id){
         ProductDto updatedProduct = this.productService.updateProduct(productDto,id);
@@ -37,23 +40,27 @@ public class ProductController {
         return ResponseEntity.ok(updatedProduct);
     }
 //delete the product by product id
+@PreAuthorize("hasRole('Admin')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable("id") Integer id){
         this.productService.deleteProduct(id);
         return new ResponseEntity<ApiResponse>(new ApiResponse("Product Deleted Successfully",true), HttpStatus.OK);
     }
 //get all products list
+@PreAuthorize("hasRole('User')")
     @GetMapping("/")
     public ResponseEntity<List<ProductDto>> getAllProducts(){
         return ResponseEntity.ok(this.productService.getAllProduct());
     }
 //get product by product id
+@PreAuthorize("hasRole('User')")
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProductBYId(@PathVariable("id") Integer id){
         return ResponseEntity.ok(this.productService.getProductById(id));
     }
 
     //get product by category using category id
+    @PreAuthorize("hasRole('User')")
     @GetMapping("/category/{catId}")
     public ResponseEntity<List<ProductDto>> getProductByCategory(@PathVariable Integer catId){
         List<ProductDto> productDtos = this.productService.findAllByCategory(catId);

@@ -1,9 +1,11 @@
 package com.example.roleBased.serviceImpl;
 
 import com.example.roleBased.config.JwtUtil;
+import com.example.roleBased.dao.RoleDao;
 import com.example.roleBased.dao.UserDao;
 import com.example.roleBased.entity.JwtRequest;
 import com.example.roleBased.entity.JwtResponse;
+import com.example.roleBased.entity.Role;
 import com.example.roleBased.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,7 +18,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -31,26 +36,33 @@ public class JwtService implements UserDetailsService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception{
-        String email = jwtRequest.getEmail();
-        String password = jwtRequest.getPassword();
-        authenticate(email,password);
+    @Autowired
+    RoleDao roleDao;
 
-        final UserDetails userDetails = loadUserByUsername(email);
-        String newGeneratedToken = jwtUtil.generateToken(email);
-        User user = userDao.findByEmail(email);
-        return new JwtResponse(user,newGeneratedToken);
-    }
+//    public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception{
+//        String email = jwtRequest.getEmail();
+//        String password = jwtRequest.getPassword();
+//        authenticate(email,password);
+//
+//        final UserDetails userDetails = loadUserByUsername(email);
+//        String newGeneratedToken = jwtUtil.generateToken(email);
+//        User user = userDao.findByEmail(email);
+//        return new JwtResponse(user,newGeneratedToken);
+//    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userDao.findByEmail(email);
 
+        List<SimpleGrantedAuthority> role = new ArrayList<>();
+        role.add(new SimpleGrantedAuthority("ROLE_Admin"));
+        role.add(new SimpleGrantedAuthority("ROLE_User"));
+        System.out.println("loadusername "+ user.getUsername());
         if (user != null) {
             return new org.springframework.security.core.userdetails.User(
                     user.getEmail(),
                     user.getPassword(),
-                    getAuthorities(user)
+                    role
                     );
         } else {
 throw new UsernameNotFoundException("email is not valid");

@@ -2,15 +2,9 @@ package com.example.roleBased.controller;
 
 import com.example.roleBased.config.JwtUtil;
 import com.example.roleBased.dao.UserDao;
-import com.example.roleBased.dto.AuthRequest;
-import com.example.roleBased.dto.LoginResponse;
-import com.example.roleBased.dto.Response;
-import com.example.roleBased.dto.UserDto;
 import com.example.roleBased.entity.JwtRequest;
 import com.example.roleBased.entity.JwtResponse;
-import com.example.roleBased.entity.Role;
 import com.example.roleBased.entity.User;
-import com.example.roleBased.serviceImpl.JwtService;
 import com.example.roleBased.serviceImpl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;;
 import org.springframework.http.HttpStatus;
@@ -21,8 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
-import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @CrossOrigin
@@ -53,6 +45,7 @@ public class UserController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(JwtResponse.builder().status(true).message("It is a Valid User!!").roles(user.getRoles()).userId(user.getUserId()).email(jwtRequest.getEmail()).jwtToken(JwtUtil.generateToken(jwtRequest.getEmail())).build());
     }
+
 //    @PostMapping("/authenticate")
 //    public ResponseEntity<LoginResponse> generateToken1(@RequestBody AuthRequest authRequest) {
 //        User user =null;

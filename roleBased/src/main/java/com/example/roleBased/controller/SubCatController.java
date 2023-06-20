@@ -8,6 +8,7 @@ import com.example.roleBased.serviceImpl.SubCategoryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,6 +23,7 @@ public class SubCatController {
     private SubCategoryServiceImpl subCategoryService;
 
     //add product to products
+    @PreAuthorize("hasRole('Admin')")
     @PostMapping("/save/{catId}")
     public ResponseEntity<SubCatDto> createSubCategory(@Valid @RequestBody SubCatDto subCatDto,@PathVariable Integer catId){
         SubCatDto createSubCategoryDto = this.subCategoryService.createSubCategory(subCatDto,catId);
@@ -29,6 +31,7 @@ public class SubCatController {
     }
 
     //update product by product id
+    @PreAuthorize("hasRole('Admin')")
     @PutMapping("/{id}")
     public ResponseEntity<SubCatDto> updateSubCategory(@Valid @RequestBody SubCatDto subCatDto, @PathVariable Integer subCatId){
         SubCatDto updateSubCat = this.subCategoryService.updateSubCategory(subCatDto,subCatId);
@@ -37,6 +40,7 @@ public class SubCatController {
     }
 
     //delete the product by product Id
+    @PreAuthorize("hasRole('Admin')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteSubCategory(@PathVariable("subCatId") Integer subCatId){
         this.subCategoryService.deleteProduct(subCatId);
@@ -44,12 +48,14 @@ public class SubCatController {
     }
 
     //get all product
+    @PreAuthorize("hasRole('User')")
     @GetMapping("/")
     public ResponseEntity<List<SubCatDto>> getAllProducts(){
         return ResponseEntity.ok(this.subCategoryService.getAllProduct());
     }
 
     //get product by product id
+    @PreAuthorize("hasRole('User')")
     @GetMapping("/{id}")
     public ResponseEntity<SubCatDto> getSubCategoryById(@PathVariable("catId") Integer catId){
         return ResponseEntity.ok(this.subCategoryService.getSubCatById(catId));

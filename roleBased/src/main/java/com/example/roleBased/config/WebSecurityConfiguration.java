@@ -53,9 +53,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/registerNewUser",
             "/products/save/{catId}",
             "/products/**",
-            "/category/**",
+            //"/category/**",
             "/category/{id}",
-            "/subCat/save/{catId}",
+//            "/subCat/save/{catId}",
             "/subCat/{id}",
             "/subCat/",
             "/product/{productId}/orders/{isSingleCheckout}/{userId}",
@@ -78,11 +78,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors();
         http.csrf().disable();
         http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll()
-                .requestMatchers().hasRole("Admin")
-                .antMatchers(HttpHeaders.ALLOW).permitAll()
+//                .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .exceptionHandling()
+//                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
