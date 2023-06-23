@@ -48,14 +48,12 @@ public class SubCatController {
     }
 
     //get all product
-    @PreAuthorize("hasRole('User')")
     @GetMapping("/")
     public ResponseEntity<List<SubCatDto>> getAllProducts(){
         return ResponseEntity.ok(this.subCategoryService.getAllProduct());
     }
 
     //get product by product id
-    @PreAuthorize("hasRole('User')")
     @GetMapping("/{id}")
     public ResponseEntity<SubCatDto> getSubCategoryById(@PathVariable("catId") Integer catId){
         return ResponseEntity.ok(this.subCategoryService.getSubCatById(catId));

@@ -44,7 +44,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //checking expiration of token
             try {
                 username = jwtUtil.getUserNameFromToken(jwtToken);
-                System.out.println(username);
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get Jwt Token");
             } catch (ExpiredJwtException e) {
@@ -57,7 +56,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //get username from authentication classes
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = jwtService.loadUserByUsername(username);
-            System.out.println(userDetails);
             if (jwtUtil.validateToken(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,
                         null, userDetails.getAuthorities());

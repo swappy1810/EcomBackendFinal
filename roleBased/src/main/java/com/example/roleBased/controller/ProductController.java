@@ -47,20 +47,17 @@ public class ProductController {
         return new ResponseEntity<ApiResponse>(new ApiResponse("Product Deleted Successfully",true), HttpStatus.OK);
     }
 //get all products list
-@PreAuthorize("hasRole('User')")
     @GetMapping("/")
     public ResponseEntity<List<ProductDto>> getAllProducts(){
         return ResponseEntity.ok(this.productService.getAllProduct());
     }
 //get product by product id
-@PreAuthorize("hasRole('User')")
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProductBYId(@PathVariable("id") Integer id){
         return ResponseEntity.ok(this.productService.getProductById(id));
     }
 
     //get product by category using category id
-    @PreAuthorize("hasRole('User')")
     @GetMapping("/category/{catId}")
     public ResponseEntity<List<ProductDto>> getProductByCategory(@PathVariable Integer catId){
         List<ProductDto> productDtos = this.productService.findAllByCategory(catId);

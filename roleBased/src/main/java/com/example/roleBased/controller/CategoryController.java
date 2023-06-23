@@ -46,14 +46,12 @@ public class CategoryController {
     }
 
     //get all product
-    @PreAuthorize("hasRole('User')")
     @GetMapping("/")
     public ResponseEntity<List<CategoryDto>> getAllProducts(){
         return ResponseEntity.ok(this.categoryService.getAllProduct());
     }
 
     //get product by product id
-    @PreAuthorize("hasRole('User')")
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDto> getProductBYId(@PathVariable("id") Integer id){
         return ResponseEntity.ok(this.categoryService.getProductById(id));
