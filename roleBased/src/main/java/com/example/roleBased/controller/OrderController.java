@@ -1,6 +1,7 @@
 package com.example.roleBased.controller;
 
 import com.example.roleBased.dto.OrderDto;
+import com.example.roleBased.dto.OrderItemDto;
 import com.example.roleBased.dto.ProductDto;
 import com.example.roleBased.entity.Order;
 import com.example.roleBased.entity.Wishlist;
@@ -28,25 +29,24 @@ public class OrderController {
     //add the order using user id and product id
     @PreAuthorize("hasRole('User')")
     @PostMapping("product/{productId}/orders/{isSingleCheckout}/{userId}")
-    public ResponseEntity<OrderDto> createCart(@RequestBody OrderDto cartDto, @PathVariable Integer productId,Boolean isSingleCheckout,@PathVariable Integer userId){
-        OrderDto createCart = this.orderService.createOrder(cartDto,productId,isSingleCheckout,userId);
-        return new ResponseEntity<OrderDto>(createCart, HttpStatus.CREATED);
+    public String createCart(@RequestBody OrderDto cartDto, @PathVariable Integer productId,Boolean isSingleCheckout,@PathVariable Integer userId){
+        String createCart = this.orderService.createOrder(cartDto,productId,isSingleCheckout,userId);
+        return "Order Placed!";
     }
 
     //get orders by user id
     @PreAuthorize("hasRole('User')")
     @GetMapping("users/{userId}/order")
-    public ResponseEntity<List<ProductDto>> getByUserId(@PathVariable Integer userId){
+    public ResponseEntity<List<OrderItemDto>> getByUserId(@PathVariable Integer userId){
         //get wishlist
         List<Order> body = orderService.getOrderByUser(userId);
 
         //create productDTO from productId in wishlist
-        List<ProductDto> products = new ArrayList<ProductDto>();
+        List<OrderItemDto> orderItemDtos = new ArrayList<OrderItemDto>();
         for (Order order : body) {
-            products.add(productService.productToDto(order.getProduct()));
+            orderItemDtos.add(orderService.orderNewDto(order));
         }
-
-        return new ResponseEntity<List<ProductDto>>(products, HttpStatus.OK);
+        return new ResponseEntity<List<OrderItemDto>>(orderItemDtos, HttpStatus.OK);
     }
 
     //get order by product id

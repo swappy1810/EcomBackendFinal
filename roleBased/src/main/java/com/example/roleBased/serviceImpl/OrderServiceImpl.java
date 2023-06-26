@@ -3,6 +3,7 @@ package com.example.roleBased.serviceImpl;
 import com.example.roleBased.config.JwtRequestFilter;
 import com.example.roleBased.dao.*;
 import com.example.roleBased.dto.OrderDto;
+import com.example.roleBased.dto.OrderItemDto;
 import com.example.roleBased.entity.*;
 import com.example.roleBased.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -35,54 +36,60 @@ public class OrderServiceImpl {
     ModelMapper modelMapper = new ModelMapper();
 
 //add order to orders
-    public OrderDto createOrder(OrderDto orderDto, Integer productId,Boolean isSingleCheckout,Integer userId) {
-        User user = this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("User not found with user Id"+userId));
-        Product product =  this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id" +productId));
-        if(Boolean.TRUE.equals(isSingleCheckout)){
-            Order order = new Order();
-            order.setAddedDate(new Date());
-            order.setStatus(orderDto.getStatus());
-            order.setUser(user);
-            order.setQuantity(orderDto.getQuantity());
-            order.setAddressLine1(orderDto.getAddressLine1());
-            order.setAddressLine2(orderDto.getAddressLine2());
-            order.setCity(orderDto.getCity());
-            order.setCountry(order.getCountry());
-            order.setState(order.getState());
-            order.setMobileNo(order.getMobileNo());
-            order.setQuantity(orderDto.getQuantity());
-            order.setZipCode(orderDto.getZipCode());
-            order.setTotalPrice(orderDto.getTotalPrice());
-            order.setProduct(product);
-            Order order1 = this.orderDao.save(order);
-            return this.modelMapper.map(order1,OrderDto.class);
-        }
-        else {
-            Order order = this.modelMapper.map(orderDto, Order.class);
-            order.setAddedDate(new Date());
-            order.setStatus(orderDto.getStatus());
-            order.setQuantity(orderDto.getQuantity());
-            order.setAddressLine1(orderDto.getAddressLine1());
-            order.setAddressLine2(orderDto.getAddressLine2());
-            order.setCity(orderDto.getCity());
-            order.setCountry(order.getCountry());
-            order.setState(order.getState());
-            order.setUser(user);
-            order.setMobileNo(order.getMobileNo());
-            order.setQuantity(orderDto.getQuantity());
-            order.setZipCode(orderDto.getZipCode());
-            order.setTotalPrice(orderDto.getTotalPrice());
-            order.setProduct(product);
-            Order newCart = this.orderDao.save(order);
+    public String createOrder(OrderDto orderDto, Integer productId,Boolean isSingleCheckout,Integer userId) {
+//        if(JwtRequestFilter.CURRENT_USER!=null) {
+            User user = this.userDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with user Id" + userId));
+            Product product = this.productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with this id" + productId));
+            if (Boolean.TRUE.equals(isSingleCheckout)) {
+                Order order = new Order();
+                order.setAddedDate(new Date());
+                order.setStatus(orderDto.getStatus());
+                order.setUser(user);
+                order.setQuantity(orderDto.getQuantity());
+                order.setAddressLine1(orderDto.getAddressLine1());
+                order.setAddressLine2(orderDto.getAddressLine2());
+                order.setCity(orderDto.getCity());
+                order.setCountry(order.getCountry());
+                order.setState(order.getState());
+                order.setMobileNo(order.getMobileNo());
+                order.setQuantity(orderDto.getQuantity());
+                order.setZipCode(orderDto.getZipCode());
+                order.setTotalPrice(orderDto.getTotalPrice());
+                order.setProduct(product);
+                Order order1 = this.orderDao.save(order);
+                 this.modelMapper.map(order1, OrderDto.class);
+                 return "Order Placed!";
+            } else {
+                Order order = this.modelMapper.map(orderDto, Order.class);
+                order.setAddedDate(new Date());
+                order.setStatus(orderDto.getStatus());
+                order.setQuantity(orderDto.getQuantity());
+                order.setAddressLine1(orderDto.getAddressLine1());
+                order.setAddressLine2(orderDto.getAddressLine2());
+                order.setCity(orderDto.getCity());
+                order.setCountry(order.getCountry());
+                order.setState(order.getState());
+                order.setUser(user);
+                order.setMobileNo(order.getMobileNo());
+                order.setQuantity(orderDto.getQuantity());
+                order.setZipCode(orderDto.getZipCode());
+                order.setTotalPrice(orderDto.getTotalPrice());
+                order.setProduct(product);
+                Order newCart = this.orderDao.save(order);
 
-            Cart cart = cartDao.findById(user.getCart().getUserCartId()).get();
-        cart.getCartDetails().clear();
-        cart.setTotalPrice(0);
-        cartDao.save(cart);
+                Cart cart = cartDao.findById(user.getCart().getUserCartId()).get();
+                cart.getCartDetails().clear();
+                cart.setTotalPrice(0);
+                cartDao.save(cart);
 
-            return this.modelMapper.map(newCart, OrderDto.class);
+                this.modelMapper.map(newCart, OrderDto.class);
+                return "Order Placed";
+            }
         }
-    }
+//        else{
+//            return "User Logged out!";
+//        }
+
 
     @Transactional
     public void deleteCart(Integer userId){
@@ -128,5 +135,9 @@ public class OrderServiceImpl {
     public List<Order> getOrderByUser(Integer userId) {
         User user = this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException(" userCart Id not found with this id "+userId));
        return orderDao.findByUser(user);
+    }
+
+    public OrderItemDto orderNewDto(Order newOrder) {
+        return this.modelMapper.map(newOrder, OrderItemDto.class);
     }
 }
