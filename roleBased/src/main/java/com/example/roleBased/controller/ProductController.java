@@ -1,6 +1,7 @@
 package com.example.roleBased.controller;
 
 import com.example.roleBased.dto.ProductDto;
+import com.example.roleBased.entity.Product;
 import com.example.roleBased.exception.ApiResponse;
 import com.example.roleBased.serviceImpl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,12 @@ public class ProductController {
     public ResponseEntity<List<ProductDto>> getProductByCategory(@PathVariable Integer catId){
         List<ProductDto> productDtos = this.productService.findAllByCategory(catId);
         return new ResponseEntity<List<ProductDto>>(productDtos,HttpStatus.ACCEPTED);
+    }
+
+    //Search API
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam("query") String query){
+        return ResponseEntity.ok(productService.searchProducts(query));
     }
 
 }

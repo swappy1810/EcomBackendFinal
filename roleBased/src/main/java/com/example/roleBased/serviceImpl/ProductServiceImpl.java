@@ -106,4 +106,10 @@ public class ProductServiceImpl{
         ProductDto productDto = modelMapper.map(product,ProductDto.class);
         return  productDto;
     }
+
+    //Search API of products
+    public List<Product> searchProducts(String query) {
+        List<Product> products = productDao.searchProducts(query);
+        return products;
+    }
 }

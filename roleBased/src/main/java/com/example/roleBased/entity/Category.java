@@ -20,8 +20,7 @@ public class Category {
     @Column(name = "categoryName",nullable = false,unique = true)
     private String catName;
 
-    @OneToMany(mappedBy = "category",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private Set<Product> product;
+
 
     public int getCatId() {
         return catId;
@@ -39,11 +38,5 @@ public class Category {
         this.catName = catName;
     }
 
-    public Set<Product> getProduct() {
-        return product;
-    }
 
-    public void setProduct(Set<Product> product) {
-        this.product = product;
-    }
 }

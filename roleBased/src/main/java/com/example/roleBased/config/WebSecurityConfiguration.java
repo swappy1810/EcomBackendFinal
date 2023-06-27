@@ -53,6 +53,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/registerNewUser",
             "/products/save/{catId}",
             "/products/**",
+            "/products/search",
             //"/category/**",
             "/category/{id}",
 //            "/subCat/save/{catId}",
@@ -68,7 +69,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/{userId}",
         "/save/{userId}/product/{productId}",
         "/getList/{userId}",
-        "/{userId}"
+        "/{userId}",
+
 
     };
 

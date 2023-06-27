@@ -4,6 +4,7 @@ import com.example.roleBased.dto.ProductDto;
 import com.example.roleBased.entity.Category;
 import com.example.roleBased.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,6 +13,11 @@ import java.util.List;
 public interface ProductDao extends JpaRepository<Product,Integer> {
 //methods
     List<Product> findByCategory(Category category);
+
+    @Query("SELECT p FROM Product p WHERE " +
+            "p.product_name LIKE CONCAT('%',:query, '%')" +
+            "Or p.product_short_desc LIKE CONCAT('%', :query, '%')")
+    List<Product> searchProducts(String query);
 
 
 }
