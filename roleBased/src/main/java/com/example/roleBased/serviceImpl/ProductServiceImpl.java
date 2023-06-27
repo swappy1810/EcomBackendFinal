@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ProductServiceImpl{
-//autowired the required objects
+public class ProductServiceImpl {
+    //autowired the required objects
     @Autowired
     private ProductDao productDao;
 
@@ -34,7 +34,7 @@ public class ProductServiceImpl{
 
     //add product to products
     public ProductDto createProduct(ProductDto productDto, Integer catId) {
-        Category category = this.categoryDao.findById(catId).orElseThrow(()->new ResourceNotFoundException("Category not found with this id"+catId));
+        Category category = this.categoryDao.findById(catId).orElseThrow(() -> new ResourceNotFoundException("Category not found with this id" + catId));
         Product product = this.dtoToProduct(productDto);
         product.setCategory(category);
         product.setProduct_price(productDto.getProduct_price());
@@ -89,21 +89,50 @@ public class ProductServiceImpl{
 
     //get list product by category with category id
     public List<ProductDto> findAllByCategory(Integer catId) {
-        Category cat = categoryDao.findById(catId).orElseThrow(()->new ResourceNotFoundException("Category with this id is not found"+catId));
+        Category cat = categoryDao.findById(catId).orElseThrow(() -> new ResourceNotFoundException("Category with this id is not found" + catId));
         List<Product> findByCategory = this.productDao.findByCategory(cat);
-       List<ProductDto> collect = findByCategory.stream().map(product -> productToDto(product)).collect(Collectors.toList());
+        List<ProductDto> collect = findByCategory.stream().map(product -> productToDto(product)).collect(Collectors.toList());
         return collect;
     }
 
     //dto to product fetch
     private Product dtoToProduct(ProductDto productDto) {
-        Product product = modelMapper.map(productDto,Product.class);
+        Product product = modelMapper.map(productDto, Product.class);
         return product;
     }
 
     //product to dto fetch
     public ProductDto productToDto(Product product) {
-        ProductDto productDto = modelMapper.map(product,ProductDto.class);
-        return  productDto;
+        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+        return productDto;
+    }
+
+//    public ResponseEntity<List<ProductDto>> getAllProductByCategory(String searchText) {
+//        try {
+//            List<Product> products = productDao.findBySearchText(searchText);
+//            if (products == null) {
+//                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+//            }
+//            List<ProductDto> productDtos = new ArrayList<>();
+//            for (Product p : products) {
+//                p.setProduct_image(p.getProduct_image());
+//                ProductDto productDto = new ProductDto();
+//                productDto.getProduct_name();
+//                productDto.getProduct_image();
+//                productDto.getProduct_price();
+//                productDto.getProduct_short_desc();
+//                productDto.getProduct_long_desc();
+//                productDto.getRating();
+//                productDtos.add(productDto);
+//            }
+//            return new ResponseEntity<List<ProductDto>>(productDtos, HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
+    public List<Product> searchProducts(String query){
+        List<Product> products = productDao.findBySearchText(query);
+        return products;
     }
 }

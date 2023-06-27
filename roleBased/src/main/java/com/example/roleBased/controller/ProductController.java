@@ -1,9 +1,12 @@
 package com.example.roleBased.controller;
 
 import com.example.roleBased.dto.ProductDto;
+import com.example.roleBased.entity.Product;
 import com.example.roleBased.exception.ApiResponse;
 import com.example.roleBased.serviceImpl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -64,4 +67,8 @@ public class ProductController {
         return new ResponseEntity<List<ProductDto>>(productDtos,HttpStatus.ACCEPTED);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam("query") String query){
+        return ResponseEntity.ok(productService.searchProducts(query));
+    }
 }

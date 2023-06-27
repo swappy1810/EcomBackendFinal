@@ -23,24 +23,24 @@ public class JwtUtil {
 
 
     //get username from token
-    public String getUserNameFromToken(String token){
+    public static String extractUsername(String token){
         return getClaimFromToken(token,Claims::getSubject);
     }
 
     //get Claim From Token
-    private <T> T getClaimFromToken(String token, Function<Claims,T> claimResolver){
+    private static <T> T getClaimFromToken(String token, Function<Claims, T> claimResolver){
         final Claims claims =  getAllClaimsFromToken(token);
         return claimResolver.apply(claims);
     }
 
     //get all claims from token
-    private Claims getAllClaimsFromToken(String token){
+    private static Claims getAllClaimsFromToken(String token){
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
     //validate token from username
     public Boolean validateToken(String token, UserDetails userDetails){
-        String username = getUserNameFromToken(token);
+        String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 

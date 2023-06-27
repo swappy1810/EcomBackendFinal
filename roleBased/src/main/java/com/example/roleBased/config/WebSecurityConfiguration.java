@@ -44,12 +44,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final String[] AUTH_WHITELIST = {
             // -- Swagger UI v3 (OpenAPI)
             "/v3/api-docs/**",
-            "/swagger-ui.html/**",
             "/swagger-ui/**",
             // other public endpoints of your API may be appended to this array
-            "/login",
             "/authenticate",
-            "/authenticateAdmin",
             "/registerNewUser",
             "/products/save/{catId}",
             "/products/**",
@@ -58,17 +55,19 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 //            "/subCat/save/{catId}",
             "/subCat/{id}",
             "/subCat/",
-            "/product/{productId}/orders/{isSingleCheckout}/{userId}",
-            "/product/{productId}/order",
-            "/users/{userId}/order",
-            "/search/**",
-            "/addtocart/{productId}/{userId}",
-            "/deleteCart/{productId}",
-            "/carts/getCartDetails",
-            "/{userId}",
-        "/save/{userId}/product/{productId}",
-        "/getList/{userId}",
-        "/{userId}"
+        "/products/search",
+//        "{/productId}",
+//            "/product/{productId}/orders/{isSingleCheckout}/{userId}",
+//            "/product/{productId}/order",
+//            "/users/{userId}/order",
+//            "/search/**",
+//            "/addtocart/{productId}/{userId}",
+//            "/deleteCart/{productId}",
+//            "/carts/getCartDetails",
+//            "/{userId}",
+//        "/save/{userId}/product/{productId}",
+//        "/getList/{userId}",
+//        "/{userId}"
 
     };
 
@@ -78,11 +77,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors();
         http.csrf().disable();
         http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll()
-//                .antMatchers(HttpHeaders.ALLOW).permitAll()
+                .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
-//                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

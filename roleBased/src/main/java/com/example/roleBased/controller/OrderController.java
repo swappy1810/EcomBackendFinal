@@ -30,7 +30,7 @@ public class OrderController {
     @PreAuthorize("hasRole('User')")
     @PostMapping("product/{productId}/orders/{isSingleCheckout}/{userId}")
     public String createCart(@RequestBody OrderDto cartDto, @PathVariable Integer productId,Boolean isSingleCheckout,@PathVariable Integer userId){
-        String createCart = this.orderService.createOrder(cartDto,productId,isSingleCheckout,userId);
+       this.orderService.createOrder(cartDto,productId,isSingleCheckout,userId);
         return "Order Placed!";
     }
 

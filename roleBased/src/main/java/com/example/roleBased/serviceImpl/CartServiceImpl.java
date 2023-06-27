@@ -1,5 +1,7 @@
 package com.example.roleBased.serviceImpl;
 
+import com.example.roleBased.config.JwtRequestFilter;
+import com.example.roleBased.config.JwtUtil;
 import com.example.roleBased.dao.CartDao;
 import com.example.roleBased.dao.CartDetailDao;
 import com.example.roleBased.dao.ProductDao;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +40,14 @@ public class CartServiceImpl {
     private UserDao userDao;
 
     ModelMapper modelMapper = new ModelMapper();
+
+    public User getUser(HttpServletRequest httpServletRequest){
+        String data = httpServletRequest.getHeader("Authorization");
+        String token = data.substring(7);
+        String name = JwtUtil.extractUsername(token);
+        User user = userDao.findByEmail(name);
+        return user;
+    }
 
     public String addToCart(CartDetails cartDetails, Integer productId,Integer userId) {
         User user = this.userDao.findById(userId).get();

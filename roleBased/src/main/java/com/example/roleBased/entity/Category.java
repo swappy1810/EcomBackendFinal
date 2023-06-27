@@ -1,5 +1,6 @@
 package com.example.roleBased.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,8 +21,6 @@ public class Category {
     @Column(name = "categoryName",nullable = false,unique = true)
     private String catName;
 
-    @OneToMany(mappedBy = "category",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private Set<Product> product;
 
 
 
