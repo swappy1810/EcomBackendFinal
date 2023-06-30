@@ -25,7 +25,6 @@ public class WishListController {
     @Autowired
     private ProductServiceImpl productService;
 
-    @PreAuthorize("hasRole('User')")
     @PostMapping("save/{userId}/product/{productId}")
     public ResponseEntity<WishlistDto> createWishList(@RequestBody WishlistDto wishListDto, @PathVariable Integer userId, @PathVariable Integer productId){
         WishlistDto createWishListDto = this.wishListService.createWishList(wishListDto,userId,productId);
@@ -33,7 +32,6 @@ public class WishListController {
     }
 
     //ReadWishlist
-    //@PreAuthorize("hasRole('User')")
     @GetMapping("getList/{userId}")
     public ResponseEntity<List<ProductDto>> getWishList(@PathVariable Integer userId) {
 
@@ -45,15 +43,8 @@ public class WishListController {
         for (Wishlist wishList : body) {
             products.add(productService.productToDto(wishList.getProduct()));
         }
-
-        return new ResponseEntity<List<ProductDto>>(products, HttpStatus.OK);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
-
-//    @DeleteMapping("/{userId}")
-//    public ApiResponse deleteByUserId(@PathVariable Integer userId) {
-//        wishListService.deleteWishList(userId);
-//        return new ApiResponse("Product removed from wishlist",true);
-//    }
 
     @DeleteMapping("/{productId}")
     public ApiResponse deleteByUserId(@PathVariable Integer productId)

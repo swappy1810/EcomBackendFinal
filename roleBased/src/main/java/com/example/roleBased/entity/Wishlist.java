@@ -30,6 +30,7 @@ public class Wishlist {
         private Date createdDate;
 
         private int quantity;
+
         private String username;
 
     public int getListid() {

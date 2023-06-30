@@ -61,12 +61,8 @@ public class WishListServiceImpl {
         User user=this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("User not found with this userId"+userId));
         return wishListDao.findByUser(user);
     }
-    //delete wishlist of user by user Id
-//    @Transactional
-//    public void deleteWishList(Integer userId){
-//        wishListDao.getProductByProductId()
-//    }
 
+    //delete wishlist of user by user Id
     @Transactional
     public void deleteWishList(Integer productId){
         Product product =  this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id" +productId));

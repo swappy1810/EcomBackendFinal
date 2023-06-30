@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true,proxyTargetClass = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -40,47 +40,32 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
    public AuthenticationManager authenticationManagerBean() throws  Exception{
         return super.authenticationManagerBean();
     }
-//permit all methods list
-    private static final String[] AUTH_WHITELIST = {
-            // -- Swagger UI v3 (OpenAPI)
-            "/v3/api-docs/**",
-            "/swagger-ui.html/**",
-            "/swagger-ui/**",
-            // other public endpoints of your API may be appended to this array
-            "/login",
-            "/authenticate",
-            "/authenticateAdmin",
-            "/registerNewUser",
-            "/products/save/{catId}",
-            "/products/**",
-            "/products/search",
-            //"/category/**",
-            "/category/{id}",
-//            "/subCat/save/{catId}",
-            "/subCat/{id}",
-            "/subCat/",
-            "/product/{productId}/orders/{isSingleCheckout}/{userId}",
-            "/product/{productId}/order",
-            "/users/{userId}/order",
-            "/search/**",
-            "/addtocart/{productId}/{userId}",
-            "/deleteCart/{productId}",
-            "/carts/getCartDetails",
-            "/{userId}",
-        "/save/{userId}/product/{productId}",
-        "/getList/{userId}",
-        "/{userId}",
-
-
-    };
 
     //configure security via http methods
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors();
         http.csrf().disable();
-        http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll()
-//                .antMatchers(HttpHeaders.ALLOW).permitAll()
+        http.authorizeRequests()
+                .antMatchers("/authenticate","/registerNewUser").permitAll()
+                .antMatchers("/category/save","/products/save","/products/{id}","/category/**",
+            "/category/{id}",
+            "/subCat/save/{catId}",
+            "/subCat/{id}",
+            "/subCat/").hasAuthority("Admin")
+                .antMatchers("/products/","/product/{productId}/orders/{isSingleCheckout}/{userId}",
+                        "/product/{productId}/order",
+                        "/users/{userId}/order",
+                        "/products/",
+                        "/search/**",
+                        "/addtocart/{productId}/{userId}",
+                        "/deleteCart/{productId}",
+                        "/carts/getCartDetails",
+                        "/{userId}",
+                        "/save/{userId}/product/{productId}",
+                        "/getList/{userId}",
+                        "/{userId}").hasAuthority("user")
+                .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

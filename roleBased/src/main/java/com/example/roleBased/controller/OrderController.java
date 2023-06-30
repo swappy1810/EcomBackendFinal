@@ -27,7 +27,6 @@ public class OrderController {
     private ProductServiceImpl productService;
 
     //add the order using user id and product id
-    @PreAuthorize("hasRole('User')")
     @PostMapping("product/{productId}/orders/{isSingleCheckout}/{userId}")
     public String createCart(@RequestBody OrderDto cartDto, @PathVariable Integer productId,Boolean isSingleCheckout,@PathVariable Integer userId){
         String createCart = this.orderService.createOrder(cartDto,productId,isSingleCheckout,userId);
@@ -35,7 +34,6 @@ public class OrderController {
     }
 
     //get orders by user id
-    @PreAuthorize("hasRole('User')")
     @GetMapping("users/{userId}/order")
     public ResponseEntity<List<OrderItemDto>> getByUserId(@PathVariable Integer userId){
         //get wishlist
@@ -50,7 +48,6 @@ public class OrderController {
     }
 
     //get order by product id
-    @PreAuthorize("hasRole('User')")
     @GetMapping("product/{productId}/order")
     public ResponseEntity<List<OrderDto>> getByCategory(@PathVariable Integer productId){
         List<OrderDto> cartDtos = this.orderService.getOrderByProduct(productId);

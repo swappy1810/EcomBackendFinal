@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtService implements UserDetailsService {
@@ -39,30 +41,18 @@ public class JwtService implements UserDetailsService {
     @Autowired
     RoleDao roleDao;
 
-//    public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception{
-//        String email = jwtRequest.getEmail();
-//        String password = jwtRequest.getPassword();
-//        authenticate(email,password);
-//
-//        final UserDetails userDetails = loadUserByUsername(email);
-//        String newGeneratedToken = jwtUtil.generateToken(email);
-//        User user = userDao.findByEmail(email);
-//        return new JwtResponse(user,newGeneratedToken);
-//    }
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userDao.findByEmail(email);
 
         List<SimpleGrantedAuthority> role = new ArrayList<>();
-        role.add(new SimpleGrantedAuthority("ROLE_Admin"));
-        role.add(new SimpleGrantedAuthority("ROLE_User"));
-        System.out.println("loadusername "+ user.getUsername());
+        role.add(new SimpleGrantedAuthority("Admin"));
+        role.add(new SimpleGrantedAuthority("User"));
         if (user != null) {
             return new org.springframework.security.core.userdetails.User(
                     user.getEmail(),
                     user.getPassword(),
-                    role
+                    getAuthorities(user)
                     );
         } else {
 throw new UsernameNotFoundException("email is not valid");
@@ -70,12 +60,10 @@ throw new UsernameNotFoundException("email is not valid");
     }
 
     private Set getAuthorities(User user){
-        Set authorities = new HashSet();
-        user.getRoles().forEach(role ->
-        {
-            authorities.add(new SimpleGrantedAuthority("ROLE"+role.getRole_name()));
-        });
-        return authorities;
+            Set<GrantedAuthority> authorities = user.getRoles().stream()
+                    .map(role -> new SimpleGrantedAuthority(role.getRole_name()))
+                    .collect(Collectors.toSet());
+            return authorities;
     }
 
     private void authenticate(String email,String password) throws Exception{

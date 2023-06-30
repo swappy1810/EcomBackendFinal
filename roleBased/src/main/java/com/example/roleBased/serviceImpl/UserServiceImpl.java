@@ -50,7 +50,7 @@ public class UserServiceImpl {
             userDao.save(user);
             System.out.println("New user registered!");
         }
-        Role role = roleDao.findById("user").get();
+        Role role = roleDao.findById("User").get();
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         user.setRoles(roles);

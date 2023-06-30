@@ -26,20 +26,20 @@ public class CartController {
    @Autowired
    private ProductServiceImpl productService;
 
-    @PreAuthorize("hasRole('User')")
+
     @PostMapping("/addtocart/{productId}/{userId}")
     public String addToCart(@RequestBody CartDetails cartDetails, @PathVariable(name = "productId") Integer productId, @PathVariable(name = "userId") Integer userId){
         return cartServiceImpl.addToCart(cartDetails,productId,userId);
     }
 
-    @PreAuthorize("hasRole('User')")
+
     @DeleteMapping("/deleteCart/{productId}")
     public ResponseEntity<ApiResponse> deleteCart(@PathVariable Integer productId){
         this.cartServiceImpl.deleteCartById(productId);
         return new ResponseEntity<ApiResponse>(new ApiResponse("product is successfully deleted from cart",true), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('User')")
+
     @GetMapping("/{userId}")
     public ResponseEntity<List<ProductDto>> getAllCart(@PathVariable Integer userId){
          //get wishlist
