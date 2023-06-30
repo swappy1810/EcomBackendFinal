@@ -44,6 +44,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //checking expiration of token
             try {
                 email = jwtUtil.getUserNameFromToken(jwtToken);
+                System.out.println(email);
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get Jwt Token");
             } catch (ExpiredJwtException e) {

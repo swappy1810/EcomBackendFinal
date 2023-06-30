@@ -33,7 +33,7 @@ public class WishListController {
     }
 
     //ReadWishlist
-    @PreAuthorize("hasRole('User')")
+    //@PreAuthorize("hasRole('User')")
     @GetMapping("getList/{userId}")
     public ResponseEntity<List<ProductDto>> getWishList(@PathVariable Integer userId) {
 
