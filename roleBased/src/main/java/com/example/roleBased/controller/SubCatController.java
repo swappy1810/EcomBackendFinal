@@ -23,7 +23,7 @@ public class SubCatController {
     private SubCategoryServiceImpl subCategoryService;
 
     //add product to products
-    @PreAuthorize("hasRole('Admin')")
+
     @PostMapping("/save/{catId}")
     public ResponseEntity<SubCatDto> createSubCategory(@Valid @RequestBody SubCatDto subCatDto,@PathVariable Integer catId){
         SubCatDto createSubCategoryDto = this.subCategoryService.createSubCategory(subCatDto,catId);
@@ -31,7 +31,7 @@ public class SubCatController {
     }
 
     //update product by product id
-    @PreAuthorize("hasRole('Admin')")
+
     @PutMapping("/{id}")
     public ResponseEntity<SubCatDto> updateSubCategory(@Valid @RequestBody SubCatDto subCatDto, @PathVariable Integer subCatId){
         SubCatDto updateSubCat = this.subCategoryService.updateSubCategory(subCatDto,subCatId);
@@ -40,7 +40,7 @@ public class SubCatController {
     }
 
     //delete the product by product Id
-    @PreAuthorize("hasRole('Admin')")
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteSubCategory(@PathVariable("subCatId") Integer subCatId){
         this.subCategoryService.deleteProduct(subCatId);

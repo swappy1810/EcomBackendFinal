@@ -1,7 +1,6 @@
 package com.example.roleBased.config;
 
 import com.example.roleBased.serviceImpl.JwtService;
-import io.jsonwebtoken.impl.crypto.JwtSigner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,14 +12,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true,proxyTargetClass = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -40,48 +38,36 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
    public AuthenticationManager authenticationManagerBean() throws  Exception{
         return super.authenticationManagerBean();
     }
-//permit all methods list
-    private static final String[] AUTH_WHITELIST = {
-            // -- Swagger UI v3 (OpenAPI)
-            "/v3/api-docs/**",
-            "/swagger-ui/**",
-            // other public endpoints of your API may be appended to this array
-            "/authenticate",
-            "/registerNewUser",
-            "/products/save/{catId}",
-            "/products/**",
-            //"/category/**",
-            "/category/{id}",
-//            "/subCat/save/{catId}",
-            "/subCat/{id}",
-            "/subCat/",
-        "/products/search",
-//        "{/productId}",
-//            "/product/{productId}/orders/{isSingleCheckout}/{userId}",
-//            "/product/{productId}/order",
-//            "/users/{userId}/order",
-//            "/search/**",
-//            "/addtocart/{productId}/{userId}",
-//            "/deleteCart/{productId}",
-//            "/carts/getCartDetails",
-//            "/{userId}",
-//        "/save/{userId}/product/{productId}",
-//        "/getList/{userId}",
-//        "/{userId}"
-
-    };
 
     //configure security via http methods
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors();
         http.csrf().disable();
-        http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll()
+        http.authorizeRequests()
+                .antMatchers("/authenticate","/registerNewUser").permitAll()
+                .antMatchers("/category/save","/products/save","/products/{id}","/category/**",
+            "/category/{id}",
+            "/subCat/save/{catId}",
+            "/subCat/{id}",
+            "/subCat/").hasAuthority("Admin")
+                .antMatchers("/products/","/product/{productId}/orders/{isSingleCheckout}/{userId}",
+                        "/product/{productId}/order",
+                        "/users/{userId}/order",
+                        "/products/",
+                        "/search/**",
+                        "/addtocart/{productId}/{userId}",
+                        "/deleteCart/{productId}",
+                        "/carts/getCartDetails",
+                        "/{userId}",
+                        "/save/{userId}/product/{productId}",
+                        "/getList/{userId}",
+                        "/{userId}").hasAuthority("user")
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+//                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

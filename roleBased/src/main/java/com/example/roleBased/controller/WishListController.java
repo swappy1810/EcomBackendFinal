@@ -25,7 +25,7 @@ public class WishListController {
     @Autowired
     private ProductServiceImpl productService;
 
-    @PreAuthorize("hasRole('User')")
+
     @PostMapping("save/{userId}/product/{productId}")
     public ResponseEntity<WishlistDto> createWishList(@RequestBody WishlistDto wishListDto, @PathVariable Integer userId, @PathVariable Integer productId){
         WishlistDto createWishListDto = this.wishListService.createWishList(wishListDto,userId,productId);
@@ -33,7 +33,7 @@ public class WishListController {
     }
 
     //ReadWishlist
-    @PreAuthorize("hasRole('User')")
+
     @GetMapping("getList/{userId}")
     public ResponseEntity<List<ProductDto>> getWishList(@PathVariable Integer userId) {
 

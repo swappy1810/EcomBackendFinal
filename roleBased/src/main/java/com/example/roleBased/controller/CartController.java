@@ -33,14 +33,13 @@ public class CartController {
    @Autowired
    private ProductServiceImpl productService;
 
-    @PreAuthorize("hasRole('User')")
+
     @PostMapping("/addtocart/{productId}/{userId}")
     public String addToCart(HttpServletRequest request,@RequestBody CartDetails cartDetails, @PathVariable(name = "productId") Integer productId, @PathVariable(name = "userId") Integer userId){
        User user = cartServiceImpl.getUser(request);
         return cartServiceImpl.addToCart(cartDetails,productId,userId);
     }
 
-    @PreAuthorize("hasRole('User')")
     @DeleteMapping("/deleteCart/{productId}")
     public ResponseEntity<ApiResponse> deleteCart(HttpServletRequest request,@PathVariable Integer productId){
         User user = cartServiceImpl.getUser(request);
@@ -48,7 +47,6 @@ public class CartController {
         return new ResponseEntity<ApiResponse>(new ApiResponse("product is successfully deleted from cart",true), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('User')")
     @GetMapping("/{userId}")
     public ResponseEntity<List<ProductDto>> getAllCart(HttpServletRequest request,@PathVariable Integer userId){
         User user = cartServiceImpl.getUser(request);

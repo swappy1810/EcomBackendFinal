@@ -21,7 +21,7 @@ public class CategoryController {
     private CategoryServiceImpl categoryService;
 
     //add product to products
-    @PreAuthorize("hasRole('Admin')")
+
     @PostMapping("/save")
     public ResponseEntity<CategoryDto> createProduct(@Valid @RequestBody CategoryDto categoryDto){
         CategoryDto createCategoryDto = this.categoryService.createProduct(categoryDto);
@@ -29,7 +29,6 @@ public class CategoryController {
     }
 
     //update product by product id
-    @PreAuthorize("hasRole('Admin')")
     @PutMapping("/{id}")
     public ResponseEntity<CategoryDto> updateProduct(@Valid @RequestBody CategoryDto categoryDto, @PathVariable Integer id){
         CategoryDto updatedCategory = this.categoryService.updateProduct(categoryDto,id);
@@ -38,7 +37,7 @@ public class CategoryController {
     }
 
     //delete the product by product Id
-    @PreAuthorize("hasRole('Admin')")
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable("id") Integer id){
         this.categoryService.deleteProduct(id);

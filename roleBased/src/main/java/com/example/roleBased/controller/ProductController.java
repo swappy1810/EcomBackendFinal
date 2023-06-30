@@ -24,14 +24,14 @@ public class ProductController {
     private ProductServiceImpl productService;
 
 //save or add the product
-@PreAuthorize("hasRole('Admin')")
+
     @PostMapping("/save/{catId}")
     public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productDto, @PathVariable Integer catId){
         ProductDto createProductDto = this.productService.createProduct(productDto,catId);
         return new ResponseEntity<>(createProductDto, HttpStatus.CREATED);
     }
 //update products from products list
-@PreAuthorize("hasRole('Admin')")
+
     @PutMapping("/{id}")
     public ResponseEntity<ProductDto> updateProduct(@Valid @RequestBody ProductDto productDto, @PathVariable Integer id){
         ProductDto updatedProduct = this.productService.updateProduct(productDto,id);
@@ -43,7 +43,7 @@ public class ProductController {
         return ResponseEntity.ok(updatedProduct);
     }
 //delete the product by product id
-@PreAuthorize("hasRole('Admin')")
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable("id") Integer id){
         this.productService.deleteProduct(id);
