@@ -54,4 +54,9 @@ public class OrderController {
         return new ResponseEntity<List<OrderDto>>(cartDtos,HttpStatus.OK);
     }
 
+    @GetMapping("/")
+    public ResponseEntity<List<OrderDto>> getAllOrder(){
+        return ResponseEntity.ok(this.orderService.getAllOrder());
+    }
+
 }

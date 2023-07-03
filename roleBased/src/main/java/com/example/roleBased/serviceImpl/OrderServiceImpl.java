@@ -4,6 +4,7 @@ import com.example.roleBased.config.JwtRequestFilter;
 import com.example.roleBased.dao.*;
 import com.example.roleBased.dto.OrderDto;
 import com.example.roleBased.dto.OrderItemDto;
+import com.example.roleBased.dto.ProductDto;
 import com.example.roleBased.entity.*;
 import com.example.roleBased.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -90,7 +91,6 @@ public class OrderServiceImpl {
 //            return "User Logged out!";
 //        }
 
-
     @Transactional
     public void deleteCart(Integer userId){
         User user = userDao.findById(userId).get();
@@ -110,9 +110,9 @@ public class OrderServiceImpl {
     }
 
     //get all order
-
     public List<OrderDto> getAllOrder() {
-        return null;
+        List<Order> orders = this.orderDao.findAll();
+        return orders.stream().map(order -> this.orderToDto(order)).collect(Collectors.toList());
     }
 
     //get order by order id
@@ -137,7 +137,15 @@ public class OrderServiceImpl {
        return orderDao.findByUser(user);
     }
 
+
+    //product to dto fetch
+    public OrderDto orderToDto(Order order) {
+        OrderDto orderDto = modelMapper.map(order,OrderDto.class);
+        return  orderDto;
+    }
+
     public OrderItemDto orderNewDto(Order newOrder) {
         return this.modelMapper.map(newOrder, OrderItemDto.class);
     }
 }
+

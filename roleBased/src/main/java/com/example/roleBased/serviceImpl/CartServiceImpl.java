@@ -59,7 +59,7 @@ public class CartServiceImpl {
         }
     }
 
-    private CartDetailDto cartNewDto(CartDetails newCart) {
+    public CartDetailDto cartNewDto(CartDetails newCart) {
         return this.modelMapper.map(newCart, CartDetailDto.class);
     }
 

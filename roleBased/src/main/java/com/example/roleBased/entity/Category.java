@@ -11,6 +11,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "Category")
 public class Category {
 
@@ -19,8 +20,6 @@ public class Category {
     private int catId;
     @Column(name = "categoryName",nullable = false,unique = true)
     private String catName;
-
-
 
     public int getCatId() {
         return catId;

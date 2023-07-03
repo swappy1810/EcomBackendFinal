@@ -41,16 +41,16 @@ public class CartController {
 
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<ProductDto>> getAllCart(@PathVariable Integer userId){
+    public ResponseEntity<List<CartDetailDto>> getAllCart(@PathVariable Integer userId){
          //get wishlist
         List<CartDetails> body = cartServiceImpl.getCartDetails(userId);
 
         //create productDTO from productId in wishlist
-        List<ProductDto> products = new ArrayList<ProductDto>();
+        List<CartDetailDto> cartDetailDtos = new ArrayList<CartDetailDto>();
         for (CartDetails cartDetails : body) {
-            products.add(productService.productToDto(cartDetails.getProduct()));
+            cartDetailDtos.add(cartServiceImpl.cartNewDto(cartDetails));
         }
-        return new ResponseEntity<List<ProductDto>>(products, HttpStatus.OK);
+        return new ResponseEntity<List<CartDetailDto>>(cartDetailDtos, HttpStatus.OK);
     }
 
 }

@@ -21,6 +21,9 @@ public class CategoryServiceImpl {
 
     ModelMapper modelMapper = new ModelMapper();
 
+    public CategoryServiceImpl(CategoryDao categoryDao) {
+    }
+
     //create category method
     public CategoryDto createProduct(CategoryDto categoryDto) {
         Category category = this.dtoToCategory(categoryDto);
