@@ -108,4 +108,15 @@ public class ProductServiceImpl{
     public List<Product> searchProducts(String query) {
         return productDao.searchProducts(query);
     }
+
+    public List<Product> findByRecomendations(String query) {
+        List<Product> product = productDao.recommendation(query);
+        for (Product product1 : product) {
+            SubCategory subcategorynew = product1.getSubCategory();
+            int subcatId = subcategorynew.getSubCatId();
+            SubCategory subCategory1 = subCategoryDao.findById(subcatId).orElseThrow(() -> new ResourceNotFoundException("SubCategory with this id is not found" + subcatId));
+            return productDao.findBySubCategory(subCategory1);
+        }
+        return null;
+    }
 }

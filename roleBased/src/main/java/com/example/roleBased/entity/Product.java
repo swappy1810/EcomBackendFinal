@@ -39,6 +39,14 @@ public class Product {
     @JoinColumn(name = "subCatId",nullable = false)
     private SubCategory subCategory;
 
+    public SubCategory getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(SubCategory subCategory) {
+        this.subCategory = subCategory;
+    }
+
     public int getProduct_id() {
         return product_id;
     }

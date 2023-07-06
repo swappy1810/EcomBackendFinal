@@ -35,6 +35,9 @@ public class OrderServiceImpl {
     @Autowired
     private CartDao cartDao;
 
+    @Autowired
+            private CartServiceImpl cartService;
+
     ModelMapper modelMapper = new ModelMapper();
 
 //add order to orders
@@ -88,6 +91,7 @@ public class OrderServiceImpl {
 //                Order newCart =
                         this.orderDao.save(order);
 
+                        cartService.clearCart(cart);
 //                Cart cart1 = cartDao.findById(cart.getUserCartId()).get();
 //                cart.getCartDetails().clear();
 //                cart.setTotalPrice(cart1.getTotalPrice());

@@ -68,4 +68,10 @@ public class ProductController {
         return ResponseEntity.ok(productService.searchProducts(query));
     }
 
+    //Recomendations API
+    @GetMapping("/recommend")
+    public ResponseEntity<List<Product>> recommendations(@RequestParam("query") String query){
+        return ResponseEntity.ok(productService.findByRecomendations(query));
+    }
+
 }

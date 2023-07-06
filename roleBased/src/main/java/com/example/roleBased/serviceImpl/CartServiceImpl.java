@@ -59,13 +59,18 @@ public class CartServiceImpl {
         }
     }
 
+    public void clearCart(Cart cart){
+        cart.getCartDetails().clear();
+        cartDao.save(cart);
+    }
+
     public CartDetailDto cartNewDto(CartDetails newCart) {
         return this.modelMapper.map(newCart, CartDetailDto.class);
     }
 
-    private CartDetails DtoToCart(CartDetails cartDetail) {
-        return this.modelMapper.map(cartDetail, CartDetails.class);
-    }
+//    private CartDetails DtoToCart(CartDetails cartDetail) {
+//        return this.modelMapper.map(cartDetail, CartDetails.class);
+//    }
 
     public ResponseEntity<ApiResponse> deleteCartById(Integer productId) {
         this.cartDetailDao.deleteById(productId);
