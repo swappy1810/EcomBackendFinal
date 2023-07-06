@@ -49,8 +49,10 @@ public class OrderServiceImpl {
                 if(product.getQuantity()<=0){
                     throw new ResourceNotFoundException("Product Out of Stock!");
                 }
-                product.setQuantity((product.getQuantity() - quantity));
-                productDao.save(product);
+                else {
+                    product.setQuantity((product.getQuantity() - quantity));
+                    productDao.save(product);
+                }
                 Cart cart = new Cart();
                 order.setAddedDate(new Date());
                 order.setStatus(order.getStatus());
@@ -91,14 +93,14 @@ public class OrderServiceImpl {
 //                Order newCart =
                         this.orderDao.save(order);
 
-                        cartService.clearCart(cart);
-//                Cart cart1 = cartDao.findById(cart.getUserCartId()).get();
+                cartService.clearCart(cart);
+//                this.modelMapper.map(newCart, OrderDto.class);
+                return "Order Placed";
+
+                //                Cart cart1 = cartDao.findById(cart.getUserCartId()).get();
 //                cart.getCartDetails().clear();
 //                cart.setTotalPrice(cart1.getTotalPrice());
 //                cartDao.save(cart);
-
-//                this.modelMapper.map(newCart, OrderDto.class);
-                return "Order Placed";
             }
         }
 

@@ -39,10 +39,10 @@ public class CartServiceImpl {
     ModelMapper modelMapper = new ModelMapper();
 
     public String addToCart(CartDetails cartDetails, Integer productId,Integer userId) {
-        User user = this.userDao.findById(userId).get();
+        User user = this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id"+userId));
         if(user != null) {
-            Product product = productDao.findById(productId).get();
-            Cart cart = cartDao.findById(cartDetails.getUserCartId()).get();
+            Product product = productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("Product not found with this id"+productId));
+            Cart cart = cartDao.findById(cartDetails.getUserCartId()).orElseThrow(()->new ResourceNotFoundException("usercart Id not found with this id"+cartDetails.getUserCartId()));
             List<CartDetails> cartDetails1 = new ArrayList<>();
             cartDetails.setProduct(product);
             cartDetails.setUser(user);
