@@ -47,7 +47,7 @@ public class CartServiceImpl {
             cartDetails.setProduct(product);
             cartDetails.setUser(user);
             cartDetails.setUserCartId(cartDetails.getUserCartId());
-            cartDetails.setPrice(cartDetails.getPrice());
+            cartDetails.setPrice(product.getQuantity()*product.getProduct_price());
             cartDetails.setQuantity(cartDetails.getQuantity());
             cartDetails1.add(cartDetails);
             cart.setCartDetails(cartDetails1);

@@ -32,6 +32,8 @@ public class ProductDto {
 
     private CategoryDto category;
 
+    private SubCatDto subCat;
+
     public int getProduct_id() {
         return product_id;
     }

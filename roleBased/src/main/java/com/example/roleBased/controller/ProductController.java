@@ -22,9 +22,9 @@ public class ProductController {
     private ProductServiceImpl productService;
 
 //save or add the product
-    @PostMapping("/save/{catId}")
-    public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productDto, @PathVariable Integer catId){
-        ProductDto createProductDto = this.productService.createProduct(productDto,catId);
+    @PostMapping("/save/{subCatId}")
+    public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productDto, @PathVariable Integer subCatId){
+        ProductDto createProductDto = this.productService.createProduct(productDto,subCatId);
         return new ResponseEntity<>(createProductDto, HttpStatus.CREATED);
     }
 //update products from products list
@@ -46,7 +46,7 @@ public class ProductController {
     }
 //get all products list
     @GetMapping("/")
-    public ResponseEntity<List<ProductDto>> getAllProducts(){
+    public ResponseEntity<List<Product>> getAllProducts(){
         return ResponseEntity.ok(this.productService.getAllProduct());
     }
 //get product by product id

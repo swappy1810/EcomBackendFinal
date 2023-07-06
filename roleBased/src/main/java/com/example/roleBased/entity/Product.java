@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Product")
+@Table(name = "Products")
 public class Product {
 
     @Id
@@ -34,6 +34,10 @@ public class Product {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "catId",nullable = false)
     private Category category;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "subCatId",nullable = false)
+    private SubCategory subCategory;
 
     public int getProduct_id() {
         return product_id;
