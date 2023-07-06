@@ -38,22 +38,25 @@ public class OrderServiceImpl {
     @Autowired
             private CartServiceImpl cartService;
 
-    ModelMapper modelMapper = new ModelMapper();
+
 
 //add order to orders
     public String createOrder(Order order, Integer productId,Boolean isSingleCheckout,Integer userId,Integer quantity) {
-//        if(JwtRequestFilter.CURRENT_USER!=null) {
+
             User user = this.userDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with user Id" + userId));
             Product product = this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id"+productId));
+        if(product.getQuantity()<=0){
+            System.out.println("entered into if");
+            throw new ResourceNotFoundException("Product Out of Stock!");
+        }
+        else {
+            product.setQuantity((product.getQuantity() - quantity));
+            System.out.println("quantity:"+quantity);
+            System.out.println("product quantity:" +product.getQuantity());
+            productDao.save(product);
+        }
+        Cart cart = new Cart();
             if (Boolean.TRUE.equals(isSingleCheckout)) {
-                if(product.getQuantity()<=0){
-                    throw new ResourceNotFoundException("Product Out of Stock!");
-                }
-                else {
-                    product.setQuantity((product.getQuantity() - quantity));
-                    productDao.save(product);
-                }
-                Cart cart = new Cart();
                 order.setAddedDate(new Date());
                 order.setStatus(order.getStatus());
                 order.setUser(user);
@@ -70,11 +73,8 @@ public class OrderServiceImpl {
                 order.setTotalPrice(product.getProduct_price()*order.getQuantity());
                 order.setProduct(product);
                 this.orderDao.save(order);
-//                 this.modelMapper.map(order1, OrderDto.class);
                  return "Order Placed!";
             } else {
-                Cart cart = new Cart();
-//                Order order2 = this.modelMapper.map(order, Order.class);
                 order.setAddedDate(new Date());
                 order.setStatus(order.getStatus());
                 order.setQuantity(order.getQuantity());
@@ -90,11 +90,8 @@ public class OrderServiceImpl {
                 order.setQuantity(order.getQuantity());
                 order.setZipCode(order.getZipCode());
                 order.setTotalPrice(product.getProduct_price()*order.getQuantity());
-//                Order newCart =
-                        this.orderDao.save(order);
-
+                orderDao.save(order);
                 cartService.clearCart(cart);
-//                this.modelMapper.map(newCart, OrderDto.class);
                 return "Order Placed";
 
                 //                Cart cart1 = cartDao.findById(cart.getUserCartId()).get();
@@ -123,9 +120,9 @@ public class OrderServiceImpl {
     }
 
     //get all order
-    public List<OrderDto> getAllOrder() {
+    public List<Order> getAllOrder() {
         List<Order> orders = this.orderDao.findAll();
-        return orders.stream().map(order -> this.orderToDto(order)).collect(Collectors.toList());
+        return orders.stream().map(order -> (order)).collect(Collectors.toList());
     }
 
     //get order by order id
@@ -136,10 +133,10 @@ public class OrderServiceImpl {
 
 //get order by product by product id
 
-    public List<OrderDto> getOrderByProduct(Integer productId) {
+    public List<Order> getOrderByProduct(Integer productId) {
         Product product= this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("Product with cart not found with this id "+productId));
         List<Order> orders = this.orderDao.findByProduct(product);
-        List<OrderDto> orderDtos = orders.stream().map((x) -> this.modelMapper.map(x, OrderDto.class)).collect(Collectors.toList());
+        List<Order> orderDtos = orders.stream().map((x) -> x).collect(Collectors.toList());
         return orderDtos;
     }
 
@@ -151,14 +148,6 @@ public class OrderServiceImpl {
     }
 
 
-    //product to dto fetch
-    public OrderDto orderToDto(Order order) {
-        OrderDto orderDto = modelMapper.map(order,OrderDto.class);
-        return  orderDto;
-    }
 
-    public OrderItemDto orderNewDto(Order newOrder) {
-        return this.modelMapper.map(newOrder, OrderItemDto.class);
-    }
 }
 

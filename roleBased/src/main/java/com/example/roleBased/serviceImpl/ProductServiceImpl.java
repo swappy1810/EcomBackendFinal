@@ -38,24 +38,23 @@ public class ProductServiceImpl{
     ModelMapper modelMapper = new ModelMapper();
 
     //add product to products
-    public ProductDto createProduct(ProductDto productDto, Integer subCatId) {
+    public Product createProduct(Product product, Integer subCatId) {
         SubCategory subCategory = this.subCategoryDao.findById(subCatId).orElseThrow(()->new ResourceNotFoundException("Category not found with this id"+subCatId));
-        Product product = this.dtoToProduct(productDto);
         product.setCategory(subCategory.getCategory());
         product.setSubCategory(subCategory);
-        product.setProduct_price(productDto.getProduct_price());
-        product.setProduct_image(productDto.getProduct_image());
-        product.setProduct_name(productDto.getProduct_name());
-        product.setProduct_short_desc(productDto.getProduct_short_desc());
-        product.setProduct_long_desc(productDto.getProduct_long_desc());
-        product.setQuantity(productDto.getQuantity());
-        product.setRating(productDto.getRating());
+        product.setProduct_price(product.getProduct_price());
+        product.setProduct_image(product.getProduct_image());
+        product.setProduct_name(product.getProduct_name());
+        product.setProduct_short_desc(product.getProduct_short_desc());
+        product.setProduct_long_desc(product.getProduct_long_desc());
+        product.setQuantity(product.getQuantity());
+        product.setRating(product.getRating());
         Product savedProduct = this.productDao.save(product);
-        return this.productToDto(savedProduct);
+        return savedProduct;
     }
 
     //update the product by product Id
-    public ProductDto updateProduct(@RequestBody ProductDto productDto, @PathVariable Integer id) {
+    public Product updateProduct(@RequestBody Product productDto, @PathVariable Integer id) {
         Product product = this.productDao.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found with this id " + id));
         product.setProduct_name(productDto.getProduct_name());
         product.setProduct_short_desc(productDto.getProduct_short_desc());
@@ -64,14 +63,13 @@ public class ProductServiceImpl{
         product.setProduct_image(productDto.getProduct_image());
         product.setQuantity(productDto.getQuantity());
         Product updateProduct = this.productDao.save(product);
-        ProductDto productDto1 = this.productToDto(updateProduct);
-        return productDto1;
+        return updateProduct;
     }
 
     //to get products by product id
-    public ProductDto getProductById(Integer id) {
+    public Product getProductById(Integer id) {
         Product product = productDao.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found with this id " + id));
-        return this.productToDto(product);
+        return product;
     }
 
     //to get all products
@@ -81,28 +79,28 @@ public class ProductServiceImpl{
     }
 
     //to delete the product by product Id
-    public ResponseEntity<ProductDto> deleteProduct(@PathVariable Integer id) {
+    public ResponseEntity<Product> deleteProduct(@PathVariable Integer id) {
         Product Product = productDao.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found with this id " + id));
         this.productDao.deleteById(id);
         return null;
     }
 
     //get list product by category with category id
-    public List<ProductDto> findAllByCategory(Integer catId) {
+    public List<Product> findAllByCategory(Integer catId) {
         Category cat = categoryDao.findById(catId).orElseThrow(()->new ResourceNotFoundException("Category with this id is not found"+catId));
         List<Product> findByCategory = this.productDao.findByCategory(cat);
-        return findByCategory.stream().map(product -> productToDto(product)).collect(Collectors.toList());
+        return findByCategory.stream().map(product -> product).collect(Collectors.toList());
     }
 
     //dto to product fetch
-    private Product dtoToProduct(ProductDto productDto) {
-        return modelMapper.map(productDto,Product.class);
-    }
-
-    //product to dto fetch
-    public ProductDto productToDto(Product product) {
-        return modelMapper.map(product,ProductDto.class);
-    }
+//    private Product dtoToProduct(ProductDto productDto) {
+//        return modelMapper.map(productDto,Product.class);
+//    }
+//
+//    //product to dto fetch
+//    public ProductDto productToDto(Product product) {
+//        return modelMapper.map(product,ProductDto.class);
+//    }
 
     //Search API of products
     public List<Product> searchProducts(String query) {

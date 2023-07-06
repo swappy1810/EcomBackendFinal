@@ -23,19 +23,19 @@ public class ProductController {
 
 //save or add the product
     @PostMapping("/save/{subCatId}")
-    public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productDto, @PathVariable Integer subCatId){
-        ProductDto createProductDto = this.productService.createProduct(productDto,subCatId);
-        return new ResponseEntity<>(createProductDto, HttpStatus.CREATED);
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product, @PathVariable Integer subCatId){
+        Product createProduct = this.productService.createProduct(product,subCatId);
+        return new ResponseEntity<>(createProduct, HttpStatus.CREATED);
     }
 //update products from products list
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDto> updateProduct(@Valid @RequestBody ProductDto productDto, @PathVariable Integer id){
-        ProductDto updatedProduct = this.productService.updateProduct(productDto,id);
-        updatedProduct.setProduct_name(productDto.getProduct_name());
-        updatedProduct.setProduct_short_desc(productDto.getProduct_long_desc());
-        updatedProduct.setProduct_price(productDto.getProduct_price());
-        updatedProduct.setProduct_image(productDto.getProduct_image());
-        updatedProduct.setQuantity(productDto.getQuantity());
+    public ResponseEntity<Product> updateProduct(@Valid @RequestBody Product product, @PathVariable Integer id){
+        Product updatedProduct = this.productService.updateProduct(product,id);
+        updatedProduct.setProduct_name(product.getProduct_name());
+        updatedProduct.setProduct_short_desc(product.getProduct_long_desc());
+        updatedProduct.setProduct_price(product.getProduct_price());
+        updatedProduct.setProduct_image(product.getProduct_image());
+        updatedProduct.setQuantity(product.getQuantity());
         return ResponseEntity.ok(updatedProduct);
     }
 //delete the product by product id
@@ -51,15 +51,15 @@ public class ProductController {
     }
 //get product by product id
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDto> getProductBYId(@PathVariable("id") Integer id){
+    public ResponseEntity<Product> getProductBYId(@PathVariable("id") Integer id){
         return ResponseEntity.ok(this.productService.getProductById(id));
     }
 
     //get product by category using category id
     @GetMapping("/category/{catId}")
-    public ResponseEntity<List<ProductDto>> getProductByCategory(@PathVariable Integer catId){
-        List<ProductDto> productDtos = this.productService.findAllByCategory(catId);
-        return new ResponseEntity<List<ProductDto>>(productDtos,HttpStatus.ACCEPTED);
+    public ResponseEntity<List<Product>> getProductByCategory(@PathVariable Integer catId){
+        List<Product> productDtos = this.productService.findAllByCategory(catId);
+        return new ResponseEntity<List<Product>>(productDtos,HttpStatus.ACCEPTED);
     }
 
     //Search API
