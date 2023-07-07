@@ -34,17 +34,17 @@ public class CouponController {
     }
 
     //update product by product id
-    @PutMapping("/{id}")
+    @PutMapping("/{couponId}")
     public ResponseEntity<Coupon> updateCoupon(@Valid @RequestBody Coupon coupon, @PathVariable Integer couponId){
         Coupon updateCoupon = this.couponService.updateCoupon(coupon,couponId);
-        updateCoupon.setSubCategory(coupon.getSubCategory());
+        updateCoupon.setSubCatId(coupon.getSubCatId());
         updateCoupon.setDiscountedPrice(coupon.getDiscountedPrice());
         updateCoupon.setUserId(coupon.getUserId());
         return ResponseEntity.ok(updateCoupon);
     }
 
     //delete the product by product Id
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{couponId}")
     public ResponseEntity<ApiResponse> deleteCoupon(@PathVariable Integer couponId){
         this.couponService.deleteCoupon(couponId);
         return new ResponseEntity<ApiResponse>(new ApiResponse("Coupon code Deleted Successfully",true), HttpStatus.OK);
@@ -57,10 +57,14 @@ public class CouponController {
     }
 
     //get product by product id
-    @GetMapping("/{id}")
+    @GetMapping("/{couponId}")
     public ResponseEntity<Coupon> getCouponById(@PathVariable Integer couponId){
         return ResponseEntity.ok(this.couponService.getCouponById(couponId));
     }
 
+    @GetMapping("/random/{userId}")
+    public Coupon getRandomCoupon(@PathVariable Integer userId){
+        return couponService.getSubcategory(userId);
+    }
 
 }

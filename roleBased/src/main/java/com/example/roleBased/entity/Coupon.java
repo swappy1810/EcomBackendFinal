@@ -21,8 +21,5 @@ public class Coupon {
     private int discountedPrice;
     private String couponCode;
     private int userId;
-
-    @ManyToOne
-    private SubCategory subCategory;
-
+    private int subCatId;
 }

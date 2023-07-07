@@ -12,10 +12,12 @@ import com.example.roleBased.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -107,14 +109,16 @@ public class ProductServiceImpl{
         return productDao.searchProducts(query);
     }
 
-    public List<Product> findByRecomendations(String query) {
-        List<Product> product = productDao.recommendation(query);
-        for (Product product1 : product) {
-            SubCategory subcategorynew = product1.getSubCategory();
-            int subcatId = subcategorynew.getSubCatId();
-            SubCategory subCategory1 = subCategoryDao.findById(subcatId).orElseThrow(() -> new ResourceNotFoundException("SubCategory with this id is not found" + subcatId));
-            return productDao.findBySubCategory(subCategory1);
-        }
-        return null;
+    //recommendation of similar product method
+    public List<Product> findByRecomendations(Integer productId) {
+        Product product = productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found with this id " + productId));
+        SubCategory subcategorynew = product.getSubCategory();
+        int subcatId = subcategorynew.getSubCatId();
+        SubCategory subCategory1 = subCategoryDao.findById(subcatId).orElseThrow(() -> new ResourceNotFoundException("SubCategory with this id is not found" + subcatId));
+        List<Product> similarProducts= new ArrayList<>();
+        similarProducts= productDao.findBySubCategory(subCategory1);
+        similarProducts.remove(product);
+        return similarProducts;
     }
+
 }

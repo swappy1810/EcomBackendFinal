@@ -17,6 +17,6 @@ public class CouponDto {
     private int discountedPrice;
     private String couponCode;
     private int userId;
-    private SubCatDto subCat;
+    private int subCatId;
 
 }

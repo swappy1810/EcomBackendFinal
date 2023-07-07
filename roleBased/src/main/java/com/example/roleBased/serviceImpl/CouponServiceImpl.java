@@ -1,21 +1,20 @@
 package com.example.roleBased.serviceImpl;
 
-import com.example.roleBased.dao.CouponDao;
-import com.example.roleBased.dao.SubCategoryDao;
+import com.example.roleBased.dao.*;
 import com.example.roleBased.dto.CouponDto;
 import com.example.roleBased.dto.SubCatDto;
-import com.example.roleBased.entity.Coupon;
-import com.example.roleBased.entity.SubCategory;
-import com.example.roleBased.entity.User;
+import com.example.roleBased.entity.*;
 import com.example.roleBased.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +24,15 @@ public class CouponServiceImpl {
     private CouponDao couponDao;
 
     @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private ProductDao productDao;
+
+    @Autowired
+    private OrderServiceImpl orderService;
+
+    @Autowired
     private SubCategoryDao subCategoryDao;
 
     ModelMapper modelMapper = new ModelMapper();
@@ -32,21 +40,20 @@ public class CouponServiceImpl {
     //create Coupon add method
     public Coupon createCoupon(Coupon coupon, Integer subCatId) {
         SubCategory subCategory = subCategoryDao.findById(subCatId).orElseThrow(()->new ResourceNotFoundException("Subcategory not found with this id"+subCatId));
-//        Coupon coupon= this.dtoToCoupon(couponDto);
-        coupon.setSubCategory(subCategory);
+        coupon.setSubCatId(subCatId);
+       // givenList_shouldReturnRandomSeries(subCategory);
         coupon.setUserId(coupon.getUserId());
-        Coupon savedCoupon = this.couponDao.save(coupon);
-//        CouponDto couponDto1 = this.couponToDto(savedCoupon);
-        return savedCoupon;
+        return this.couponDao.save(coupon);
     }
 
-    public User givenList_shouldReturnRandomSeries(SubCategory subCategory) {
-        List<SubCategory> givenList = new ArrayList<>();
-        Collections.shuffle(givenList);
-
-        List<SubCategory> randomSeries = givenList.subList(0, givenList.size());
-        return null;
-    }
+//    public User givenList_shouldReturnRandomSeries(SubCategory subCategory) {
+//        List<SubCategory> givenList = new ArrayList<>();
+//        Collections.shuffle(givenList);
+//        Random random = new Random();
+//        random.ints(givenList.size());
+//        List<SubCategory> randomSeries = givenList.subList(0, givenList.size());
+//        return null;
+//    }
 
     //update Coupon method
     public Coupon updateCoupon(Coupon coupon, Integer couponId) {
@@ -54,7 +61,7 @@ public class CouponServiceImpl {
         coupon1.setCouponCode(coupon.getCouponCode());
         coupon1.setDiscountedPrice(coupon.getDiscountedPrice());
         coupon1.setUserId(coupon.getUserId());
-        coupon1.setSubCategory(coupon.getSubCategory());
+        coupon1.setSubCatId(coupon.getSubCatId());
         Coupon updateCoupon = this.couponDao.save(coupon);
         return updateCoupon;
     }
@@ -79,16 +86,10 @@ public class CouponServiceImpl {
         return null;
     }
 
-    //dto to subCat fetch
-    private Coupon dtoToCoupon(CouponDto coupon) {
-        Coupon coupon1 = modelMapper.map(coupon,Coupon.class);
-        return coupon1;
+    public Coupon getSubcategory(Integer productId){
+        Product product = productDao.findById(productId).orElseThrow(()-> new ResourceNotFoundException("User not found with this id"+productId));
+        SubCategory subCategory =product.getSubCategory();
+        int id = subCategory.getSubCatId();
+        return couponDao.findBySubCatId(id);
     }
-
-    //subCat to dto fetch
-    private CouponDto couponToDto(Coupon coupon) {
-        CouponDto couponDto = modelMapper.map(coupon,CouponDto.class);
-        return  couponDto;
-    }
-
 }
