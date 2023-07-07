@@ -9,8 +9,6 @@ import java.util.Set;
 @Data
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "Category")
 public class Category {
 
@@ -38,5 +36,9 @@ public class Category {
         this.catName = catName;
     }
 
-
+    public Category(){}
+    public Category(int catId, String catName) {
+        this.catId = catId;
+        this.catName = catName;
+    }
 }

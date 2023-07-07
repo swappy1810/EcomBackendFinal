@@ -9,8 +9,6 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
 public class ProductDto {
 
@@ -31,6 +29,30 @@ public class ProductDto {
     private int rating;
 
     private CategoryDto category;
+
+    private SubCatDto subCatDto;
+
+    public ProductDto(){}
+    public ProductDto(int product_id, String product_image, @NotBlank String product_name, @NotBlank String product_short_desc, @NotBlank String product_long_desc, int product_price, int quantity, int rating, CategoryDto category, SubCatDto subCatDto) {
+        this.product_id = product_id;
+        this.product_image = product_image;
+        this.product_name = product_name;
+        this.product_short_desc = product_short_desc;
+        this.product_long_desc = product_long_desc;
+        this.product_price = product_price;
+        this.quantity = quantity;
+        this.rating = rating;
+        this.category = category;
+        this.subCatDto = subCatDto;
+    }
+
+    public SubCatDto getSubCatDto() {
+        return subCatDto;
+    }
+
+    public void setSubCatDto(SubCatDto subCatDto) {
+        this.subCatDto = subCatDto;
+    }
 
     public int getProduct_id() {
         return product_id;

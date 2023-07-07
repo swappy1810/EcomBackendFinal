@@ -8,9 +8,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "Product")
+@Table(name = "Products")
 public class Product {
 
     @Id
@@ -34,6 +32,33 @@ public class Product {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "catId",nullable = false)
     private Category category;
+
+    //mapped product with Subcategory
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "subCatId",nullable = false)
+    private SubCategory subCategory;
+    public Product(){}
+    public Product(int product_id, String product_image, String product_name, String product_short_desc, String product_long_desc, int product_price, int quantity, int rating, Category category, SubCategory subCategory) {
+        this.product_id = product_id;
+        this.product_image = product_image;
+        this.product_name = product_name;
+        this.product_short_desc = product_short_desc;
+        this.product_long_desc = product_long_desc;
+        this.product_price = product_price;
+        this.quantity = quantity;
+        this.rating = rating;
+        this.category = category;
+        this.subCategory = subCategory;
+    }
+
+
+    public SubCategory getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(SubCategory subCategory) {
+        this.subCategory = subCategory;
+    }
 
     public int getProduct_id() {
         return product_id;

@@ -47,8 +47,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors();
         http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers("/authenticate","/registerNewUser").permitAll()
-                .antMatchers("/category/save","/products/save","/products/{id}","/category/**",
+                .antMatchers("/authenticate","/registerNewUser","/products/recomend").permitAll()
+                .antMatchers("/category/save","/products/save/{subcatId}","/products/{id}","/category/**",
             "/category/{id}",
             "/subCat/save/{catId}",
             "/subCat/{id}",
@@ -56,15 +56,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/products/","/product/{productId}/orders/{isSingleCheckout}/{userId}",
                         "/product/{productId}/order",
                         "/users/{userId}/order",
-                        "/products/",
-                        "/search/**",
                         "/addtocart/{productId}/{userId}",
                         "/deleteCart/{productId}",
                         "/carts/getCartDetails",
                         "/{userId}",
                         "/save/{userId}/product/{productId}",
                         "/getList/{userId}",
-                        "/{userId}").hasAuthority("user")
+                        "/{userId}").hasAuthority("User")
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .anyRequest().authenticated()
                 .and()

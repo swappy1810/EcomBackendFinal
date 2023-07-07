@@ -2,10 +2,10 @@ package com.example.roleBased.serviceImpl;
 
 import com.example.roleBased.dao.CategoryDao;
 import com.example.roleBased.dao.ProductDao;
+import com.example.roleBased.dao.SubCategoryDao;
 import com.example.roleBased.dao.UserDao;
 import com.example.roleBased.dto.ProductDto;
-import com.example.roleBased.entity.Category;
-import com.example.roleBased.entity.Product;
+import com.example.roleBased.entity.*;
 import com.example.roleBased.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,16 +28,21 @@ public class ProductServiceImpl{
     private CategoryDao categoryDao;
 
     @Autowired
+    private SubCategoryDao subCategoryDao;
+
+    @Autowired
     private UserDao userDao;
 
 
     ModelMapper modelMapper = new ModelMapper();
 
     //add product to products
-    public ProductDto createProduct(ProductDto productDto, Integer catId) {
-        Category category = this.categoryDao.findById(catId).orElseThrow(()->new ResourceNotFoundException("Category not found with this id"+catId));
+    public ProductDto createProduct(ProductDto productDto, Integer subCatId) {
+        //Category category = this.categoryDao.findById(catId).orElseThrow(()->new ResourceNotFoundException("Category not found with this id"+catId));
+        SubCategory subCategory=this.subCategoryDao.findById(subCatId).orElseThrow(()->new ResourceNotFoundException("Subcategory not found with this id"+subCatId));
         Product product = this.dtoToProduct(productDto);
-        product.setCategory(category);
+        product.setCategory(subCategory.getCategory());
+        product.setSubCategory(subCategory);
         product.setProduct_price(productDto.getProduct_price());
         product.setProduct_image(productDto.getProduct_image());
         product.setProduct_name(productDto.getProduct_name());
@@ -112,4 +118,20 @@ public class ProductServiceImpl{
         List<Product> products = productDao.searchProducts(query);
         return products;
     }
+
+    //Recommendations API
+    public List<Product> findByRecomendations(String query) {
+        List<Product> product=productDao.searchProduct(query);
+        for (Product productall : product) {
+            SubCategory subcategorynew = productall.getSubCategory();
+            int subcatId = subcategorynew.getSubCatId();
+            SubCategory subCategory1 = subCategoryDao.findById(subcatId).orElseThrow(() -> new ResourceNotFoundException("SubCategory with this id is not found" + subcatId));
+            return productDao.findBySubCategory(subCategory1);
+        }
+        return null;
+
+
+
+    }
+
 }

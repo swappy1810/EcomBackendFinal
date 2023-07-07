@@ -2,6 +2,7 @@ package com.example.roleBased.controller;
 
 import com.example.roleBased.dto.ProductDto;
 import com.example.roleBased.entity.Product;
+import com.example.roleBased.entity.Wishlist;
 import com.example.roleBased.exception.ApiResponse;
 import com.example.roleBased.serviceImpl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,9 +24,9 @@ public class ProductController {
     private ProductServiceImpl productService;
 
 //save or add the product
-    @PostMapping("/save/{catId}")
-    public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productDto, @PathVariable Integer catId){
-        ProductDto createProductDto = this.productService.createProduct(productDto,catId);
+    @PostMapping("/save/{subCatId}")
+    public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productDto, @PathVariable Integer subCatId){
+        ProductDto createProductDto = this.productService.createProduct(productDto,subCatId);
         return new ResponseEntity<>(createProductDto, HttpStatus.CREATED);
     }
 //update products from products list
@@ -67,5 +69,13 @@ public class ProductController {
     public ResponseEntity<List<Product>> searchProducts(@RequestParam("query") String query){
         return ResponseEntity.ok(productService.searchProducts(query));
     }
+
+
+    //Recomendations API
+    @GetMapping("/recomend")
+    public ResponseEntity<List<Product>> recomendations(@RequestParam("query") String query){
+        return ResponseEntity.ok(productService.findByRecomendations(query));
+    }
+
 
 }

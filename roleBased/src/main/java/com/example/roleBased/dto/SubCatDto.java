@@ -1,5 +1,6 @@
 package com.example.roleBased.dto;
 
+import com.example.roleBased.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,13 +8,21 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class SubCatDto {
 
     private int subCatId;
     private String subCatName;
     private CategoryDto category;
+
+    public SubCatDto(int i, String skirts, Category category) {
+    }
+
+    public SubCatDto(int subCatId, String subCatName, CategoryDto category) {
+        this.subCatId = subCatId;
+        this.subCatName = subCatName;
+        this.category = category;
+    }
 
     public int getSubCatId() {
         return subCatId;
