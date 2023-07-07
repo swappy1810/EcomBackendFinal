@@ -6,10 +6,18 @@ public class WishlistDto {
 
     private int Listid;
     private ProductDto product;
-    private UserDto userDto;
+    private int userId;
     private int quantity = 1;
     private  String username;
     private Date createdDate;
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public String getUsername() {
         return username;
@@ -29,14 +37,6 @@ public class WishlistDto {
 
     public void setProduct(ProductDto product) {
         this.product = product;
-    }
-
-    public UserDto getUserDto() {
-        return userDto;
-    }
-
-    public void setUserDto(UserDto userDto) {
-        this.userDto = userDto;
     }
 
     public int getQuantity() {

@@ -20,8 +20,7 @@ public class CartDetails {
     private int quantity=1;
     private double price;
     private int userCartId;
-    @OneToOne
-    private User user;
+   private int userId;
     @OneToOne
     private Product product;
 
@@ -57,12 +56,12 @@ public class CartDetails {
         this.userCartId = userCartId;
     }
 
-    public User getUser() {
-        return user;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public Product getProduct() {

@@ -21,15 +21,13 @@ public class Wishlist {
         @JoinColumn(name = "productid")
         private Product product;
 
-        @OneToOne
-        @JoinColumn(name = "userid")
-        private User user;
+        private int userId;
 
         //created_date column
         @Column(name = "created_date")
         private Date createdDate;
 
-        private int quantity;
+        private int quantity=1;
 
         private String username;
 
@@ -47,14 +45,6 @@ public class Wishlist {
 
     public void setProduct(Product product) {
         this.product = product;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Date getCreatedDate() {

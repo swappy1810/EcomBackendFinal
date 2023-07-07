@@ -33,33 +33,33 @@ public class WishListServiceImpl {
     ModelMapper modelMapper = new ModelMapper();
 
     //add product to WishList
-    public WishlistDto createWishList(WishlistDto wishListDto, Integer userId, Integer productId) {
+    public Wishlist createWishList(Wishlist wishList, Integer userId, Integer productId) {
         Product product= this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("Product not found with this id"+productId));
         User user=this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("User not found with this userId"+userId));
-        Wishlist wishList = this.dtoToWishList(wishListDto);
-        wishList.setUsername(wishListDto.getUsername());
+       // Wishlist wishList = this.dtoToWishList(wishListDto);
+        wishList.setUsername(wishList.getUsername());
         wishList.setCreatedDate(new Date());
         wishList.setProduct(product);
-        wishList.setUser(user);
+        wishList.setUserId(userId);
         Wishlist SaveWishList = this.wishListDao.save(wishList);
-        return this.WishListToDto(SaveWishList);
+        return SaveWishList;
 
     }
 
-    //dto to WishList fetch
-    private Wishlist dtoToWishList(WishlistDto wishListDto) {
-        return modelMapper.map(wishListDto,Wishlist.class);
-    }
-
-    //WISHlIST to dto fetch
-    private WishlistDto WishListToDto(Wishlist wishList) {
-        return modelMapper.map(wishList,WishlistDto.class);
-    }
+//    //dto to WishList fetch
+//    private Wishlist dtoToWishList(WishlistDto wishListDto) {
+//        return modelMapper.map(wishListDto,Wishlist.class);
+//    }
+//
+//    //WISHlIST to dto fetch
+//    private WishlistDto WishListToDto(Wishlist wishList) {
+//        return modelMapper.map(wishList,WishlistDto.class);
+//    }
 
     //ReadWishlist
     public List<Wishlist> readWishList(Integer userId) {
         User user=this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("User not found with this userId"+userId));
-        return wishListDao.findByUser(user);
+        return wishListDao.findByUserId(userId);
     }
 
     //delete wishlist of user by user Id

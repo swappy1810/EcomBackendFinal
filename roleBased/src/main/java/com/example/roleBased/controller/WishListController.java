@@ -30,22 +30,22 @@ public class WishListController {
     ModelMapper modelMapper = new ModelMapper();
 
     @PostMapping("save/{userId}/product/{productId}")
-    public ResponseEntity<WishlistDto> createWishList(@RequestBody WishlistDto wishListDto, @PathVariable Integer userId, @PathVariable Integer productId){
-        WishlistDto createWishListDto = this.wishListService.createWishList(wishListDto,userId,productId);
-        return new ResponseEntity<WishlistDto>(createWishListDto, HttpStatus.CREATED);
+    public ResponseEntity<Wishlist> createWishList(@RequestBody Wishlist wishListDto, @PathVariable Integer userId, @PathVariable Integer productId){
+        Wishlist createWishListDto = this.wishListService.createWishList(wishListDto,userId,productId);
+        return new ResponseEntity<Wishlist>(createWishListDto, HttpStatus.CREATED);
     }
 
     //ReadWishlist
     @GetMapping("getList/{userId}")
-    public ResponseEntity<List<ProductDto>> getWishList(@PathVariable Integer userId) {
+    public ResponseEntity<List<Product>> getWishList(@PathVariable Integer userId) {
 
         //get wishlist
         List<Wishlist> body = wishListService.readWishList(userId);
 
         //create productDTO from productId in wishlist
-        List<ProductDto> products = new ArrayList<ProductDto>();
+        List<Product> products = new ArrayList<Product>();
         for (Wishlist wishList : body) {
-            products.add(productToDto(wishList.getProduct()));
+            products.add(wishList.getProduct());
         }
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
