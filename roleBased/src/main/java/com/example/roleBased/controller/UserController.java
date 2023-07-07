@@ -43,7 +43,7 @@ public class UserController {
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(JwtResponse.builder().message("not valid!").status(false).build());
         }
-        return ResponseEntity.status(HttpStatus.OK).body(JwtResponse.builder().status(true).message("It is a Valid User!!").roles(user.getRoles()).userId(user.getUserId()).email(jwtRequest.getEmail()).jwtToken(JwtUtil.generateToken(jwtRequest.getEmail())).build());
+        return ResponseEntity.status(HttpStatus.OK).body(JwtResponse.builder().status(true).message("It is a Valid User!!").username(user.getUsername()).roles(user.getRoles()).userId(user.getUserId()).email(jwtRequest.getEmail()).jwtToken(JwtUtil.generateToken(jwtRequest.getEmail())).build());
     }
 
 //    @PostMapping("/authenticate")

@@ -15,6 +15,7 @@ public class JwtResponse {
     private String message;
     private Boolean status;
     private int userId;
+    private String username;
     private String jwtToken;
     private String email;
 
