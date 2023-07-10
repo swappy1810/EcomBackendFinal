@@ -132,4 +132,9 @@ public class ProductServiceImpl{
 
     }
 
+    // for review functionality
+    public boolean doesProductExists(int productId){
+        return productDao.existsById(productId);
+    }
+
 }

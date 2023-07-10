@@ -62,7 +62,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/{userId}",
                         "/save/{userId}/product/{productId}",
                         "/getList/{userId}",
-                        "/{userId}")
+                        "/{userId}",
+                        "/products/{productId}/reviews")
                 .hasAuthority("User")
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .anyRequest().authenticated()
