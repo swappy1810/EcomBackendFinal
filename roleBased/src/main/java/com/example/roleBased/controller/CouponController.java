@@ -1,12 +1,8 @@
 package com.example.roleBased.controller;
 
 import com.example.roleBased.dao.SubCategoryDao;
-import com.example.roleBased.dto.CouponDto;
-import com.example.roleBased.dto.SubCatDto;
 import com.example.roleBased.entity.Coupon;
-import com.example.roleBased.entity.SubCategory;
 import com.example.roleBased.exception.ApiResponse;
-import com.example.roleBased.exception.ResourceNotFoundException;
 import com.example.roleBased.serviceImpl.CouponServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,7 +35,6 @@ public class CouponController {
         Coupon updateCoupon = this.couponService.updateCoupon(coupon,couponId);
         updateCoupon.setSubCatId(coupon.getSubCatId());
         updateCoupon.setDiscountedPrice(coupon.getDiscountedPrice());
-        updateCoupon.setUserId(coupon.getUserId());
         return ResponseEntity.ok(updateCoupon);
     }
 
@@ -67,4 +62,9 @@ public class CouponController {
         return couponService.getSubcategory(userId);
     }
 
+    @PostMapping("/applyCoupon")
+    public Integer applyCoupon(@RequestParam("couponCode") String couponCode,
+                               @PathVariable Integer price){
+        return couponService.applyCoupon(couponCode,price);
+    }
 }

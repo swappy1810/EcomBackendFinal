@@ -2,6 +2,7 @@ package com.example.roleBased.controller;
 
 import com.example.roleBased.dto.CartDetailDto;
 import com.example.roleBased.dto.CategoryDto;
+import com.example.roleBased.entity.Cart;
 import com.example.roleBased.entity.CartDetails;
 import com.example.roleBased.exception.ApiResponse;
 import com.example.roleBased.serviceImpl.CartServiceImpl;
@@ -47,11 +48,11 @@ public class CartController {
         List<CartDetails> body = cartServiceImpl.getCartDetails(userId);
 
         //create productDTO from productId in wishlist
-        List<CartDetails> cartDetailDtos = new ArrayList<>();
+        List<CartDetails> cartDetails1 = new ArrayList<>();
         for (CartDetails cartDetails : body) {
-            cartDetailDtos.add(cartDetails);
+            cartDetails1.add(cartDetails);
         }
-        return new ResponseEntity<>(cartDetailDtos, HttpStatus.OK);
+        return new ResponseEntity<>(cartDetails1, HttpStatus.OK);
     }
 
     //update cart by cart id

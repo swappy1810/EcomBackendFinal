@@ -10,4 +10,6 @@ public interface CouponDao extends JpaRepository<Coupon,Integer>{
 
     Coupon findBySubCatId(Integer subCatId);
 
+    Coupon findByCouponCode(String couponCode);
+
 }

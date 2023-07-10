@@ -3,7 +3,9 @@ package com.example.roleBased.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -29,13 +31,11 @@ public class Order {
     private String city;
     private String zipCode;
     private String mobileNo;
-//    private int userCartId;
 
     @OneToOne
     private User user;
-    //mapped order by product
+
     @ManyToOne
-    @JoinColumn(name = "productId")
     private Product product;
 
     public int getOrderId() {
@@ -142,11 +142,6 @@ public class Order {
         this.user = user;
     }
 
-    public Product getProduct() {
-        return product;
-    }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
+
 }

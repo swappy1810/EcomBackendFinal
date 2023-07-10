@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,26 +43,16 @@ public class CouponServiceImpl {
     public Coupon createCoupon(Coupon coupon, Integer subCatId) {
         SubCategory subCategory = subCategoryDao.findById(subCatId).orElseThrow(()->new ResourceNotFoundException("Subcategory not found with this id"+subCatId));
         coupon.setSubCatId(subCatId);
-       // givenList_shouldReturnRandomSeries(subCategory);
-        coupon.setUserId(coupon.getUserId());
+        coupon.setExpiryDate(new Date());
         return this.couponDao.save(coupon);
     }
-
-//    public User givenList_shouldReturnRandomSeries(SubCategory subCategory) {
-//        List<SubCategory> givenList = new ArrayList<>();
-//        Collections.shuffle(givenList);
-//        Random random = new Random();
-//        random.ints(givenList.size());
-//        List<SubCategory> randomSeries = givenList.subList(0, givenList.size());
-//        return null;
-//    }
 
     //update Coupon method
     public Coupon updateCoupon(Coupon coupon, Integer couponId) {
         Coupon coupon1 = this.couponDao.findById(couponId).orElseThrow(() -> new ResourceNotFoundException("Coupon not found with this id " + couponId));
         coupon1.setCouponCode(coupon.getCouponCode());
         coupon1.setDiscountedPrice(coupon.getDiscountedPrice());
-        coupon1.setUserId(coupon.getUserId());
+        coupon1.setExpiryDate(new Date());
         coupon1.setSubCatId(coupon.getSubCatId());
         Coupon updateCoupon = this.couponDao.save(coupon);
         return updateCoupon;
@@ -92,4 +84,19 @@ public class CouponServiceImpl {
         int id = subCategory.getSubCatId();
         return couponDao.findBySubCatId(id);
     }
+
+    public Integer applyCoupon(String couponCode,
+                                                 Integer price){
+     Coupon coupon = couponDao.findByCouponCode(couponCode);
+
+        if(coupon == null) {
+           return null;
+        }
+        if(coupon.getExpiryDate().before(new Date())){
+            return null;
+        }
+        int discountedPrice = price - coupon.getDiscountedPrice();
+        return discountedPrice;
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.example.roleBased.dto;
 
+import com.example.roleBased.entity.Product;
+import com.example.roleBased.entity.User;
 import lombok.*;
 
 import java.util.Date;
@@ -15,7 +17,7 @@ public class OrderDto {
     private Date addedDate;
     private String status;
     private int quantity=1;
-    private ProductDto product;
+    private Product product;
     private double totalPrice;
     private String addressLine1;
     private String addressLine2;
@@ -24,7 +26,7 @@ public class OrderDto {
     private String city;
     private String zipCode;
     private String mobileNo;
-    private UserDto user;
+    private User user;
 //    private int userCartId;
 
 
@@ -60,11 +62,11 @@ public class OrderDto {
         this.quantity = quantity;
     }
 
-    public ProductDto getProduct() {
+    public Product getProduct() {
         return product;
     }
 
-    public void setProduct(ProductDto product) {
+    public void setProduct(Product product) {
         this.product = product;
     }
 
@@ -132,11 +134,11 @@ public class OrderDto {
         this.mobileNo = mobileNo;
     }
 
-    public UserDto getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(UserDto user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }

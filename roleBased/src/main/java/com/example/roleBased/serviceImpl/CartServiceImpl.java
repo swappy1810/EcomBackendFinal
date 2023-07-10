@@ -57,7 +57,8 @@ public class CartServiceImpl {
     }
 
     public void clearCart(Cart cart){
-        cart.getCartDetails().clear();
+        cart.setCartDetails(new ArrayList<>());
+        cart.setTotalPrice(0.0);
         cartDao.save(cart);
     }
 

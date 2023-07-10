@@ -1,6 +1,5 @@
 package com.example.roleBased.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,9 +19,13 @@ public class CartDetails {
     private int quantity=1;
     private double price;
     private int userCartId;
-   private int userId;
+    private int userId;
+
     @OneToOne
     private Product product;
+
+//    @ManyToOne
+//    private Cart cart;
 
     public int getId() {
         return id;
@@ -54,14 +57,6 @@ public class CartDetails {
 
     public void setUserCartId(int userCartId) {
         this.userCartId = userCartId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public Product getProduct() {

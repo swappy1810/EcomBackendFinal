@@ -1,17 +1,15 @@
 package com.example.roleBased.controller;
 
 import com.example.roleBased.dto.OrderDto;
-import com.example.roleBased.dto.OrderItemDto;
-import com.example.roleBased.dto.ProductDto;
+import com.example.roleBased.entity.Cart;
+import com.example.roleBased.entity.CartDetails;
 import com.example.roleBased.entity.Order;
-import com.example.roleBased.entity.Wishlist;
 import com.example.roleBased.serviceImpl.OrderServiceImpl;
 import com.example.roleBased.serviceImpl.ProductServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -31,9 +29,8 @@ public class OrderController {
 
     //add the order using user id and product id
     @PostMapping("product/{productId}/orders/{isSingleCheckout}/{userId}/{quantity}")
-    public String createCart(@RequestBody Order order, @PathVariable Integer productId,Boolean isSingleCheckout,@PathVariable Integer userId,@PathVariable Integer quantity){
-        String createCart = this.orderService.createOrder(order,productId,isSingleCheckout,userId,quantity);
-        return "Order Placed!";
+    public String createCart(@RequestBody OrderDto cartDto, @PathVariable Integer productId, Boolean isSingleCheckout, @PathVariable Integer userId,@PathVariable Integer quantity){
+        return this.orderService.createOrder(cartDto,productId,isSingleCheckout,userId,quantity);
     }
 
     //get orders by user id
@@ -62,14 +59,4 @@ public class OrderController {
         return ResponseEntity.ok(this.orderService.getAllOrder());
     }
 
-//    //product to dto fetch
-//    public OrderDto orderToDto(Order order) {
-//        OrderDto orderDto = modelMapper.map(order,OrderDto.class);
-//        return  orderDto;
-//    }
-//
-//    public OrderItemDto orderNewDto(Order newOrder) {
-//        OrderItemDto order =  modelMapper.map(newOrder, OrderItemDto.class);
-//        return order;
-//    }
 }
