@@ -4,6 +4,7 @@ import com.example.roleBased.config.JwtUtil;
 import com.example.roleBased.dao.RoleDao;
 import com.example.roleBased.dao.UserDao;
 import com.example.roleBased.entity.*;
+import com.example.roleBased.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -83,6 +84,14 @@ public class UserServiceImpl {
         userDao.save(adminUser);
 
     }
+
+    public User getUsername(Integer userId){
+        User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id"+userId));
+        user.getUsername();
+        user.getEmail();
+        return user;
+    }
+
 
     //method to find user by username
     public Optional<User> findByUsername(String username) {

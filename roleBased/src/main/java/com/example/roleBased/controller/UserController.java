@@ -46,37 +46,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(JwtResponse.builder().status(true).message("It is a Valid User!!").username(user.getUsername()).roles(user.getRoles()).userId(user.getUserId()).email(jwtRequest.getEmail()).jwtToken(JwtUtil.generateToken(jwtRequest.getEmail())).build());
     }
 
-//    @PostMapping("/authenticate")
-//    public ResponseEntity<LoginResponse> generateToken1(@RequestBody AuthRequest authRequest) {
-//        User user =null;
-//        System.out.println(authRequest.getEmail());
-//        System.out.println(authRequest.getPassword());
-//            authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(authRequest.getPassword(), authRequest.getPassword())
-//            );
-//            return ResponseEntity.status(LoginResponse.builder().status(true).message("Valide User!").)
-//            user = userDao.findByEmail(authRequest.getEmail());
-//            System.out.println(authRequest.getEmail());
-//            if(user!=null){
-//                String plaintextPassword = authRequest.getPassword();
-//                String encryptedPassword = user.getPassword();
-//
-//                Boolean passwordMatched = passwordEncoder.matches(plaintextPassword,encryptedPassword);
-//                System.out.println(passwordMatched);
-//                if(passwordMatched) {
-//                    Optional<User> validUser = userDao.findOneByEmailAndPassword(authRequest.getEmail(), encryptedPassword);
-//                    if (user.isPresent()) {
-//                        return ResponseEntity.status(HttpStatus.OK).body(LoginResponse.builder().message("It is a Valid User!!").status(true).email(authRequest.getEmail()).jwtToken(JwtUtil.generateToken(authRequest.getEmail())).build());
-//                    }
-//                    else{
-//                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(LoginResponse.builder().status(true).message("Invalid Credentials !!").build());
-//                    }
-//                }else {
-//                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(LoginResponse.builder().status(false).message("Credentials not Matching!!").build());
-//                }
-//            }
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(LoginResponse.builder().status(false).message("Email Not Exist !!").build());
-//    }
+    @GetMapping("/userInfo/{userId}")
+    public User getUserInfo(@PathVariable Integer userId){
+        return userService.getUsername(userId);
+    }
 
     //add or register new user
     @PostMapping("/registerNewUser")
