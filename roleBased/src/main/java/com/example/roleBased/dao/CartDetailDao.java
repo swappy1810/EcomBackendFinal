@@ -14,7 +14,7 @@ public interface CartDetailDao extends JpaRepository<CartDetails,Integer> {
 
     CartDetailDto deleteProductByUserId(Integer userId);
 
-    Product findByProduct(Product product);
+   CartDetails findByProduct(Product product);
 
     List<CartDetails> findByUserCartId(Integer userCartId);
 

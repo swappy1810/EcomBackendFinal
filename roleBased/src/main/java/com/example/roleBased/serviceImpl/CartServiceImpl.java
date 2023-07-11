@@ -95,15 +95,21 @@ public class CartServiceImpl {
     }
 
     //update cart method
-    public CartDetails updateCart(CartDetails cartDetails, Integer userId, Integer productId) {
-        Product product = this.productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with this id" + productId));
-        CartDetails cartDetails1 = this.cartDetailDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user id not found with this id " + userId));
-        if (productId == cartDetails1.getProduct().getProduct_id()) {
-            cartDetails1.setQuantity(cartDetails.getQuantity());
-            cartDetails1.setPrice(product.getProduct_price() * cartDetails.getQuantity());
-            CartDetails updateCart = this.cartDetailDao.save(cartDetails1);
-            return updateCart;
+    public ResponseEntity<String> updateCart(CartDetails cartDetails,Integer quantity, Integer productId,Integer userId) {
+        User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id"+userId));
+        Product product = productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id"+productId));
+//            if (userId == cartDetails.getUserId()) {
+//                cartDetails.setQuantity(cartDetails.getQuantity());
+//                cartDetails.setPrice(product.getProduct_price()*cartDetails.getQuantity());
+//                cartDetailDao.save(cartDetails);
+//            }
+        cartDetails.setUserId(cartDetails.getUserId());
+        CartDetails cartDetails1 = cartDetailDao.findByProduct(product);
+        if(userId==cartDetails1.getUserId()){
+            cartDetails1.setQuantity(quantity);
+            cartDetails1.setPrice(product.getProduct_price()*quantity);
+            cartDetailDao.save(cartDetails1);
         }
-        return null;
+        return ResponseEntity.ok("Cart updated successfully");
     }
 }
