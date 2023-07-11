@@ -69,22 +69,19 @@ public class CartServiceImpl {
         return "User not logged In please sign In";
     }
 
-//    public boolean isProductInCart(CartDetails cart, Product product){
-//        if(product.getProduct_name().equals(cart.getProduct().getProduct_name())){
-//            return true;
-//        }
-//        return false;
-//    }
-
     public void clearCart(Cart cart) {
         cart.setCartDetails(new ArrayList<>());
         cart.setTotalPrice(0.0);
         cartDao.save(cart);
     }
 
-    public ResponseEntity<ApiResponse> deleteCartById(Integer productId) {
+    public ResponseEntity<ApiResponse> deleteCartById(Integer productId,Integer userId) {
+        User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id"+userId));
         Product product = productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with this id" + productId));
-        this.cartDetailDao.deleteByProduct(product);
+        CartDetails cartDetails1 = cartDetailDao.findByProduct(product);
+        if(userId==cartDetails1.getUserId()) {
+            cartDetailDao.deleteById(cartDetails1.getId());
+        }
         return new ResponseEntity<ApiResponse>(new ApiResponse("Product deleted successfully from cart", true), HttpStatus.OK);
     }
 
@@ -98,11 +95,6 @@ public class CartServiceImpl {
     public ResponseEntity<String> updateCart(CartDetails cartDetails,Integer quantity, Integer productId,Integer userId) {
         User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id"+userId));
         Product product = productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id"+productId));
-//            if (userId == cartDetails.getUserId()) {
-//                cartDetails.setQuantity(cartDetails.getQuantity());
-//                cartDetails.setPrice(product.getProduct_price()*cartDetails.getQuantity());
-//                cartDetailDao.save(cartDetails);
-//            }
         cartDetails.setUserId(cartDetails.getUserId());
         CartDetails cartDetails1 = cartDetailDao.findByProduct(product);
         if(userId==cartDetails1.getUserId()){

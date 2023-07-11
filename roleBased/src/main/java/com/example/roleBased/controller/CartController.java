@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,9 +36,9 @@ public class CartController {
     }
 
 
-    @DeleteMapping("/deleteCart/{productId}")
-    public ResponseEntity<ApiResponse> deleteCart(@PathVariable Integer productId){
-        this.cartServiceImpl.deleteCartById(productId);
+    @DeleteMapping("/deleteCart/{productId}/{userId}")
+    public ResponseEntity<ApiResponse> deleteCart(@PathVariable Integer productId, @PathVariable Integer userId){
+        this.cartServiceImpl.deleteCartById(productId,userId);
         return new ResponseEntity<ApiResponse>(new ApiResponse("product is successfully deleted from cart",true), HttpStatus.OK);
     }
 
