@@ -34,9 +34,9 @@ public class WishListServiceImpl {
 
     //add product to WishList
     public Wishlist createWishList(Wishlist wishList, Integer userId, Integer productId) {
-        Product product= this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("Product not found with this id"+productId));
-        User user=this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("User not found with this userId"+userId));
-       // Wishlist wishList = this.dtoToWishList(wishListDto);
+        Product product = this.productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found with this id" + productId));
+        User user = this.userDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with this userId" + userId));
+        // Wishlist wishList = this.dtoToWishList(wishListDto);
         wishList.setUsername(wishList.getUsername());
         wishList.setCreatedDate(new Date());
         wishList.setProduct(product);
@@ -58,14 +58,20 @@ public class WishListServiceImpl {
 
     //ReadWishlist
     public List<Wishlist> readWishList(Integer userId) {
-        User user=this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("User not found with this userId"+userId));
+        User user = this.userDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with this userId" + userId));
         return wishListDao.findByUserId(userId);
     }
 
     //delete wishlist of user by user Id
     @Transactional
-    public void deleteWishList(Integer productId){
-        Product product =  this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id" +productId));
-        wishListDao.deleteByProduct(product);
+    public void deleteWishList(Integer productId, Integer userId) {
+        User user = userDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("product not found with this id" + productId));
+        Product product = this.productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with this id" + productId));
+        List<Wishlist> wishlist2 = wishListDao.findByProduct(product);
+        for (Wishlist wishlist1 : wishlist2) {
+            if (userId == wishlist1.getUserId()) {
+                wishListDao.deleteById(wishlist1.getListid());
+            }
+        }
     }
 }

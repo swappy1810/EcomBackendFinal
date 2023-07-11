@@ -57,9 +57,9 @@ public class CartController {
 
     //update cart by cart id
 
-    @PutMapping("/{cartId}/{productId}")
-    public ResponseEntity<CartDetails> updateCart(@Valid @RequestBody CartDetails cartDetails, @PathVariable Integer cartId,@PathVariable Integer productId){
-        CartDetails updatedCart = this.cartServiceImpl.updateCart(cartDetails,cartId,productId);
+    @PutMapping("/{userId}/{productId}")
+    public ResponseEntity<CartDetails> updateCart(@Valid @RequestBody CartDetails cartDetails,@PathVariable Integer userId,@PathVariable Integer productId){
+        CartDetails updatedCart = this.cartServiceImpl.updateCart(cartDetails,userId,productId);
         return ResponseEntity.ok(updatedCart);
     }
 

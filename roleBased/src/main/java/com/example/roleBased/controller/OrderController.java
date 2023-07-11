@@ -28,8 +28,8 @@ public class OrderController {
     ModelMapper modelMapper = new ModelMapper();
 
     //add the order using user id and product id
-    @PostMapping("product/{productId}/orders/{isSingleCheckout}/{userId}/{quantity}")
-    public String createCart(@RequestBody OrderDto cartDto, @PathVariable Integer productId, Boolean isSingleCheckout, @PathVariable Integer userId,@PathVariable Integer quantity){
+    @PostMapping("product/orders/{productId}/{isSingleCheckout}/{userId}/{quantity}")
+    public String createCart(@RequestBody OrderDto cartDto,@PathVariable Integer productId, Boolean isSingleCheckout, @PathVariable Integer userId,@PathVariable Integer quantity){
         return this.orderService.createOrder(cartDto,productId,isSingleCheckout,userId,quantity);
     }
 

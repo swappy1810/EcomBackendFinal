@@ -19,7 +19,7 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private static final String SECRET_KEY = "learn_programming_yourself";
 
-    private static final int TOKEN_VALIDITY  = 3600 * 5;
+    private static final int TOKEN_VALIDITY  =  60 * 60 * 24 * 3;
 
 
     //get username from token

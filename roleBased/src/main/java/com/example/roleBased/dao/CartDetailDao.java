@@ -16,6 +16,8 @@ public interface CartDetailDao extends JpaRepository<CartDetails,Integer> {
 
     Product findByProduct(Product product);
 
+    List<CartDetails> findByUserCartId(Integer userCartId);
+
     List<CartDetails> findByUserId(Integer userId);
 
     //List<CartDetails> findByUserCartId(Integer userCartId);

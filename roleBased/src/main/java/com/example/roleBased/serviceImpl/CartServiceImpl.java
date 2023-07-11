@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartServiceImpl {
@@ -30,40 +31,60 @@ public class CartServiceImpl {
     @Autowired
     private CartDao cartDao;
 
-    ModelMapper modelMapper= new ModelMapper();
+    ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     private UserDao userDao;
 
-    public String addToCart(CartDetails cartDetails, Integer productId,Integer userId) {
-        User user = this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id"+userId));
-        if(user != null) {
-            Product product = productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("Product not found with this id"+productId));
-            Cart cart = cartDao.findById(cartDetails.getUserCartId()).orElseThrow(()->new ResourceNotFoundException("usercart Id not found with this id"+cartDetails.getUserCartId()));
+    public String addToCart(CartDetails cartDetails, Integer productId, Integer userId) {
+        User user = this.userDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with this id" + userId));
+        if (user != null) {
+            Product product = productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found with this id" + productId));
+            Cart cart = cartDao.findById(cartDetails.getUserCartId()).orElseThrow(() -> new ResourceNotFoundException("usercart Id not found with this id" + cartDetails.getUserCartId()));
+//            Optional<CartDetails> existingProduct = cart.getCartDetails().stream().filter(product1 -> product.getProduct_name().equals(cartDetails.getProduct().getProduct_name())).findFirst();
+////            System.out.println(existingProduct);
+//            System.out.println(existingProduct.isPresent());
+//            if (existingProduct.isPresent()) {
+//                CartDetails itemUpdate = existingProduct.get();
+//                int updateQuantity = itemUpdate.getQuantity() + cartDetails.getQuantity();
+//                System.out.println(updateQuantity);
+//                itemUpdate.setQuantity(updateQuantity);
+//            } else {
+            //boolean isProductInCart = isProductInCart(cartDetails,product);
+//                Product itemUpdate = cartDetails.getProduct();
+//                int updateQuantity = itemUpdate.getQuantity() + cartDetails.getQuantity();
+//                System.out.println(updateQuantity);
+//                itemUpdate.setQuantity(updateQuantity);
             List<CartDetails> cartDetails1 = new ArrayList<>();
             cartDetails.setProduct(product);
             cartDetails.setUserId(userId);
             cartDetails.setUserCartId(cartDetails.getUserCartId());
-            cartDetails.setPrice(cartDetails.getQuantity()*product.getProduct_price());
+            cartDetails.setPrice(cartDetails.getQuantity() * product.getProduct_price());
             cartDetails.setQuantity(cartDetails.getQuantity());
             cartDetails1.add(cartDetails);
             cart.setCartDetails(cartDetails1);
             cartDao.save(cart);
             return "Product added to cart";
         }
-        else{
-            return "User not logged In please sign In!";
-        }
+        return "User not logged In please sign In";
     }
 
-    public void clearCart(Cart cart){
+//    public boolean isProductInCart(CartDetails cart, Product product){
+//        if(product.getProduct_name().equals(cart.getProduct().getProduct_name())){
+//            return true;
+//        }
+//        return false;
+//    }
+
+    public void clearCart(Cart cart) {
         cart.setCartDetails(new ArrayList<>());
         cart.setTotalPrice(0.0);
         cartDao.save(cart);
     }
 
     public ResponseEntity<ApiResponse> deleteCartById(Integer productId) {
-        this.cartDetailDao.deleteById(productId);
+        Product product = productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with this id" + productId));
+        this.cartDetailDao.deleteByProduct(product);
         return new ResponseEntity<ApiResponse>(new ApiResponse("Product deleted successfully from cart", true), HttpStatus.OK);
     }
 
@@ -71,16 +92,18 @@ public class CartServiceImpl {
     public List<CartDetails> getCartDetails(Integer userId) {
         User user = userDao.findById(userId).get();
         return cartDetailDao.findByUserId(userId);
-        }
-
-        //update cart method
-    public CartDetails updateCart(CartDetails cartDetails, Integer cartId,Integer productId) {
-        Product product = this.productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id"+productId));
-        CartDetails cartDetails1 = this.cartDetailDao.findById(cartId).orElseThrow(() -> new ResourceNotFoundException("cart id not found with this id " + cartId));
-        cartDetails1.setQuantity(cartDetails.getQuantity());
-        CartDetails updateCart = this.cartDetailDao.save(cartDetails1);
-        return updateCart;
     }
 
-
+    //update cart method
+    public CartDetails updateCart(CartDetails cartDetails, Integer userId, Integer productId) {
+        Product product = this.productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with this id" + productId));
+        CartDetails cartDetails1 = this.cartDetailDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user id not found with this id " + userId));
+        if (productId == cartDetails1.getProduct().getProduct_id()) {
+            cartDetails1.setQuantity(cartDetails.getQuantity());
+            cartDetails1.setPrice(product.getProduct_price() * cartDetails.getQuantity());
+            CartDetails updateCart = this.cartDetailDao.save(cartDetails1);
+            return updateCart;
+        }
+        return null;
+    }
 }

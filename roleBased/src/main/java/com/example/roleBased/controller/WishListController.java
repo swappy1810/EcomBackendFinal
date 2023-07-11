@@ -50,9 +50,9 @@ public class WishListController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{productId}")
-    public ApiResponse deleteByUserId(@PathVariable Integer productId)
-    { wishListService.deleteWishList(productId);
+    @DeleteMapping("/{productId}/{userId}")
+    public ApiResponse deleteByUserId(@PathVariable Integer productId,@PathVariable Integer userId)
+    { wishListService.deleteWishList(productId,userId);
         return new ApiResponse("Product removed from wishlist",true); }
 
 

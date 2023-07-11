@@ -113,60 +113,61 @@ public class OrderServiceImpl {
 //    }
 
 //add order to orders
-public String createOrder(OrderDto order, Integer productId, Boolean isSingleCheckout, Integer userId,Integer quantity) {
-//        if(JwtRequestFilter.CURRENT_USER!=null) {
+public String createOrder(OrderDto order,Integer productId, Boolean isSingleCheckout, Integer userId,Integer quantity) {
+//if(JwtRequestFilter.CURRENT_USER!=null) {
     User user = this.userDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with user Id" + userId));
-    Product product = this.productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with this id" + productId));
-    if(product.getQuantity()<quantity){
-        throw new ResourceNotFoundException("Product Out of Stock!");
-    }
-    else {
-        product.setQuantity((product.getQuantity() - quantity));
-        productDao.save(product);
-    }
-    if (Boolean.TRUE.equals(isSingleCheckout)) {
-
-        Order order1 = new Order();
-        order1.setAddedDate(new Date());
-        order1.setStatus(order.getStatus());
-        order1.setUser(user);
-        order1.setQuantity(order.getQuantity());
-        order1.setAddressLine1(order.getAddressLine1());
-        order1.setAddressLine2(order.getAddressLine2());
-        order1.setCity(order.getCity());
-        order1.setCountry(order.getCountry());
-        order1.setState(order.getState());
-        order1.setMobileNo(order.getMobileNo());
-        order1.setQuantity(quantity);
-        order1.setZipCode(order.getZipCode());
-        order1.setTotalPrice(order.getTotalPrice());
-        order1.setProduct(product);
-       orderDao.save(order1);
-        return "Order Placed!";
-    } else {
-        Order order2 = new Order();
-        order2.setAddedDate(new Date());
-        order2.setStatus(order.getStatus());
-        order2.setQuantity(order.getQuantity());
-        order2.setAddressLine1(order.getAddressLine1());
-        order2.setAddressLine2(order.getAddressLine2());
-        order2.setCity(order.getCity());
-        order2.setCountry(order.getCountry());
-        order2.setState(order.getState());
-        order2.setUser(user);
-        order2.setMobileNo(order.getMobileNo());
-        order2.setQuantity(quantity);
-        order2.setZipCode(order.getZipCode());
-        order2.setTotalPrice(order.getTotalPrice());
-        order2.setProduct(product);
-        this.orderDao.save(order2);
-
-        Cart cart = cartDao.findById(user.getCart().getUserCartId()).get();
-        cart.getCartDetails().clear();
-        cart.setTotalPrice(0);
-        cartDao.save(cart);
-        return "Order Placed";
-    }
+    Product product = productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with thsi id)"+productId));
+//    List<CartDetails> cartDetails = cartDetailDao.findByUserCartId(userCartId);
+//    for(CartDetails cartDetails1 : cartDetails) {
+//        Product product = cartDetails1.getProduct();
+//        int quantity1 = cartDetails1.getQuantity();
+    Order order1 = new Order();
+    if (product.getQuantity() < quantity) {
+            throw new ResourceNotFoundException("Product Out of Stock!");
+        } else {
+            product.setQuantity((product.getQuantity() - quantity));
+            productDao.save(product);
+        }
+        List<Order> orders = new ArrayList<>();
+        if (Boolean.TRUE.equals(isSingleCheckout)) {
+            order1.setAddedDate(new Date());
+            order1.setStatus(order.getStatus());
+            order1.setUser(user);
+            order1.setQuantity(order.getQuantity());
+            order1.setAddressLine1(order.getAddressLine1());
+            order1.setAddressLine2(order.getAddressLine2());
+            order1.setCity(order.getCity());
+            order1.setCountry(order.getCountry());
+            order1.setState(order.getState());
+            order1.setMobileNo(order.getMobileNo());
+            order1.setQuantity(quantity);
+            order1.setZipCode(order.getZipCode());
+            order1.setTotalPrice(order.getTotalPrice());
+            order1.setProduct(product);
+            orders.add(order1);
+            orderDao.saveAll(orders);
+            return "Order Placed!";
+        } else {
+            order1.setAddedDate(new Date());
+            order1.setStatus(order.getStatus());
+            order1.setQuantity(order.getQuantity());
+            order1.setAddressLine1(order.getAddressLine1());
+            order1.setAddressLine2(order.getAddressLine2());
+            order1.setCity(order.getCity());
+            order1.setCountry(order.getCountry());
+            order1.setState(order.getState());
+            order1.setUser(user);
+            order1.setMobileNo(order.getMobileNo());
+            order1.setQuantity(quantity);
+            order1.setZipCode(order.getZipCode());
+            order1.setTotalPrice(order.getTotalPrice());
+            order1.setProduct(product);
+            orders.add(order1);
+            orderDao.saveAll(orders);
+        }
+    Cart cart = cartDao.findById(user.getCart().getUserCartId()).get();
+        cartService.clearCart(cart);
+            return "Order Placed";
 }
 
     @Transactional
