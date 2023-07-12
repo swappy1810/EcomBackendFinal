@@ -46,16 +46,6 @@ public class WishListServiceImpl {
 
     }
 
-//    //dto to WishList fetch
-//    private Wishlist dtoToWishList(WishlistDto wishListDto) {
-//        return modelMapper.map(wishListDto,Wishlist.class);
-//    }
-//
-//    //WISHlIST to dto fetch
-//    private WishlistDto WishListToDto(Wishlist wishList) {
-//        return modelMapper.map(wishList,WishlistDto.class);
-//    }
-
     //ReadWishlist
     public List<Wishlist> readWishList(Integer userId) {
         User user = this.userDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with this userId" + userId));

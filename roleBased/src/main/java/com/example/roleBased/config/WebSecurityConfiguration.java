@@ -55,7 +55,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/coupon/{subCatId}",
             "/coupon/{couponId}",
             "/subCat/","/").hasAuthority("Admin")
-                .antMatchers("/product/orders/{userCartId}/{isSingleCheckout}/{userId}/{userCartId}/{quantity}/{couponCode}",
+                .antMatchers("order/{userId}/{isSingleCheckout}",
                         "/product/{productId}/order",
                         "/product/orders/{productId}/{isSingleCheckout}/{userId}/{quantity}",
                         "/users/{userId}/order",
@@ -64,7 +64,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/carts/getCartDetails",
                         "/{userId}",
                         "/userInfo/{userId}",
-                "/{quantity}/{productId}/{userId}",
+                "/{quantity}/{productId}/{userId}/{userCartId}",
                         "/{productId}",
                         "/{userId}/{productId}",
                         "/save/{userId}/product/{productId}",

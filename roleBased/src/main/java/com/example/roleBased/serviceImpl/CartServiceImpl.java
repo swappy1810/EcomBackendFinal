@@ -15,10 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CartServiceImpl {
@@ -91,16 +88,40 @@ public class CartServiceImpl {
         return cartDetailDao.findByUserId(userId);
     }
 
+    public Cart getCartById(Integer userCartId){
+        return cartDao.findByUserCartId(userCartId);
+    }
+
+    public List<CartDetails> getCartItemByCartId(Integer cartId){
+        Cart cart = cartDao.findById(cartId).orElseThrow(()->new ResourceNotFoundException("cart id not found with this id"+cartId));
+        if(cart != null) {
+            return cart.getCartDetails();
+        }
+        return Collections.emptyList();
+    }
+
     //update cart method
-    public ResponseEntity<String> updateCart(CartDetails cartDetails,Integer quantity, Integer productId,Integer userId) {
+    public ResponseEntity<String> updateCart(CartDetails cartDetails,Integer quantity, Integer productId,Integer userId,Integer userCartId) {
         User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id"+userId));
         Product product = productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id"+productId));
         cartDetails.setUserId(cartDetails.getUserId());
+        List<CartDetails> cartDetailsList = getCartItemByCartId(userCartId);
+        boolean productExistInCart = false;
         CartDetails cartDetails1 = cartDetailDao.findByProduct(product);
-        if(userId==cartDetails1.getUserId()){
-            cartDetails1.setQuantity(quantity);
-            cartDetails1.setPrice(product.getProduct_price()*quantity);
-            cartDetailDao.save(cartDetails1);
+        for(CartDetails cartDetails2 : cartDetailsList) {
+            if (userId == cartDetails1.getUserId() && productExistInCart == true) {
+                cartDetails1.setQuantity(quantity);
+                cartDetails1.setPrice(product.getProduct_price() * quantity);
+                cartDetailDao.save(cartDetails1);
+                break;
+            }
+        }
+        if(!productExistInCart){
+            CartDetails cartDetails2 = new CartDetails();
+            cartDetails2.setProduct(product);
+            cartDetails2.setQuantity(quantity);
+            cartDetailsList.add(cartDetails2);
+            cartDetailDao.saveAll(cartDetailsList);
         }
         return ResponseEntity.ok("Cart updated successfully");
     }

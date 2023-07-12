@@ -4,6 +4,7 @@ import com.example.roleBased.dto.CartDetailDto;
 import com.example.roleBased.dto.CategoryDto;
 import com.example.roleBased.entity.Cart;
 import com.example.roleBased.entity.CartDetails;
+import com.example.roleBased.entity.Product;
 import com.example.roleBased.exception.ApiResponse;
 import com.example.roleBased.serviceImpl.CartServiceImpl;
 import com.example.roleBased.serviceImpl.ProductServiceImpl;
@@ -58,9 +59,9 @@ public class CartController {
 
     //update cart by cart id
 
-    @PutMapping("/{quantity}/{productId}/{userId}")
-    public ResponseEntity<String> updateCart(@RequestBody CartDetails cartDetails,@PathVariable Integer quantity,@PathVariable Integer productId,@PathVariable Integer userId){
-        return this.cartServiceImpl.updateCart(cartDetails,quantity,productId,userId);
+    @PutMapping("/{quantity}/{productId}/{userId}/{userCartId}")
+    public ResponseEntity<String> updateCart(@RequestBody CartDetails cartDetails,@PathVariable Integer quantity,@PathVariable Integer productId,@PathVariable Integer userId,@PathVariable Integer userCartId){
+       return this.cartServiceImpl.updateCart(cartDetails,quantity,productId,userId,userCartId);
     }
 
 }
