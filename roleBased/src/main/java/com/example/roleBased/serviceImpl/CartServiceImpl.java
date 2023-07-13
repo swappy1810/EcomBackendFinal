@@ -38,7 +38,7 @@ public class CartServiceImpl {
         User user = this.userDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with this id" + userId));
         if (user != null) {
             Product product = productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found with this id" + productId));
-            Cart cart = cartDao.findById(cartDetails.getUserCartId()).orElseThrow(() -> new ResourceNotFoundException("usercart Id not found with this id" + cartDetails.getUserCartId()));
+            Cart cart = cartDao.findById(user.getCart().getUserCartId()).orElseThrow(() -> new ResourceNotFoundException("usercart Id not found with this id" + user.getCart().getUserCartId()));
             List<CartDetails> cartDetails1 = new ArrayList<>();
             cartDetails.setProduct(product);
             cartDetails.setUserId(cartDetails.getUserId());
@@ -62,9 +62,11 @@ public class CartServiceImpl {
     public ResponseEntity<ApiResponse> deleteCartById(Integer productId,Integer userId) {
         User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id"+userId));
         Product product = productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with this id" + productId));
-        CartDetails cartDetails1 = cartDetailDao.findByProduct(product);
-        if(userId==cartDetails1.getUserId()) {
-            cartDetailDao.deleteById(cartDetails1.getId());
+        List<CartDetails> cartDetails1 = cartDetailDao.findByProduct(product);
+        for(CartDetails cartDetailsNew : cartDetails1) {
+            if (userId == cartDetailsNew.getUserId()) {
+                cartDetailDao.deleteById(cartDetailsNew.getId());
+            }
         }
         return new ResponseEntity<ApiResponse>(new ApiResponse("Product deleted successfully from cart", true), HttpStatus.OK);
     }
@@ -100,14 +102,16 @@ public class CartServiceImpl {
         Product product = productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id"+productId));
         cartDetails.setUserId(cartDetails.getUserId());
         List<CartDetails> cartDetailsList = getCartDetails(userId);
-        CartDetails cartDetails1 = cartDetailDao.findByProduct(product);
+        List<CartDetails> cartDetails1 = cartDetailDao.findByProduct(product);
+        for(CartDetails cartDetailsNew : cartDetails1){
         for(CartDetails cartDetails2 : cartDetailsList) {
-            if (userId == cartDetails1.getUserId() && productExistInCart == true) {
-                cartDetails1.setQuantity(quantity);
-                cartDetails1.setPrice(product.getProduct_price() * quantity);
-                cartDetailDao.save(cartDetails1);
+            if (userId == cartDetailsNew.getUserId() && productExistInCart == true) {
+                cartDetailsNew.setQuantity(quantity);
+                cartDetailsNew.setPrice(product.getProduct_price() * quantity);
+                cartDetailDao.save(cartDetailsNew);
                 break;
             }
+        }
         }
         if(!productExistInCart){
             CartDetails cartDetails2 = new CartDetails();

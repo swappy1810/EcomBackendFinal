@@ -29,7 +29,7 @@ public class Product {
     @Column(nullable = false)
     private int quantity;
     @Column(nullable = false)
-    private int rating;
+    private float rating;
     //mapped product with category
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "catId",nullable = false)
@@ -103,11 +103,11 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 
