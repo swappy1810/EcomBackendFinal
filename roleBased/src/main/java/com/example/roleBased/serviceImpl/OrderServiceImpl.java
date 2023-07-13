@@ -1,8 +1,6 @@
 package com.example.roleBased.serviceImpl;
 
 import com.example.roleBased.dao.*;
-import com.example.roleBased.dto.OrderDto;
-import com.example.roleBased.dto.OrderItemDto;
 import com.example.roleBased.entity.*;
 import com.example.roleBased.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +42,6 @@ public class OrderServiceImpl {
 
     public String placeOrder(OrderItems orderItems1, Integer userId, boolean isSingleCheckout,double price){
         User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id"+userId));
-//        Cart id= user.getCart();
-//        cartService.clearCart(id);
         List<CartDetails> cartDetailsList = cartDetailDao.findByUserId(userId);
         Order order1 = new Order();
         order1.setUserId(userId);
@@ -69,7 +65,7 @@ public class OrderServiceImpl {
                 orderItems.setMobileNo(orderItems1.getMobileNo());
                 orderItems.setZipCode(orderItems1.getZipCode());
                 orderItems.setTotalPrice(cartDetails.getPrice() * cartDetails.getQuantity());
-                orderItems.setProductId(cartDetails.getProduct().getProduct_id());
+                orderItems.setProduct(product);
                 orderdDetailsList.add(orderItems);
             } else {
                 orderItems.setAddedDate(new Date());
@@ -82,7 +78,7 @@ public class OrderServiceImpl {
                 orderItems.setState(orderItems1.getState());
                 orderItems.setMobileNo(orderItems1.getMobileNo());
                 orderItems.setZipCode(orderItems1.getZipCode());
-                orderItems.setProductId(cartDetails.getProduct().getProduct_id());
+                orderItems.setProduct(product);
                 orderItems.setTotalPrice(cartDetails.getPrice() * cartDetails.getQuantity());
                 orderdDetailsList.add(orderItems);
             }
@@ -104,7 +100,7 @@ public class OrderServiceImpl {
     }
 
     //update the order by order id
-    public Order updateOrder(OrderDto orderDto, Integer orderId) {
+    public Order updateOrder(Order orderDto, Integer orderId) {
         return null;
     }
 
@@ -120,7 +116,7 @@ public class OrderServiceImpl {
     }
 
     //get order by order id
-    public OrderDto getOrderById(Integer orderId) {
+    public Order getOrderById(Integer orderId) {
         return null;
     }
 

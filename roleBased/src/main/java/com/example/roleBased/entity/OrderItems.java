@@ -31,7 +31,8 @@ public class OrderItems {
     private String city;
     private String zipCode;
     private String mobileNo;
-    private Integer productId;
+    @ManyToOne
+    private Product product;
 
 
     public Date getAddedDate() {
