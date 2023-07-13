@@ -20,6 +20,8 @@ public interface CartDetailDao extends JpaRepository<CartDetails,Integer> {
 
     List<CartDetails> findByUserId(Integer userId);
 
+    List<CartDetails> deleteByUserId(Integer userId);
+
     //List<CartDetails> findByUserCartId(Integer userCartId);
 
 }

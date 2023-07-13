@@ -26,9 +26,9 @@ public class OrderController {
     ModelMapper modelMapper = new ModelMapper();
 
     //add the order using user id and product id
-    @PostMapping("order/{userId}/{isSingleCheckout}")
-    public String createCart(@RequestBody OrderItems cartDto, @PathVariable Boolean isSingleCheckout, @PathVariable Integer userId){
-        return this.orderService.placeOrder(cartDto, userId, isSingleCheckout);
+    @PostMapping("order/{userId}/{isSingleCheckout}/{price}")
+    public String createCart(@RequestBody OrderItems cartDto, @PathVariable Boolean isSingleCheckout, @PathVariable Integer userId,@PathVariable double price){
+        return this.orderService.placeOrder(cartDto, userId, isSingleCheckout,price);
     }
 
     //get orders by user id

@@ -21,6 +21,7 @@ public class Order {
     private int id;
     private double price;
     private int userId;
+    private Date addedDate;
 
     @OneToMany(cascade = CascadeType.ALL,targetEntity = OrderItems.class)
     @JoinColumn(name = "order_orderItems")
