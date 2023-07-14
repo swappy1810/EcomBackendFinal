@@ -17,4 +17,6 @@ public interface OrderDao extends JpaRepository<Order,Integer> {
 
     List<Order> findByUserIdOrderByAddedDateAsc(Integer userId);
 
+    Order deleteById(Order order);
+
 }

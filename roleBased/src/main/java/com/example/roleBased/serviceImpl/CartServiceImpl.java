@@ -4,8 +4,6 @@ import com.example.roleBased.dao.CartDao;
 import com.example.roleBased.dao.CartDetailDao;
 import com.example.roleBased.dao.ProductDao;
 import com.example.roleBased.dao.UserDao;
-import com.example.roleBased.dto.CartDetailDto;
-import com.example.roleBased.dto.CategoryDto;
 import com.example.roleBased.entity.*;
 import com.example.roleBased.exception.ApiResponse;
 import com.example.roleBased.exception.ResourceNotFoundException;
@@ -41,7 +39,7 @@ public class CartServiceImpl {
             Cart cart = cartDao.findById(user.getCart().getUserCartId()).orElseThrow(() -> new ResourceNotFoundException("usercart Id not found with this id" + user.getCart().getUserCartId()));
             List<CartDetails> cartDetails1 = new ArrayList<>();
             cartDetails.setProduct(product);
-            cartDetails.setUserId(cartDetails.getUserId());
+            cartDetails.setUserId(userId);
             cartDetails.setUserCartId(cart.getUserCartId());
             cartDetails.setPrice(cartDetails.getQuantity() * product.getProduct_price());
             cartDetails.setQuantity(cartDetails.getQuantity());
@@ -68,7 +66,7 @@ public class CartServiceImpl {
                 cartDetailDao.deleteById(cartDetailsNew.getId());
             }
         }
-        return new ResponseEntity<ApiResponse>(new ApiResponse("Product deleted successfully from cart", true), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse("Product deleted successfully from cart", true), HttpStatus.OK);
     }
 
     //get all cart items lists
@@ -81,7 +79,7 @@ public class CartServiceImpl {
     public ResponseEntity<ApiResponse> deleteCartByUserId(Integer userId){
         User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user id not found with this id"+userId));
         this.cartDetailDao.deleteByUserId(userId);
-        return new ResponseEntity<ApiResponse>(new ApiResponse("cart deleted successfully",true),HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse("cart deleted successfully",true),HttpStatus.OK);
         }
 
     public Cart getCartById(Integer userCartId){

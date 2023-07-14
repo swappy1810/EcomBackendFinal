@@ -1,6 +1,7 @@
 package com.example.roleBased.serviceImpl;
 
 import com.example.roleBased.dao.*;
+import com.example.roleBased.dto.CategoryDto;
 import com.example.roleBased.entity.*;
 import com.example.roleBased.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,9 +87,7 @@ public class OrderServiceImpl {
         order1.setOrderItems(orderdDetailsList);
         orderDao.save(order1);
         Cart cart = cartDao.findById(user.getCart().getUserCartId()).get();
-        System.out.println(cart);
         cart.getCartDetails().clear();
-        System.out.println(cart);
         cartDao.save(cart);
         return "Order Placed";
     }
@@ -101,12 +100,17 @@ public class OrderServiceImpl {
 
     //update the order by order id
     public Order updateOrder(Order orderDto, Integer orderId) {
-        return null;
+        Order order = this.orderDao.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order not found with this id " + orderId));
+        order.setUserId(orderDto.getUserId());
+        order.setPrice(orderDto.getPrice());
+        order.setAddedDate(new Date());
+        return orderDao.save(order);
     }
 
     //delete order by order id
-    public void deleteOrder(Integer orderId) {
-
+    public Order deleteOrder(Integer orderId) {
+        Order order =  orderDao.findById(orderId).orElseThrow(()->new ResourceNotFoundException("order id not found with this id"+orderId));
+        return orderDao.deleteById(order);
     }
 
     //get all order
@@ -117,7 +121,7 @@ public class OrderServiceImpl {
 
     //get order by order id
     public Order getOrderById(Integer orderId) {
-        return null;
+        return orderDao.findById(orderId).orElseThrow(()->new ResourceNotFoundException("order id not found with this id"+orderId));
     }
 
 //get order by user by user id

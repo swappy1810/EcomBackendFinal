@@ -9,6 +9,18 @@ import com.example.roleBased.entity.Category;
 import com.example.roleBased.entity.Product;
 import com.example.roleBased.entity.SubCategory;
 import com.example.roleBased.exception.ResourceNotFoundException;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.search.*;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.RAMDirectory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +29,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -94,16 +109,6 @@ public class ProductServiceImpl{
         return findByCategory.stream().map(product -> product).collect(Collectors.toList());
     }
 
-    //dto to product fetch
-//    private Product dtoToProduct(ProductDto productDto) {
-//        return modelMapper.map(productDto,Product.class);
-//    }
-//
-//    //product to dto fetch
-//    public ProductDto productToDto(Product product) {
-//        return modelMapper.map(product,ProductDto.class);
-//    }
-
     //Search API of products
     public List<Product> searchProducts(String query) {
         return productDao.searchProducts(query);
@@ -120,5 +125,49 @@ public class ProductServiceImpl{
         similarProducts.remove(product);
         return similarProducts;
     }
+
+//    public List<Product> getSimilarProduct(Integer productId){
+//        Optional<Product> productOptional = productDao.findById(productId);
+//        if(productOptional.isPresent()){
+//            Product product = productOptional.get();
+//            Category category = product.getCategory();
+//
+//            List<Product> productList = productDao.findByCategory(category);
+//            productList.remove(product);
+//
+//            Directory directory = buildIndex(productList);
+//            List<Product> recommendProduct = performContentBasedFiltering(product,directory);
+//            return recommendProduct;
+//        }
+//        return Collections.emptyList();
+//    }
+//
+//    private Directory buildIndex(List<Product> products){
+//        Directory directory = new RAMDirectory();
+//        try(Analyzer analyzer = new StandardAnalyzer()){
+//            IndexWriterConfig indexWriterConfig  = new IndexWriterConfig(analyzer);
+//            try(IndexWriter indexWriter = new IndexWriter(directory,indexWriterConfig)) {
+//                for (Product product : products) {
+//                    Document document = new Document();
+//                    document.add(new TextField("description", product.getProduct_long_desc(), Field.Store.YES));
+//                    indexWriter.addDocument(document);
+//                }
+//            }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            return directory;
+//        }
+//
+//        private List<Product> performContentBasedFiltering(Product product,Directory directory){
+//        List<Product> recommendedProducts = new ArrayList<>();
+//        try(IndexSearcher indexSearcher = new IndexSearcher(DirectoryReader.open(directory))){
+//            Analyzer analyzer = new EnglishAnalyzer();
+//            Query
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        }
+
 
 }
