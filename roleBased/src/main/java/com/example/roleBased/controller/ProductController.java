@@ -1,7 +1,9 @@
 package com.example.roleBased.controller;
 
 import com.example.roleBased.dto.ProductDto;
+import com.example.roleBased.entity.Category;
 import com.example.roleBased.entity.Product;
+import com.example.roleBased.entity.SubCategory;
 import com.example.roleBased.exception.ApiResponse;
 import com.example.roleBased.serviceImpl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +76,12 @@ public class ProductController {
     @GetMapping("/recommend/{productId}")
     public ResponseEntity<List<Product>> recommendations(@PathVariable Integer productId){
         return ResponseEntity.ok(productService.findByRecomendations(productId));
+    }
+
+    @GetMapping("/recommendation")
+    public ResponseEntity<List<Product>> getRelatedProducts(@RequestParam String category,@RequestParam String subCategory){
+       List<Product> products = productService.getRelatedProduct(category,subCategory);
+       return ResponseEntity.ok(products);
     }
 
 }

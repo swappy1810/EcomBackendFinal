@@ -20,6 +20,7 @@ public class corsConfigurer {
                 registry.addMapping("/**")
                         .allowedMethods(GET, POST, PUT, DELETE)
                         .allowedHeaders("*")
+                        .allowedOrigins("*")
                         .allowedOriginPatterns("*")
                         .allowCredentials(true);
             }

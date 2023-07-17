@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,58 +40,91 @@ public class OrderServiceImpl {
     private CartDao cartDao;
 
     @Autowired
-            private CartServiceImpl cartService;
+    private CartServiceImpl cartService;
 
 
-    public String placeOrder(OrderItems orderItems1, Integer userId, boolean isSingleCheckout,double price){
-        User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id"+userId));
+    public String placeOrder(OrderItems orderItems1, Integer userId, double price, Integer quantity1, Integer productId) {
+        User user = userDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with this id" + userId));
         List<CartDetails> cartDetailsList = cartDetailDao.findByUserId(userId);
         Order order1 = new Order();
         order1.setUserId(userId);
-        order1.setAddedDate(new Date());
+        order1.setAddedDate(LocalDate.now());
+        //order1.setShippingDate(order1.getAddedDate().plusDays(7));
         order1.setPrice(price);
         List<OrderItems> orderdDetailsList = new ArrayList<>();
-        int index;
-        for(index=0;index<cartDetailsList.size();index++) {
-            OrderItems orderItems = new OrderItems();
-            CartDetails cartDetails = cartDetailsList.get(index);
-            Product product = productDao.findById(cartDetails.getProduct().getProduct_id()).get();
-            if (Boolean.TRUE.equals(isSingleCheckout)) {
-                orderItems.setAddedDate(new Date());
-                orderItems.setStatus(orderItems1.getStatus());
-                orderItems.setQuantity(cartDetails.getQuantity());
-                orderItems.setAddressLine1(orderItems1.getAddressLine1());
-                orderItems.setAddressLine2(orderItems1.getAddressLine2());
-                orderItems.setCity(orderItems1.getCity());
-                orderItems.setCountry(orderItems1.getCountry());
-                orderItems.setState(orderItems1.getState());
-                orderItems.setMobileNo(orderItems1.getMobileNo());
-                orderItems.setZipCode(orderItems1.getZipCode());
-                orderItems.setTotalPrice(cartDetails.getPrice() * cartDetails.getQuantity());
-                orderItems.setProduct(product);
-                orderdDetailsList.add(orderItems);
+        OrderItems orderItems = new OrderItems();
+            Product product1 = productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product id not found with this id" + productId));
+            if (product1.getQuantity() < quantity1) {
+                throw new ResourceNotFoundException("Product Out of Stock!");
             } else {
-                orderItems.setAddedDate(new Date());
-                orderItems.setStatus(orderItems1.getStatus());
-                orderItems.setQuantity(cartDetails.getQuantity());
-                orderItems.setAddressLine1(orderItems1.getAddressLine1());
-                orderItems.setAddressLine2(orderItems1.getAddressLine2());
-                orderItems.setCity(orderItems1.getCity());
-                orderItems.setCountry(orderItems1.getCountry());
-                orderItems.setState(orderItems1.getState());
-                orderItems.setMobileNo(orderItems1.getMobileNo());
-                orderItems.setZipCode(orderItems1.getZipCode());
-                orderItems.setProduct(product);
-                orderItems.setTotalPrice(cartDetails.getPrice() * cartDetails.getQuantity());
-                orderdDetailsList.add(orderItems);
+                product1.setQuantity((product1.getQuantity() - quantity1));
+                productDao.save(product1);
             }
-        }
+            orderItems.setAddedDate(LocalDate.now());
+            orderItems.setShippingDate(order1.getAddedDate().plusDays(7));
+            orderItems.setStatus(orderItems1.getStatus());
+            orderItems.setQuantity(quantity1);
+            orderItems.setAddressLine1(orderItems1.getAddressLine1());
+            orderItems.setAddressLine2(orderItems1.getAddressLine2());
+            orderItems.setCity(orderItems1.getCity());
+            orderItems.setCountry(orderItems1.getCountry());
+            orderItems.setState(orderItems1.getState());
+            orderItems.setMobileNo(orderItems1.getMobileNo());
+            orderItems.setZipCode(orderItems1.getZipCode());
+            orderItems.setTotalPrice(product1.getProduct_price() * quantity1);
+            orderItems.setProduct(product1);
+            orderdDetailsList.add(orderItems);
+
         order1.setOrderItems(orderdDetailsList);
         orderDao.save(order1);
         Cart cart = cartDao.findById(user.getCart().getUserCartId()).get();
         cart.getCartDetails().clear();
         cartDao.save(cart);
         return "Order Placed";
+    }
+
+        public String createOrder(OrderItems orderItems1, Integer userId, double price){
+            User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id"+userId));
+            List<CartDetails> cartDetailsList = cartDetailDao.findByUserId(userId);
+            Order order1 = new Order();
+            order1.setUserId(userId);
+            order1.setAddedDate(LocalDate.now());
+            //order1.setShippingDate(order1.getAddedDate().plusDays(7));
+            order1.setPrice(price);
+            List<OrderItems> orderdDetailsList = new ArrayList<>();
+            int index;
+            for(index=0;index<cartDetailsList.size();index++) {
+                OrderItems orderItems = new OrderItems();
+                CartDetails cartDetails = cartDetailsList.get(index);
+                Product product = productDao.findById(cartDetails.getProduct().getProduct_id()).get();
+                int quantity = cartDetails.getQuantity();
+                    if (product.getQuantity()<quantity) {
+                        throw new ResourceNotFoundException("Product Out of Stock!");
+                    } else {
+                        product.setQuantity((product.getQuantity() - quantity));
+                        productDao.save(product);
+                    }
+                    orderItems.setAddedDate(LocalDate.now());
+                    orderItems.setShippingDate(order1.getAddedDate().plusDays(7));
+                    orderItems.setStatus(orderItems1.getStatus());
+                    orderItems.setQuantity(cartDetails.getQuantity());
+                    orderItems.setAddressLine1(orderItems1.getAddressLine1());
+                    orderItems.setAddressLine2(orderItems1.getAddressLine2());
+                    orderItems.setCity(orderItems1.getCity());
+                    orderItems.setCountry(orderItems1.getCountry());
+                    orderItems.setState(orderItems1.getState());
+                    orderItems.setMobileNo(orderItems1.getMobileNo());
+                    orderItems.setZipCode(orderItems1.getZipCode());
+                    orderItems.setProduct(product);
+                    orderItems.setTotalPrice(cartDetails.getPrice() * cartDetails.getQuantity());
+                    orderdDetailsList.add(orderItems);
+                }
+            order1.setOrderItems(orderdDetailsList);
+            orderDao.save(order1);
+            Cart cart = cartDao.findById(user.getCart().getUserCartId()).get();
+            cart.getCartDetails().clear();
+            cartDao.save(cart);
+            return "Order Placed";
     }
 
     @Transactional
@@ -103,7 +138,7 @@ public class OrderServiceImpl {
         Order order = this.orderDao.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order not found with this id " + orderId));
         order.setUserId(orderDto.getUserId());
         order.setPrice(orderDto.getPrice());
-        order.setAddedDate(new Date());
+        order.setAddedDate(LocalDate.now());
         return orderDao.save(order);
     }
 

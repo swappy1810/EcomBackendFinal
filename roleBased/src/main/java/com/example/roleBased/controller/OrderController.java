@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,9 +27,15 @@ public class OrderController {
     ModelMapper modelMapper = new ModelMapper();
 
     //add the order using user id and product id
-    @PostMapping("order/{userId}/{isSingleCheckout}/{price}")
-    public String createCart(@RequestBody OrderItems cartDto, @PathVariable Boolean isSingleCheckout, @PathVariable Integer userId,@PathVariable double price){
-        return this.orderService.placeOrder(cartDto, userId, isSingleCheckout,price);
+    @PostMapping("order/{userId}/{price}/{quantity}/{productId}")
+    public String createCart(@RequestBody OrderItems cartDto, @PathVariable Integer userId, @PathVariable double price, @PathVariable Integer quantity, @PathVariable Integer productId){
+        return this.orderService.placeOrder(cartDto, userId,price,quantity,productId);
+    }
+
+    //add the order using user id and product id
+    @PostMapping("order/{userId}/{price}")
+    public String createCart(@RequestBody OrderItems cartDto, @PathVariable Integer userId, @PathVariable double price){
+        return this.orderService.createOrder(cartDto, userId,price);
     }
 
     //get orders by user id

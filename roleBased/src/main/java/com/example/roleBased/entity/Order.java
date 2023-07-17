@@ -3,6 +3,7 @@ package com.example.roleBased.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,8 @@ public class Order {
     private int id;
     private double price;
     private int userId;
-    private Date addedDate;
+    private LocalDate addedDate;
+    private LocalDate shippingDate;
 
     @OneToMany(cascade = CascadeType.ALL,targetEntity = OrderItems.class)
     @JoinColumn(name = "order_orderItems")

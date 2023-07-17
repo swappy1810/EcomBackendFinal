@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -20,7 +21,7 @@ public class OrderItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userOrderId;
     @Column(name = "date")
-    private Date addedDate;
+    private LocalDate addedDate;
     private int quantity;
     private String status;
     private double totalPrice;
@@ -31,16 +32,40 @@ public class OrderItems {
     private String city;
     private String zipCode;
     private String mobileNo;
+    private LocalDate shippingDate;
     @ManyToOne
     private Product product;
 
+    public LocalDate getShippingDate() {
+        return shippingDate;
+    }
 
-    public Date getAddedDate() {
+    public void setShippingDate(LocalDate shippingDate) {
+        this.shippingDate = shippingDate;
+    }
+
+    public int getUserOrderId() {
+        return userOrderId;
+    }
+
+    public void setUserOrderId(int userOrderId) {
+        this.userOrderId = userOrderId;
+    }
+
+    public LocalDate getAddedDate() {
         return addedDate;
     }
 
-    public void setAddedDate(Date addedDate) {
+    public void setAddedDate(LocalDate addedDate) {
         this.addedDate = addedDate;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getQuantity() {

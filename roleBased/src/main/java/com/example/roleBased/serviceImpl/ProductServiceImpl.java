@@ -30,10 +30,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -128,48 +125,17 @@ public class ProductServiceImpl{
         return similarProducts;
     }
 
-//    public List<Product> getSimilarProduct(Integer productId){
-//        Optional<Product> productOptional = productDao.findById(productId);
-//        if(productOptional.isPresent()){
-//            Product product = productOptional.get();
-//            Category category = product.getCategory();
-//
-//            List<Product> productList = productDao.findByCategory(category);
-//            productList.remove(product);
-//
-//            Directory directory = buildIndex(productList);
-//            List<Product> recommendProduct = performContentBasedFiltering(product,directory);
-//            return recommendProduct;
-//        }
-//        return Collections.emptyList();
-//    }
-//
-//    private Directory buildIndex(List<Product> products){
-//        Directory directory = new RAMDirectory();
-//        try(Analyzer analyzer = new StandardAnalyzer()){
-//            IndexWriterConfig indexWriterConfig  = new IndexWriterConfig(analyzer);
-//            try(IndexWriter indexWriter = new IndexWriter(directory,indexWriterConfig)) {
-//                for (Product product : products) {
-//                    Document document = new Document();
-//                    document.add(new TextField("description", product.getProduct_long_desc(), Field.Store.YES));
-//                    indexWriter.addDocument(document);
-//                }
-//            }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            return directory;
-//        }
-//
-//        private List<Product> performContentBasedFiltering(Product product,Directory directory){
-//        List<Product> recommendedProducts = new ArrayList<>();
-//        try(IndexSearcher indexSearcher = new IndexSearcher(DirectoryReader.open(directory))){
-//            Analyzer analyzer = new EnglishAnalyzer();
-//            Query
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        }
+    public List<Product> getRelatedProduct(String category,String subCategory) {
+//        Category category = categoryDao.findById(catId).orElseThrow(()->new ResourceNotFoundException("category id not fund with this id"+catId));
+//        SubCategory subCategory = subCategoryDao.findById(subCatId).orElseThrow(()->new ResourceNotFoundException("subcategory id not found with this id"+subCatId));
+        List<Product> products = productDao.findByCategoryAndSubCategory(category,subCategory);
+        List<Product> productList = new ArrayList<>();
+        for(Product product : products){
+            List<Product> relatedBySubCategory = productDao.findByCategoryAndSubCategory(category,subCategory);
+            productList.addAll(relatedBySubCategory);
+        }
+        productList.removeIf(product -> product.getProduct_id()==products.get(0).getProduct_id());
 
-
+        return productList;
+    }
 }
