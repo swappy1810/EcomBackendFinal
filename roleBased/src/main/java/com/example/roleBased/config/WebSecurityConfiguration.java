@@ -58,7 +58,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("order/{userId}/{isSingleCheckout}/{price}",
                         "/product/{productId}/order",
                         "/users/{userId}/order","/deleteCart/{userId}",
-                        "/addtocart/{productId}/{userId}",
+                        "/addtocart/{productId}/{userId}/{quantity}/{productExistInCart}",
                         "/deleteCart/{productId}/{userId}",
                         "/carts/getCartDetails",
                         "/{userId}",

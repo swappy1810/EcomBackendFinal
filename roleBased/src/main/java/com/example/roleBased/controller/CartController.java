@@ -31,9 +31,9 @@ public class CartController {
 
    public ModelMapper modelMapper = new ModelMapper();
 
-    @PostMapping("/addtocart/{productId}/{userId}")
-    public String addToCart(@RequestBody CartDetails cartDetails, @PathVariable(name = "productId") Integer productId, @PathVariable(name = "userId") Integer userId){
-        return cartServiceImpl.addToCart(cartDetails,productId,userId);
+    @PostMapping("/addtocart/{productId}/{userId}/{quantity}/{productExistInCart}")
+    public String addToCart(@RequestBody CartDetails cartDetails, @PathVariable(name = "productId") Integer productId, @PathVariable(name = "userId") Integer userId,@PathVariable Integer quantity,@PathVariable boolean productExistInCart){
+        return cartServiceImpl.addToCart(cartDetails,productId,userId,quantity,productExistInCart);
     }
 
     @DeleteMapping("/deleteCart/{productId}/{userId}")

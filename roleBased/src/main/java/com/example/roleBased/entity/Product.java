@@ -30,6 +30,8 @@ public class Product {
     private int quantity;
     @Column(nullable = false)
     private float rating;
+    @Column(nullable = false)
+    private int discount;
     //mapped product with category
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "catId",nullable = false)

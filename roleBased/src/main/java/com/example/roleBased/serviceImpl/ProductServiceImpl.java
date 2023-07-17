@@ -66,6 +66,7 @@ public class ProductServiceImpl{
         product.setProduct_long_desc(product.getProduct_long_desc());
         product.setQuantity(product.getQuantity());
         product.setRating(product.getRating());
+        product.setDiscount(product.getDiscount());
         Product savedProduct = this.productDao.save(product);
         return savedProduct;
     }
@@ -79,6 +80,7 @@ public class ProductServiceImpl{
         product.setProduct_price(productDto.getProduct_price());
         product.setProduct_image(productDto.getProduct_image());
         product.setQuantity(productDto.getQuantity());
+        product.setDiscount(productDto.getDiscount());
         Product updateProduct = this.productDao.save(product);
         return updateProduct;
     }

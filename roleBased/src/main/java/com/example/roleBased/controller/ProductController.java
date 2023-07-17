@@ -37,6 +37,7 @@ public class ProductController {
         updatedProduct.setProduct_price(product.getProduct_price());
         updatedProduct.setProduct_image(product.getProduct_image());
         updatedProduct.setQuantity(product.getQuantity());
+        updatedProduct.setDiscount(product.getDiscount());
         return ResponseEntity.ok(updatedProduct);
     }
 //delete the product by product id

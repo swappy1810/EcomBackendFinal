@@ -30,6 +30,8 @@ public class ProductDto {
 
     private int rating;
 
+    private int discount;
+
     private CategoryDto category;
 
     private SubCatDto subCat;
