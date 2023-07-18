@@ -78,10 +78,10 @@ public class ProductController {
         return ResponseEntity.ok(productService.findByRecomendations(productId));
     }
 
-    @GetMapping("/recommendation")
-    public ResponseEntity<List<Product>> getRelatedProducts(@RequestParam String category,@RequestParam String subCategory){
-       List<Product> products = productService.getRelatedProduct(category,subCategory);
-       return ResponseEntity.ok(products);
-    }
+//    @GetMapping("/recommendation")
+//    public ResponseEntity<List<Product>> getRelatedProducts(@RequestParam String category,@RequestParam String subCategory){
+//       List<Product> products = productService.getRelatedProduct(category,subCategory);
+//       return ResponseEntity.ok(products);
+//    }
 
 }

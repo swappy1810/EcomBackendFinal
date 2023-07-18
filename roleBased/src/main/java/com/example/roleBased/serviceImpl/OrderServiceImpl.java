@@ -49,7 +49,7 @@ public class OrderServiceImpl {
         Order order1 = new Order();
         order1.setUserId(userId);
         order1.setAddedDate(LocalDate.now());
-        //order1.setShippingDate(order1.getAddedDate().plusDays(7));
+        order1.setShippingDate(order1.getAddedDate().plusDays(7));
         order1.setPrice(price);
         List<OrderItems> orderdDetailsList = new ArrayList<>();
         OrderItems orderItems = new OrderItems();
@@ -89,7 +89,7 @@ public class OrderServiceImpl {
             Order order1 = new Order();
             order1.setUserId(userId);
             order1.setAddedDate(LocalDate.now());
-            //order1.setShippingDate(order1.getAddedDate().plusDays(7));
+            order1.setShippingDate(order1.getAddedDate().plusDays(7));
             order1.setPrice(price);
             List<OrderItems> orderdDetailsList = new ArrayList<>();
             int index;
