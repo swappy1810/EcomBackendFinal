@@ -27,9 +27,9 @@ public class OrderController {
     ModelMapper modelMapper = new ModelMapper();
 
     //add the order using user id and product id
-    @PostMapping("order/{userId}/{price}/{quantity}/{productId}")
-    public String createCart(@RequestBody OrderItems cartDto, @PathVariable Integer userId, @PathVariable double price, @PathVariable Integer quantity, @PathVariable Integer productId){
-        return this.orderService.placeOrder(cartDto, userId,price,quantity,productId);
+    @PostMapping("order/{userId}/{quantity}/{productId}")
+    public String createCart(@RequestBody OrderItems cartDto, @PathVariable Integer userId, @PathVariable Integer productId, @PathVariable Integer quantity){
+        return this.orderService.placeOrder(cartDto, userId,quantity,productId);
     }
 
     //add the order using user id and product id

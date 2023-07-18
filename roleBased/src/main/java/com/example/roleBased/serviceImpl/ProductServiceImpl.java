@@ -12,6 +12,7 @@ import com.example.roleBased.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -111,6 +112,12 @@ public class ProductServiceImpl{
         similarProducts= productDao.findBySubCategory(subCategory1);
         similarProducts.remove(product);
         return similarProducts;
+    }
+
+    public List<Product> getProduct(Integer catId,Integer subCatId){
+        Category category = categoryDao.findById(catId).orElseThrow(()->new ResourceNotFoundException("category id not found with this id"+catId));
+        SubCategory subCategory = subCategoryDao.findById(subCatId).orElseThrow(()->new ResourceNotFoundException("subcategory id not found with this id"+subCatId));
+        return productDao.findByCategoryAndSubCategory(category,subCategory);
     }
 
 //    public List<Product> getRelatedProduct(Integer catId,Integer subCatId,Integer referenceProductId) {

@@ -43,18 +43,18 @@ public class OrderServiceImpl {
     private CartServiceImpl cartService;
 
 
-    public String placeOrder(OrderItems orderItems1, Integer userId, double price, Integer quantity1, Integer productId) {
+    public String placeOrder(OrderItems orderItems1, Integer userId, Integer quantity1, Integer productId) {
         User user = userDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with this id" + userId));
+        Product product1 = productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product id not found with this id" + productId));
         List<CartDetails> cartDetailsList = cartDetailDao.findByUserId(userId);
         Order order1 = new Order();
         order1.setUserId(userId);
         order1.setAddedDate(LocalDate.now());
         order1.setShippingDate(order1.getAddedDate().plusDays(7));
-        order1.setPrice(price);
+        order1.setPrice(product1.getProduct_price()*quantity1);
         List<OrderItems> orderdDetailsList = new ArrayList<>();
         OrderItems orderItems = new OrderItems();
-            Product product1 = productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product id not found with this id" + productId));
-            if (product1.getQuantity() < quantity1) {
+           if (product1.getQuantity() < quantity1) {
                 throw new ResourceNotFoundException("Product Out of Stock!");
             } else {
                 product1.setQuantity((product1.getQuantity() - quantity1));
@@ -164,5 +164,6 @@ public class OrderServiceImpl {
         User user = this.userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException(" userCart Id not found with this id "+userId));
        return orderDao.findByUserIdOrderByAddedDateAsc(userId);
     }
+
 }
 
