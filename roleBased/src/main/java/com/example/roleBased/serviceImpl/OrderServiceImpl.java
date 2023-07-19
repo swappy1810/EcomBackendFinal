@@ -83,14 +83,13 @@ public class OrderServiceImpl {
         return "Order Placed";
     }
 
-        public String createOrder(OrderItems orderItems1, Integer userId, double price){
+        public String createOrder(OrderItems orderItems1, Integer userId){
             User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id"+userId));
             List<CartDetails> cartDetailsList = cartDetailDao.findByUserId(userId);
             Order order1 = new Order();
             order1.setUserId(userId);
             order1.setAddedDate(LocalDate.now());
             order1.setShippingDate(order1.getAddedDate().plusDays(7));
-            order1.setPrice(price);
             List<OrderItems> orderdDetailsList = new ArrayList<>();
             int index;
             for(index=0;index<cartDetailsList.size();index++) {
@@ -98,6 +97,7 @@ public class OrderServiceImpl {
                 CartDetails cartDetails = cartDetailsList.get(index);
                 Product product = productDao.findById(cartDetails.getProduct().getProduct_id()).get();
                 int quantity = cartDetails.getQuantity();
+                order1.setPrice(cartDetails.getPrice()*quantity);
                     if (product.getQuantity()<quantity) {
                         throw new ResourceNotFoundException("Product Out of Stock!");
                     } else {

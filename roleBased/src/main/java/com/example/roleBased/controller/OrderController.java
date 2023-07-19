@@ -33,9 +33,9 @@ public class OrderController {
     }
 
     //add the order using user id and product id
-    @PostMapping("order/{userId}/{price}")
-    public String createCart(@RequestBody OrderItems cartDto, @PathVariable Integer userId, @PathVariable double price){
-        return this.orderService.createOrder(cartDto, userId,price);
+    @PostMapping("order/{userId}")
+    public String createCart(@RequestBody OrderItems cartDto, @PathVariable Integer userId){
+        return this.orderService.createOrder(cartDto, userId);
     }
 
     //get orders by user id

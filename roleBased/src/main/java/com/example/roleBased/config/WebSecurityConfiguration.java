@@ -56,7 +56,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/coupon/{couponId}",
             "/subCat/","/").hasAuthority("Admin")
                 .antMatchers("order/{userId}/{quantity}/{productId}",
-                        "order/{userId}/{price}",
+                        "order/{userId}",
                         "/product/{productId}/order",
                         "/users/{userId}/order","/deleteCart/{userId}",
                         "/addtocart/{productId}/{userId}/{quantity}",

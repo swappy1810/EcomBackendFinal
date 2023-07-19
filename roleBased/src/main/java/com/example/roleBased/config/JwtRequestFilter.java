@@ -29,7 +29,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtService jwtService;
 
-
 //default filter method to filterchain by passing header and token
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,

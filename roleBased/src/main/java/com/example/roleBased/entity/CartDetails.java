@@ -10,7 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "cartDetails")
+@Table(name = "cartDetailsNew")
 public class CartDetails {
 
     @Id
@@ -23,9 +23,6 @@ public class CartDetails {
 
     @OneToOne
     private Product product;
-
-//    @ManyToOne
-//    private Cart cart;
 
     public int getId() {
         return id;

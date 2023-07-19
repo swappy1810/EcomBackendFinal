@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "usersNew")
 public class User {
 
     @Id
@@ -42,10 +42,6 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cartId")
     private Cart cart;
-
-    @OneToMany(targetEntity = Order.class,cascade = CascadeType.ALL)
-    @JoinColumn(name="user_order_id")
-    private List<Order> userOrders = new ArrayList<>();
 
     public boolean isPresent() {
         return true;
