@@ -32,61 +32,18 @@ public class CartServiceImpl {
     @Autowired
     private UserDao userDao;
 
-//    public String addToCart(CartDetails cartDetails, Integer productId, Integer userId,Integer quantity) {
-//        User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id"+userId));
-//        Product product = productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("product not found with this id"+productId));
-//        cartDetails.setUserId(cartDetails.getUserId());
-//        boolean productExistInCart = true;
-//        List<CartDetails> cartDetailsList1 = new ArrayList<>();
-//        Cart cart = cartDao.findByUserCartId(user.getCart().getUserCartId());
-//        if(productExistInCart) {
-//            System.out.println("entered into if");
-//            List<CartDetails> cartDetailsList = cartDetailDao.findByUserId(userId);
-//            System.out.println(cartDetailsList);
-//            List<CartDetails> cartDetails1 = cartDetailDao.findByProduct(product);
-//            System.out.println(cartDetails1);
-//            for (CartDetails cartDetailsNew : cartDetails1) {
-//                for (CartDetails cartDetails2 : cartDetailsList) {
-//                    if (userId == cartDetailsNew.getUserId() && productId == cartDetails2.getProduct().getProduct_id()) {
-//                        cartDetailsNew.setQuantity(quantity);
-//                        cartDetailsNew.setPrice(product.getProduct_price() * quantity);
-//                        cartDetailsList.add(cartDetails2);
-//                        cart.setCartDetails(cartDetailsList);
-//                        System.out.println(cart);
-//                    }
-//                }
-//            }
-//        }
-//       else{
-//           System.out.println("entered into else");
-//        cartDetails.setProduct(product);
-//                    cartDetails.setUserId(userId);
-//                    cartDetails.setUserCartId(cart.getUserCartId());
-//                    cartDetails.setPrice(quantity * product.getProduct_price());
-//                    cartDetails.setQuantity(quantity);
-//                    cartDetailsList1.add(cartDetails);
-//                    cart.setCartDetails(cartDetailsList1);
-//                    System.out.println(cart);
-//        }
-//            cartDao.save(cart);
-//        return "Product added to cart";
-//    }
-
     public String addToCart(CartDetails cartDetails,Integer productId,Integer userId,Integer quantity) {
         User user = userDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with this id" + userId));
         Product product = productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with this id" + productId));
         cartDetails.setUserId(cartDetails.getUserId());
         Cart cart = cartDao.findByUserCartId(user.getCart().getUserCartId());
         CartDetails cartDetailsNewList = cartDetailDao.findByUserIdAndProduct(userId,product);
-        System.out.println(cartDetailsNewList);
         if(cartDetailsNewList != null) {
-            System.out.println("entered into if");
                         cartDetailsNewList.setQuantity(cartDetailsNewList.getQuantity()+quantity);
                         cartDetailsNewList.setPrice(product.getProduct_price() * cartDetailsNewList.getQuantity());
                        cartDetailDao.save(cartDetailsNewList);
             }
         else {
-            System.out.println("entered into else");
             CartDetails newCart = new CartDetails();
             newCart.setProduct(product);
             newCart.setUserId(userId);
