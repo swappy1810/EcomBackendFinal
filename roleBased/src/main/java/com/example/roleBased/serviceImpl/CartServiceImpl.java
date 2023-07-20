@@ -75,43 +75,28 @@ public class CartServiceImpl {
     public String addToCart(CartDetails cartDetails,Integer productId,Integer userId,Integer quantity) {
         User user = userDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with this id" + userId));
         Product product = productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with this id" + productId));
-        List<CartDetails> cartDetailsList1 = new ArrayList<>();
-        boolean productExistInCart = true;
+        cartDetails.setUserId(cartDetails.getUserId());
         Cart cart = cartDao.findByUserCartId(user.getCart().getUserCartId());
-        if(productExistInCart) {
-            System.out.println("entered into if1");
-            List<CartDetails> cartDetailsList = cartDetailDao.findByUserId(userId);
-            System.out.println(cartDetailsList);
-            List<CartDetails> cartDetails1 = cartDetailDao.findByProduct(product);
-            System.out.println(cartDetails1);
-            for (CartDetails cartDetailsNew : cartDetails1) {
-                for (CartDetails cartDetails2 : cartDetailsList) {
-                    int cartId = cartDetails2.getUserCartId();
-                    System.out.println(cartId);
-                    int id1 = cartDetailsNew.getUserCartId();
-                    System.out.println(id1);
-                    if (cartId == id1) {
-                        System.out.println("entered into if2");
-                        cartDetails.setQuantity(quantity);
-                        cartDetails.setPrice(product.getProduct_price() * quantity);
-                        cartDetailsList1.add(cartDetails);
-                        cart.setCartDetails(cartDetailsList1);
-                    }
-                }
+        CartDetails cartDetailsNewList = cartDetailDao.findByUserIdAndProduct(userId,product);
+        System.out.println(cartDetailsNewList);
+        if(cartDetailsNewList != null) {
+            System.out.println("entered into if");
+                        cartDetailsNewList.setQuantity(cartDetailsNewList.getQuantity()+quantity);
+                        cartDetailsNewList.setPrice(product.getProduct_price() * cartDetailsNewList.getQuantity());
+                       cartDetailDao.save(cartDetailsNewList);
             }
-        }else {
+        else {
             System.out.println("entered into else");
-                    cartDetails.setProduct(product);
-                    cartDetails.setUserId(userId);
-                    cartDetails.setUserCartId(cart.getUserCartId());
-                    cartDetails.setPrice(quantity * product.getProduct_price());
-                    cartDetails.setQuantity(quantity);
-                    cartDetailsList1.add(cartDetails);
-                    cart.setCartDetails(cartDetailsList1);
-                }
-                    cartDao.save(cart);
-                    return "Product added to cart";
-                }
+            CartDetails newCart = new CartDetails();
+            newCart.setProduct(product);
+            newCart.setUserId(userId);
+            newCart.setUserCartId(cart.getUserCartId());
+            newCart.setPrice(quantity * product.getProduct_price());
+            newCart.setQuantity(quantity);
+           cartDetailDao.save(newCart);
+        }
+        return "Product added to cart";
+    }
 
     public void clearCart(Cart cart) {
         cart.setCartDetails(new ArrayList<>());
