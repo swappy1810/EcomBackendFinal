@@ -1,6 +1,5 @@
 package com.example.roleBased.serviceImpl;
 
-import com.example.roleBased.config.FeatureExtractor;
 import com.example.roleBased.dao.CategoryDao;
 import com.example.roleBased.dao.ProductDao;
 import com.example.roleBased.dao.SubCategoryDao;
@@ -8,11 +7,11 @@ import com.example.roleBased.dao.UserDao;
 import com.example.roleBased.entity.Category;
 import com.example.roleBased.entity.Product;
 import com.example.roleBased.entity.SubCategory;
+import com.example.roleBased.entity.User;
 import com.example.roleBased.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +20,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl{
+
+    private static final int MAX_SIZE = 4;
+    private Set<Product> recentlyViewedProducts = new LinkedHashSet<>();
+
 //autowired the required objects
     @Autowired
     private ProductDao productDao;
@@ -33,10 +36,6 @@ public class ProductServiceImpl{
 
     @Autowired
     private UserDao userDao;
-
-    @Autowired
-            private FeatureExtractor featureExtractor;
-
 
     ModelMapper modelMapper = new ModelMapper();
 
@@ -120,14 +119,21 @@ public class ProductServiceImpl{
         return productDao.findByCategoryAndSubCategory(category,subCategory);
     }
 
-//    public List<Product> getRelatedProduct(Integer catId,Integer subCatId,Integer referenceProductId) {
-//        List<Product> products = null;
-//        List<Product> productsInCategory = products.stream().filter(product -> product.getCategory().equals(catId) && product.getSubCategory().equals(subCatId)).collect(Collectors.toList());
-//
-//        Product referenceProduct = productsInCategory.stream().filter(product -> product.getProduct_id()==referenceProductId).findFirst().orElse(null);
-//        if(referenceProduct == null){
-//            return null;
-//        }
-//        List<Product> recommendProduct = productsInCategory.stream().sorted((p1,p2) -> Double.compare(featureExtractor.jaccardSimilarity(referenceProduct.getProduct_long_desc(),p1.getProduct_long_desc()))).collect(Collectors.toList());
-//
+
+    public void addRecentlyViewedProducts(Integer productId,Integer userId){
+        User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("User id not fund with this id"+userId));
+        Product product = productDao.findById(productId).orElseThrow(()->new ResourceNotFoundException("Product id not found with this id"+productId));
+        recentlyViewedProducts.remove(product);
+        if(recentlyViewedProducts.size() >= MAX_SIZE){
+            Iterator<Product> iterator = recentlyViewedProducts.iterator();
+            iterator.next();
+            iterator.remove();
+        }
+        recentlyViewedProducts.add(product);
+    }
+
+    public Set<Product> getRecentlyViewedProducts(Integer userId){
+        User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user id not found with this id"+userId));
+        return  recentlyViewedProducts;
+    }
 }

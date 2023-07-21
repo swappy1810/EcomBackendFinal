@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @CrossOrigin
@@ -84,4 +85,13 @@ public class ProductController {
        return ResponseEntity.ok(products);
     }
 
+    @PostMapping("/viewed/{productId}/{userId}")
+    public void addRecentlyViewedProducts(@PathVariable Integer productId,@PathVariable Integer userId){
+        productService.addRecentlyViewedProducts(productId,userId);
+    }
+
+    @GetMapping("/viewed/{userId}")
+    public Set<Product> getRecentlyViewedProducts(@PathVariable Integer userId){
+        return productService.getRecentlyViewedProducts(userId);
+    }
 }

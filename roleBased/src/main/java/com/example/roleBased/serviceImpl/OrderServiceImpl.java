@@ -62,7 +62,6 @@ public class OrderServiceImpl {
             }
             orderItems.setAddedDate(LocalDate.now());
             orderItems.setShippingDate(order1.getAddedDate().plusDays(7));
-            orderItems.setStatus(orderItems1.getStatus());
             orderItems.setQuantity(quantity1);
             orderItems.setAddressLine1(orderItems1.getAddressLine1());
             orderItems.setAddressLine2(orderItems1.getAddressLine2());
@@ -83,49 +82,53 @@ public class OrderServiceImpl {
         return "Order Placed";
     }
 
-        public String createOrder(OrderItems orderItems1, Integer userId){
-            User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user not found with this id"+userId));
+        public String createOrder(OrderItems orderItems1, Integer userId) {
+            User user = userDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with this id" + userId));
             List<CartDetails> cartDetailsList = cartDetailDao.findByUserId(userId);
-            Order order1 = new Order();
-            order1.setUserId(userId);
-            order1.setAddedDate(LocalDate.now());
-            order1.setShippingDate(order1.getAddedDate().plusDays(7));
-            List<OrderItems> orderdDetailsList = new ArrayList<>();
-            int index;
-            for(index=0;index<cartDetailsList.size();index++) {
-                OrderItems orderItems = new OrderItems();
-                CartDetails cartDetails = cartDetailsList.get(index);
-                Product product = productDao.findById(cartDetails.getProduct().getProduct_id()).get();
-                int quantity = cartDetails.getQuantity();
-                order1.setPrice(cartDetails.getPrice()*quantity);
-                    if (product.getQuantity()<quantity) {
-                        throw new ResourceNotFoundException("Product Out of Stock!");
-                    } else {
-                        product.setQuantity((product.getQuantity() - quantity));
-                        productDao.save(product);
+            if (cartDetailsList != null) {
+                Order order1 = new Order();
+                order1.setUserId(userId);
+                order1.setAddedDate(LocalDate.now());
+                order1.setShippingDate(order1.getAddedDate().plusDays(7));
+                List<OrderItems> orderdDetailsList = new ArrayList<>();
+                    int index;
+                    for (index = 0; index < cartDetailsList.size(); index++) {
+                        OrderItems orderItems = new OrderItems();
+                        CartDetails cartDetails = cartDetailsList.get(index);
+                        Product product = productDao.findById(cartDetails.getProduct().getProduct_id()).get();
+                        int quantity = cartDetails.getQuantity();
+                        order1.setPrice(cartDetails.getPrice() * quantity);
+                        if (product.getQuantity() < quantity) {
+                            throw new ResourceNotFoundException("Product Out of Stock!");
+                        } else {
+                            product.setQuantity((product.getQuantity() - quantity));
+                            productDao.save(product);
+                        }
+                        orderItems.setAddedDate(LocalDate.now());
+                        orderItems.setShippingDate(order1.getAddedDate().plusDays(7));
+                        orderItems.setQuantity(cartDetails.getQuantity());
+                        orderItems.setAddressLine1(orderItems1.getAddressLine1());
+                        orderItems.setAddressLine2(orderItems1.getAddressLine2());
+                        orderItems.setCity(orderItems1.getCity());
+                        orderItems.setCountry(orderItems1.getCountry());
+                        orderItems.setState(orderItems1.getState());
+                        orderItems.setMobileNo(orderItems1.getMobileNo());
+                        orderItems.setZipCode(orderItems1.getZipCode());
+                        orderItems.setProduct(product);
+                        orderItems.setTotalPrice(cartDetails.getPrice() * cartDetails.getQuantity());
+                        orderdDetailsList.add(orderItems);
                     }
-                    orderItems.setAddedDate(LocalDate.now());
-                    orderItems.setShippingDate(order1.getAddedDate().plusDays(7));
-                    orderItems.setStatus(orderItems1.getStatus());
-                    orderItems.setQuantity(cartDetails.getQuantity());
-                    orderItems.setAddressLine1(orderItems1.getAddressLine1());
-                    orderItems.setAddressLine2(orderItems1.getAddressLine2());
-                    orderItems.setCity(orderItems1.getCity());
-                    orderItems.setCountry(orderItems1.getCountry());
-                    orderItems.setState(orderItems1.getState());
-                    orderItems.setMobileNo(orderItems1.getMobileNo());
-                    orderItems.setZipCode(orderItems1.getZipCode());
-                    orderItems.setProduct(product);
-                    orderItems.setTotalPrice(cartDetails.getPrice() * cartDetails.getQuantity());
-                    orderdDetailsList.add(orderItems);
+                    order1.setOrderItems(orderdDetailsList);
+                    orderDao.save(order1);
+                    Cart cart = cartDao.findById(user.getCart().getUserCartId()).get();
+                    cart.getCartDetails().clear();
+                    cartDao.save(cart);
+                    return "Order Placed";
+                } else {
+                    return "cart is empty cannot placed order";
                 }
-            order1.setOrderItems(orderdDetailsList);
-            orderDao.save(order1);
-            Cart cart = cartDao.findById(user.getCart().getUserCartId()).get();
-            cart.getCartDetails().clear();
-            cartDao.save(cart);
-            return "Order Placed";
-    }
+        }
+
 
     @Transactional
     public void deleteCart(Integer userId){

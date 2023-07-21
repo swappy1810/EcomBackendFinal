@@ -23,7 +23,7 @@ public class OrderItems {
     @Column(name = "date")
     private LocalDate addedDate;
     private int quantity;
-    private String status;
+    private String status = "In Progress";
     private double totalPrice;
     private String addressLine1;
     private String addressLine2;
