@@ -47,7 +47,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors();
         http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers("/products/","/authenticate","/registerNewUser","/products/category/{catId}","/products/search","/products/recommend/{productId}","/coupon/","/products/recommendation/{catId}/{subCatId}","/tags/{productId}").permitAll()
+                .antMatchers("/swagger-ui/**","/swagger-ui.html","/swagger-ui/index.html").permitAll()
+                .antMatchers("/products/","/authenticate","/registerNewUser","/products/category/{catId}","/products/search","/products/recommend/{productId}","/coupon/","/products/recommendation/{catId}/{subCatId}","/tags/{productId}",  "/v3/api-docs/**"
+                        ).permitAll()
                 .antMatchers("/category/save","/products/save/{subCatId}","/products/{id}","/category/**",
             "/category/{id}",
             "/subCat/save/{catId}",
@@ -74,6 +76,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/{cartId}/{productId}",
                         "/coupon/random/{userId}",
                         "/coupon/applyCoupon",
+                        "/tags",
                         "/{userId}")
                 .hasAuthority("User")
                 .antMatchers(HttpHeaders.ALLOW).permitAll()

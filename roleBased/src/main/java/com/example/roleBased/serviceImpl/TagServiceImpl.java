@@ -1,6 +1,5 @@
 package com.example.roleBased.serviceImpl;
 
-import com.example.roleBased.controller.TgaController;
 import com.example.roleBased.dao.ProductDao;
 import com.example.roleBased.dao.TagDao;
 import com.example.roleBased.entity.Category;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TagServiceImpl {
@@ -149,4 +149,9 @@ public class TagServiceImpl {
         tagDao.save(tags);
         return tags;
     }
+
+     public List<Tags> getAllTags(){
+         List<Tags> tags = this.tagDao.findAll();
+         return tags.stream().map(tags1 -> (tags1)).collect(Collectors.toList());
+     }
 }
