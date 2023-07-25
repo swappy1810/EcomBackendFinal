@@ -77,7 +77,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/coupon/random/{userId}",
                         "/coupon/applyCoupon",
                         "/tags",
-                        "/{userId}")
+                        "/{userId}","/products/{productId}/reviews")
                 .hasAuthority("User")
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .anyRequest().authenticated()

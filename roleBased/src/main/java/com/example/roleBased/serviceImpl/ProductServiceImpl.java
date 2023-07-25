@@ -136,4 +136,8 @@ public class ProductServiceImpl{
         User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user id not found with this id"+userId));
         return  recentlyViewedProducts;
     }
+
+    public boolean doesProductExists(int productId){
+        return productDao.existsById(productId);
+    }
 }
