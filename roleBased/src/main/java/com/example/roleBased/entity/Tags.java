@@ -19,6 +19,8 @@ public class Tags {
     @OneToOne
     private Product product;
 
+    private int catId;
+
     private double productPrice;
 
     private int discountPercent;

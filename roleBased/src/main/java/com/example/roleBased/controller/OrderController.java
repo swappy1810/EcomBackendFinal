@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 public class OrderController {
 
     @Autowired
@@ -29,6 +29,8 @@ public class OrderController {
     //add the order using user id and product id
     @PostMapping("order/{userId}/{quantity}/{productId}")
     public String createCart(@RequestBody OrderItems cartDto, @PathVariable Integer userId, @PathVariable Integer productId, @PathVariable Integer quantity){
+        System.out.println("in order controller");
+        System.out.println(cartDto);
         return this.orderService.placeOrder(cartDto, userId,quantity,productId);
     }
 

@@ -35,11 +35,13 @@ public class TagServiceImpl {
         if ((price > 599 & price <= 1099) && catId1 == 1) {
             tags.setDiscountPercent(40);
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setProductPrice(product.getProduct_price());
             tags.setTotalPrice(price * 60 / 100);
         } else if ((price > 1099 && price <= 1599) && catId1 == 1) {
             tags.setDiscountPercent(60);
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setProductPrice(product.getProduct_price());
             tags.setTotalPrice(price * 40 / 100);
         }
@@ -48,22 +50,27 @@ public class TagServiceImpl {
             tags.setDiscountPercent(40);
             tags.setProductPrice(product.getProduct_price());
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setTotalPrice(price * 60 / 100);
         } else if ((price > 1099 && price <= 1599) && catId1 == 2) {
             tags.setDiscountPercent(60);
             tags.setProductPrice(product.getProduct_price());
+            tags.setCatId(product.getCategory().getCatId());
             tags.setTotalPrice(price * 40 / 100);
         }
 
         else if ((price > 599 & price <= 1099) && catId1 == 4) {
             tags.setDiscountPercent(40);
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setProductPrice(product.getProduct_price());
             tags.setTotalPrice(price * 60 / 100);
         } else if ((price > 1099 && price <= 1599) && catId1 == 4) {
             tags.setDiscountPercent(60);
             tags.setProductPrice(product.getProduct_price());
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
+            System.out.println(product);
             tags.setTotalPrice(price * 40 / 100);
         }
 
@@ -71,32 +78,40 @@ public class TagServiceImpl {
             tags.setDiscountPercent(40);
             tags.setProductPrice(product.getProduct_price());
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setTotalPrice(price * 60 / 100);
         } else if ((price > 1099 && price <= 1599) && catId1 == 6) {
             tags.setDiscountPercent(60);
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setProductPrice(product.getProduct_price());
             tags.setTotalPrice(price * 40 / 100);
         }
 
         else if ((price > 599 & price <= 1099) && catId1 == 7) {
             tags.setDiscountPercent(40);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setProduct(product);
             tags.setProductPrice(product.getProduct_price());
             tags.setTotalPrice(price * 60 / 100);
         } else if ((price > 1099 && price <= 1599) && catId1 == 7) {
             tags.setDiscountPercent(60);
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setProductPrice(product.getProduct_price());
             tags.setTotalPrice(price * 40 / 100);
-        } else if (price < 599 && (catId1==1 || catId1==2 || catId1 == 4|| catId1 == 6|| catId1 == 7)) {
+        }
+
+        else if (price <= 599 && (catId1==1 || catId1==2 || catId1 == 4|| catId1 == 6|| catId1 == 7)) {
             tags.setDiscountPercent(0);
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setProductPrice(product.getProduct_price());
             tags.setTotalPrice(price * 100 / 100);
         } else if (price > 1599 && (catId1==1 || catId1==2 || catId1 == 4|| catId1 == 6|| catId1 == 7)) {
             tags.setDiscountPercent(80);
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setProductPrice(product.getProduct_price());
             tags.setTotalPrice(price * 20 / 100);
         }
@@ -104,23 +119,29 @@ public class TagServiceImpl {
         else if ((price > 2099 & price <= 3099) && catId1 == 3) {
             tags.setDiscountPercent(40);
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setProductPrice(product.getProduct_price());
             tags.setTotalPrice(price * 60 / 100);
-        } else if ((price > 3099 && price <= 4099) && catId1 == 3) {
+        } else if ((price > 3099 && price <= 4499) && catId1 == 3) {
             tags.setDiscountPercent(60);
             tags.setProductPrice(product.getProduct_price());
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setTotalPrice(price * 40 / 100);
         }
 
-        else if ((price > 9999 & price <= 10999) && catId1 == 5) {
+        else if ((price > 2100 & price <= 10999) && catId1 == 5) {
             tags.setDiscountPercent(40);
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
+            System.out.println(product);
             tags.setProductPrice(product.getProduct_price());
             tags.setTotalPrice(price * 60 / 100);
-        } else if ((price > 10999 && price <= 20599) && catId1 == 5) {
+        } else if ((price > 10999 && price <= 34999) && catId1 == 5) {
             tags.setDiscountPercent(60);
             tags.setProduct(product);
+            System.out.println(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setProductPrice(product.getProduct_price());
             tags.setTotalPrice(price * 40 / 100);
         }
@@ -128,29 +149,34 @@ public class TagServiceImpl {
         else if ((price > 3099 & price <= 10999) && catId1 == 8) {
             tags.setDiscountPercent(40);
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setProductPrice(product.getProduct_price());
             tags.setTotalPrice(price * 60 / 100);
-        } else if ((price > 10999 && price <= 15999) && catId1 == 8) {
+        } else if ((price > 10999 && price <= 28599) && catId1 == 8) {
             tags.setDiscountPercent(60);
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setProductPrice(product.getProduct_price());
             tags.setTotalPrice(price * 40 / 100);
         }
-        else if (price <2099 && (catId1==3 || catId1==5 || catId1 == 8)) {
+        else if (price <= 2099 && (catId1==3 || catId1==5 || catId1 == 8)) {
             tags.setDiscountPercent(0);
             tags.setProduct(product);
+            System.out.println(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setProductPrice(product.getProduct_price());
             tags.setTotalPrice(price * 100 / 100);
-        } else if (price > 35000 && (catId1==3 || catId1==5 || catId1 == 8)) {
+        } else if (price >= 35000 && (catId1==3 || catId1==5 || catId1 == 8)) {
             tags.setDiscountPercent(80);
+            System.out.println(product);
             tags.setProductPrice(product.getProduct_price());
             tags.setProduct(product);
+            tags.setCatId(product.getCategory().getCatId());
             tags.setTotalPrice(price * 20 / 100);
         }
         else {
             return null;
         }
-
         tagDao.save(tags);
         return tags;
     }
@@ -162,13 +188,6 @@ public class TagServiceImpl {
 
     public List<Tags> getProductByTags(Integer catId){
        Category category = categoryDao.findById(catId).orElseThrow(()->new ResourceNotFoundException("Category npt found with this id"+catId));
-        List<Tags> tags = tagDao.findAll();
-        List<Tags> tagsList = new ArrayList<>();
-        for(Tags tags1 : tags) {
-            if (catId == tags1.getProduct().getCategory().getCatId()) {
-               tagsList.add(tags1);
-            }
-        }
-       return tagsList;
+       return tagDao.findByCatId(catId);
     }
 }

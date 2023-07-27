@@ -36,12 +36,14 @@ public class CartServiceImpl {
         User user = userDao.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with this id" + userId));
         Product product = productDao.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with this id" + productId));
         cartDetails.setUserId(cartDetails.getUserId());
+        List<CartDetails> cartDetailsList = new ArrayList<>();
         Cart cart = cartDao.findByUserCartId(user.getCart().getUserCartId());
         CartDetails cartDetailsNewList = cartDetailDao.findByUserIdAndProduct(userId,product);
         if(cartDetailsNewList != null) {
                         cartDetailsNewList.setQuantity(cartDetailsNewList.getQuantity()+quantity);
                         cartDetailsNewList.setPrice(product.getProduct_price() * cartDetailsNewList.getQuantity());
-                       cartDetailDao.save(cartDetailsNewList);
+                        //cartDetailDao.save(cartDetailsNewList);
+            cartDetailsList.add(cartDetailsNewList);
             }
         else {
             CartDetails newCart = new CartDetails();
@@ -50,8 +52,12 @@ public class CartServiceImpl {
             newCart.setUserCartId(cart.getUserCartId());
             newCart.setPrice(quantity * product.getProduct_price());
             newCart.setQuantity(quantity);
-           cartDetailDao.save(newCart);
+           //cartDetailDao.save(newCart);
+           cartDetailsList.add(newCart);
         }
+
+        cart.setCartDetails(cartDetailsList);
+        cartDao.save(cart);
         return "Product added to cart";
     }
 
@@ -82,7 +88,7 @@ public class CartServiceImpl {
     @Transactional
     public ResponseEntity<ApiResponse> deleteCartByUserId(Integer userId){
         User user = userDao.findById(userId).orElseThrow(()->new ResourceNotFoundException("user id not found with this id"+userId));
-        this.cartDetailDao.deleteByUserId(userId);
+        cartDetailDao.deleteByUserId(userId);
         return new ResponseEntity<>(new ApiResponse("cart deleted successfully",true),HttpStatus.OK);
         }
 

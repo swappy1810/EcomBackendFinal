@@ -92,14 +92,20 @@ public class OrderServiceImpl {
                 order1.setShippingDate(order1.getAddedDate().plusDays(7));
                 List<OrderItems> orderdDetailsList = new ArrayList<>();
                     int index;
+                double total =0;
                     for (index = 0; index < cartDetailsList.size(); index++) {
                         OrderItems orderItems = new OrderItems();
                         CartDetails cartDetails = cartDetailsList.get(index);
                         Product product = productDao.findById(cartDetails.getProduct().getProduct_id()).get();
                         int quantity = cartDetails.getQuantity();
-                        order1.setPrice(cartDetails.getPrice() * quantity);
+                        System.out.println(quantity);
+                        total += product.getProduct_price() * quantity;
+                        System.out.println(total);
+                        System.out.println(product.getProduct_price());
                         if (product.getQuantity() < quantity) {
-                            throw new ResourceNotFoundException("Product Out of Stock!");
+                            System.out.println(product.getQuantity());
+                            System.out.println(quantity);
+                            throw new ResourceNotFoundException("some products are out of stock can't place order!");
                         } else {
                             product.setQuantity((product.getQuantity() - quantity));
                             productDao.save(product);
@@ -115,9 +121,10 @@ public class OrderServiceImpl {
                         orderItems.setMobileNo(orderItems1.getMobileNo());
                         orderItems.setZipCode(orderItems1.getZipCode());
                         orderItems.setProduct(product);
-                        orderItems.setTotalPrice(cartDetails.getPrice() * cartDetails.getQuantity());
+                        orderItems.setTotalPrice(product.getProduct_price() * quantity);
                         orderdDetailsList.add(orderItems);
                     }
+                    order1.setPrice(total);
                     order1.setOrderItems(orderdDetailsList);
                     orderDao.save(order1);
                     Cart cart = cartDao.findById(user.getCart().getUserCartId()).get();
@@ -128,6 +135,7 @@ public class OrderServiceImpl {
                     return "cart is empty cannot placed order";
                 }
         }
+
 
 
     @Transactional

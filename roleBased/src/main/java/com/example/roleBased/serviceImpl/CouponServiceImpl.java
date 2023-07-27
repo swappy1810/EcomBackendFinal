@@ -85,8 +85,7 @@ public class CouponServiceImpl {
         return couponDao.findBySubCatId(id);
     }
 
-    public Integer applyCoupon(String couponCode,
-                                                 Integer price){
+    public Integer applyCoupon(String couponCode,Integer price){
      Coupon coupon = couponDao.findByCouponCode(couponCode);
 
         if(coupon == null) {
@@ -95,8 +94,7 @@ public class CouponServiceImpl {
         if(coupon.getExpiryDate().before(new Date())){
             return null;
         }
-        int discountedPrice = price - coupon.getDiscountedPrice();
-        return discountedPrice;
+        return price - coupon.getDiscountedPrice();
     }
 
 }

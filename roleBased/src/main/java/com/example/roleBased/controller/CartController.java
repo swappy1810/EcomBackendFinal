@@ -32,7 +32,9 @@ public class CartController {
    public ModelMapper modelMapper = new ModelMapper();
 
     @PostMapping("/addtocart/{productId}/{userId}/{quantity}")
-    public String addToCart(@RequestBody CartDetails cartDetails, @PathVariable(name = "productId") Integer productId, @PathVariable(name = "userId") Integer userId,@PathVariable Integer quantity){
+    public String addToCart(@RequestBody CartDetails cartDetails, @PathVariable Integer productId, @PathVariable Integer userId,@PathVariable Integer quantity){
+        System.out.println("in cart controller");
+        System.out.println(cartDetails);
         return cartServiceImpl.addToCart(cartDetails,productId,userId,quantity);
     }
 
@@ -44,7 +46,7 @@ public class CartController {
 
     @DeleteMapping("/deleteCart/{userId}")
     public  ResponseEntity<ApiResponse> deleteCartByUserId(@PathVariable Integer userId){
-        this.cartServiceImpl.deleteCartByUserId(userId);
+        cartServiceImpl.deleteCartByUserId(userId);
         return new ResponseEntity<ApiResponse>(new ApiResponse("cart deleted successfully",true),HttpStatus.OK);
     }
 
@@ -59,6 +61,11 @@ public class CartController {
             cartDetails1.add(cartDetails);
         }
         return new ResponseEntity<>(cartDetails1, HttpStatus.OK);
+    }
+
+    @GetMapping("cart/{userCartId}")
+    public Cart getCartByUserCartId(@PathVariable Integer userCartId){
+        return cartServiceImpl.getCartById(userCartId);
     }
 
     //update cart by cart id

@@ -20,7 +20,7 @@ public class corsConfigurer {
                 registry.addMapping("/**")
                         .allowedMethods(GET, POST, PUT, DELETE)
                         .allowedHeaders("*")
-                        .allowedOrigins("*")
+                        .allowedOrigins("http://localhost:3000")
                         .allowedOriginPatterns("*")
                         .allowCredentials(true);
             }

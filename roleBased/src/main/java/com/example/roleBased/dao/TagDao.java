@@ -13,4 +13,6 @@ public interface TagDao extends JpaRepository<Tags,Integer> {
 
     List<Tags> findByProduct(Product product);
 
+    List<Tags> findByCatId(Integer catId);
+
 }

@@ -24,6 +24,7 @@ public class Coupon {
     private int couponId;
     private int discountedPrice;
     private String couponCode;
-    private Date expiryDate;
+    private LocalDate expiryDate;
     private int subCatId;
+
 }

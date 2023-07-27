@@ -48,7 +48,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.authorizeRequests()
                 .antMatchers("/swagger-ui/**","/swagger-ui.html","/swagger-ui/index.html").permitAll()
-                .antMatchers("/products/","/authenticate","/registerNewUser","/products/category/{catId}","/products/search","/products/recommend/{productId}","/coupon/","/products/recommendation/{catId}/{subCatId}","/tags/{productId}","/tags/{catId}",  "/v3/api-docs/**"
+                .antMatchers("/products/","/authenticate","/registerNewUser","/products/category/{catId}","/products/search","/products/recommend/{productId}","/coupon/","/products/recommendation/{catId}/{subCatId}","/tags/{productId}","/tags/{catId}", "/deleteCart/{userId}", "/v3/api-docs/**"
                         ).permitAll()
                 .antMatchers("/category/save","/products/save/{subCatId}","/products/{id}","/category/**",
             "/category/{id}",
@@ -60,11 +60,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("order/{userId}/{quantity}/{productId}",
                         "order/{userId}",
                         "/product/{productId}/order",
-                        "/users/{userId}/order","/deleteCart/{userId}",
+                        "/users/{userId}/order",
                         "/addtocart/{productId}/{userId}/{quantity}",
                         "/deleteCart/{productId}/{userId}",
                         "/carts/getCartDetails",
                         "/{userId}",
+                        "/cart/{userCartId}",
                         "/userInfo/{userId}",
                 "/products/viewed/{productId}/{userId}",
                 "/products/viewed/{userId}",
