@@ -162,20 +162,21 @@ public class CouponServiceImpl {
         if(orderPrice>5000&& orderPrice<=10000)
           {   double totalPrice=7000;
               coupons = couponDao.findByTotalOrderPrice(totalPrice);
-            //  return  coupons;
+              return  coupons;
           }
         else if(orderPrice>10001 && orderPrice<25000)
         {
-            double totalPrice=20000;
+            double totalPrice=15000;
            coupons = couponDao.findByTotalOrderPrice(totalPrice);
-          //  return  coupons;
+           return  coupons;
         }
         else if(orderPrice>=25000){
             double totalPrice=30050;
             coupons = couponDao.findByTotalOrderPrice(totalPrice);
+            return  coupons;
 
         }
-          return  coupons;
+          return null;
     }
 
 
